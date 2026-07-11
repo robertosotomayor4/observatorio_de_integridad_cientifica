@@ -948,3 +948,273 @@ footer { background: #102d46; }
   .priority-events li,
   .web-pages li { grid-template-columns: 1fr; gap: 4px; }
 }
+
+/* Ajuste visual posterior a la integración OpenAlex · Versión 1.0 */
+.openalex-charts {
+  grid-template-columns: 1fr;
+  gap: 22px;
+}
+.openalex-charts .chart-card {
+  padding: 20px 22px 18px;
+}
+.openalex-charts .chart-wrap {
+  min-height: 330px;
+}
+.openalex-charts .chart {
+  min-width: 760px;
+}
+.chart-card-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 8px;
+}
+.chart-card-heading h3 { margin: 0; font-size: 1.05rem; }
+.chart-card-heading > span {
+  color: #526d7d;
+  font-size: .82rem;
+  white-space: nowrap;
+}
+.chart .grid-line {
+  stroke: #dbe7ed;
+  stroke-width: 1;
+  stroke-dasharray: 4 5;
+}
+.chart circle {
+  cursor: help;
+  transition: r .15s ease, filter .15s ease;
+}
+.chart circle:hover,
+.chart circle:focus {
+  r: 8;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,.25));
+  outline: none;
+}
+.chart-help {
+  margin: 6px 0 0;
+  color: #6c8290;
+  font-size: .76rem;
+}
+.chart-data {
+  margin-top: 10px;
+  border-top: 1px solid #c8dde7;
+  padding-top: 9px;
+}
+.chart-data summary {
+  cursor: pointer;
+  color: var(--openalex-dark);
+  font-weight: 800;
+  font-size: .82rem;
+}
+.chart-table-wrap {
+  max-height: 260px;
+  overflow: auto;
+  margin-top: 10px;
+  border: 1px solid #c4dce7;
+  border-radius: 10px;
+}
+.chart-table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .82rem;
+}
+.chart-table-wrap th,
+.chart-table-wrap td {
+  padding: 8px 11px;
+  border-bottom: 1px solid #dce8ee;
+  text-align: left;
+}
+.chart-table-wrap th {
+  position: sticky;
+  top: 0;
+  background: #eaf8fc;
+  color: var(--openalex-dark);
+}
+.openalex-narrative {
+  margin: 0 0 20px;
+  padding: 16px 18px;
+  background: #edf8ff;
+  border: 2px solid #9ed2e5;
+  border-left: 7px solid var(--openalex);
+  border-radius: 13px;
+  color: #244f65;
+}
+.openalex-narrative p { margin: 5px 0 0; line-height: 1.55; }
+.openalex-explorer {
+  margin-top: 20px;
+  border: 2px solid #b4d9e5;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+.openalex-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  background: #eaf8fc;
+  border-bottom: 2px solid #b4d9e5;
+}
+.openalex-tab {
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: #315d72;
+  padding: 9px 15px;
+  font: inherit;
+  font-size: .86rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.openalex-tab:hover { background: rgba(255,255,255,.7); }
+.openalex-tab.active {
+  color: #fff;
+  background: var(--openalex);
+  box-shadow: 0 3px 8px rgba(8,126,164,.22);
+}
+.openalex-tab-panel { padding: 18px 20px 20px; }
+.openalex-tab-panel h3 { margin: 0 0 14px; color: var(--openalex-dark); }
+.openalex-rank-list { display: grid; gap: 13px; }
+.openalex-rank-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 5px;
+  font-size: .86rem;
+}
+.openalex-rank-label span { min-width: 0; overflow-wrap: anywhere; }
+.openalex-rank-label strong { color: #526d7d; }
+.openalex-rank-track {
+  height: 11px;
+  background: #e5f0f5;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.openalex-rank-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--openalex), #42b8d5);
+}
+
+.qualitative-human-section {
+  background: #f7fbff;
+  border-top: 7px solid #386f9f;
+}
+.qualitative-automated-section {
+  background: #f8fbfd;
+  border-top: 7px solid #6d5aa6;
+}
+.human-review-status,
+.automated-status {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 74px;
+  padding: 16px 19px;
+  border: 2px solid #b7cfde;
+  border-radius: 13px;
+  background: #fff;
+}
+.human-review-status span,
+.automated-status span {
+  color: #5f7888;
+  font-size: .72rem;
+  font-weight: 850;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.human-review-status strong,
+.automated-status strong { font-size: 1.02rem; color: #153c5c; }
+.human-review-status small { margin-left: auto; color: #617887; }
+.human-review-status p { flex-basis: 100%; margin: 4px 0 0; }
+.human-review-status.completed { flex-wrap: wrap; border-color: #64b58f; background: #eefaf4; }
+.automated-status.no-results { border-color: #91b7ca; background: #f1f8fb; }
+.automated-status.not-run { border-color: #aebcc5; background: #f4f6f7; }
+.automated-findings {
+  display: grid;
+  gap: 14px;
+}
+.automated-finding {
+  position: relative;
+  padding: 18px 20px 18px 22px;
+  border: 2px solid #b6ccd8;
+  border-left-width: 8px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 7px 16px rgba(23,59,93,.045);
+}
+.automated-finding.high {
+  border-color: #df6f69;
+  background: #fff3f3;
+  color: #70231e;
+}
+.automated-finding.informational {
+  border-color: #5ba9d0;
+  background: #f2f9fd;
+  color: #284f66;
+}
+.finding-type {
+  margin-bottom: 5px;
+  color: inherit;
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.automated-finding h3 {
+  margin: 0 0 10px;
+  font-size: 1.02rem;
+  line-height: 1.35;
+}
+.automated-finding dl {
+  display: grid;
+  gap: 7px;
+  margin: 0 0 12px;
+}
+.automated-finding dl > div {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  gap: 10px;
+}
+.automated-finding dt { font-weight: 850; }
+.automated-finding dd { margin: 0; overflow-wrap: anywhere; }
+.finding-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 8px 13px;
+  border: 2px solid currentColor;
+  border-radius: 9px;
+  font-weight: 850;
+  text-decoration: none;
+}
+.finding-link:hover { background: rgba(255,255,255,.75); }
+.automated-more {
+  border: 2px solid #b7cfde;
+  border-radius: 13px;
+  background: #fff;
+  padding: 12px 15px;
+}
+.automated-more summary {
+  cursor: pointer;
+  color: #315d72;
+  font-weight: 850;
+}
+.automated-more > div {
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+@media (max-width: 720px) {
+  .chart-card-heading { display: block; }
+  .chart-card-heading > span { display: block; margin-top: 5px; }
+  .openalex-tabs { overflow-x: auto; }
+  .openalex-tab { white-space: nowrap; }
+  .human-review-status,
+  .automated-status { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .human-review-status small { margin-left: 0; }
+  .automated-finding dl > div { grid-template-columns: 1fr; gap: 2px; }
+}

@@ -85,6 +85,9 @@ function bindEvents() {
     if (!event.target.closest(".live-search")) hideSuggestions();
     const copyButton = event.target.closest("[data-copy-journal]");
     if (copyButton) copyJournalLink(copyButton.dataset.copyJournal);
+
+    const openAlexTab = event.target.closest("[data-openalex-tab]");
+    if (openAlexTab) switchOpenAlexTab(openAlexTab);
   });
 }
 
@@ -427,13 +430,14 @@ function journalHtml(journal, detail, complementary) {
 
       ${openAlexSectionHtml(complementary?.openalex)}
 
-      <section class="journal-section qualitative-section">
+      <section class="journal-section qualitative-human-section">
         <div class="section-heading">
-          <div><p class="section-kicker">Revisión humana y evidencias</p><h2>Evaluación cualitativa</h2></div>
+          <div><p class="section-kicker">Revisión especializada</p><h2>Evaluación cualitativa humana</h2></div>
         </div>
         ${qualitativeHtml(journal)}
-        ${externalEvidenceHtml(complementary, detail)}
       </section>
+
+      ${automatedQualitativeSectionHtml(complementary, detail)}
 
       <aside class="interpretation-note">
         <strong>Interpretación responsable</strong>
@@ -571,11 +575,15 @@ function wosHistoricalRange(detail, journal = null) {
 }
 
 function wosSourceExtra(journal, detail) {
+  const range = wosHistoricalRange(detail, journal);
   if (wosNoLongerCurrent(journal, detail)) {
-    const range = wosHistoricalRange(detail, journal);
     return range ? `Registros históricos en InCites: ${range}` : "Registros históricos identificados en InCites";
   }
-  return journal.wos_indexes ? `Índice(s): ${journal.wos_indexes}` : "";
+
+  const parts = [];
+  if (journal.wos_indexes) parts.push(`Índice(s): ${journal.wos_indexes}`);
+  if (range) parts.push(`Cobertura registrada en InCites: ${range}`);
+  return parts.join(" · ");
 }
 
 function indexingAlertTitle(scopusInactive, wosHistoricalAlert, doajWithdrawn) {
@@ -801,9 +809,9 @@ function chartBlock(title, series, key, sourceClass, measureLabel = "documentos"
     return `<div class="chart-card ${sourceClass}"><h3>${escapeHtml(title)}</h3><div class="chart-empty">Sin serie histórica comparable.</div></div>`;
   }
 
-  const width = 640;
-  const height = 250;
-  const padding = { left: 48, right: 20, top: 24, bottom: 42 };
+  const width = 920;
+  const height = 350;
+  const padding = { left: 70, right: 28, top: 32, bottom: 58 };
   const values = valid.map(item => Number(item[key]));
   const maximum = Math.max(...values, 1);
   const xStep = valid.length > 1 ? (width - padding.left - padding.right) / (valid.length - 1) : 0;
@@ -814,42 +822,58 @@ function chartBlock(title, series, key, sourceClass, measureLabel = "documentos"
     return { x, y, year: item.year, value: Number(item[key]) };
   });
   const polyline = points.map(point => `${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(" ");
-  const dots = points.map(point => `<circle cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="4"><title>${point.year}: ${point.value}</title></circle>`).join("");
+  const dots = points.map(point => `<circle tabindex="0" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="5" aria-label="${escapeHtml(String(point.year))}: ${escapeHtml(integerFormat(point.value))} ${escapeHtml(measureLabel)}"><title>${point.year}: ${integerFormat(point.value)} ${measureLabel}</title></circle>`).join("");
+  const labelEvery = valid.length > 22 ? 3 : valid.length > 14 ? 2 : 1;
   const labels = points.map((point, index) => {
-    const show = valid.length <= 12 || index === 0 || index === valid.length - 1 || index % 2 === 0;
-    return show ? `<text x="${point.x.toFixed(1)}" y="${height - 15}" text-anchor="middle">${escapeHtml(String(point.year))}</text>` : "";
+    const show = index === 0 || index === valid.length - 1 || index % labelEvery === 0;
+    return show ? `<text x="${point.x.toFixed(1)}" y="${height - 20}" text-anchor="middle">${escapeHtml(String(point.year))}</text>` : "";
   }).join("");
+  const gridLines = [0.25, 0.5, 0.75, 1].map(fraction => {
+    const y = height - padding.bottom - fraction * chartHeight;
+    const value = Math.round(maximum * fraction);
+    return `<line class="grid-line" x1="${padding.left}" y1="${y.toFixed(1)}" x2="${width - padding.right}" y2="${y.toFixed(1)}"></line><text class="axis-value" x="8" y="${(y + 4).toFixed(1)}">${escapeHtml(integerFormat(value))}</text>`;
+  }).join("");
+  const latest = valid[valid.length - 1];
 
   return `
     <div class="chart-card ${sourceClass}">
-      <h3>${escapeHtml(title)}</h3>
+      <div class="chart-card-heading"><h3>${escapeHtml(title)}</h3><span>${escapeHtml(String(latest.year))}: <strong>${escapeHtml(integerFormat(latest[key]))}</strong></span></div>
       <div class="chart-wrap">
         <svg class="chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(title)}: ${escapeHtml(measureLabel)} por año">
+          ${gridLines}
           <line class="axis" x1="${padding.left}" y1="${height - padding.bottom}" x2="${width - padding.right}" y2="${height - padding.bottom}"></line>
           <line class="axis" x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${height - padding.bottom}"></line>
-          <text class="axis-value" x="10" y="${padding.top + 5}">${Math.round(maximum)}</text>
-          <text class="axis-value" x="30" y="${height - padding.bottom + 4}">0</text>
+          <text class="axis-value" x="42" y="${height - padding.bottom + 4}">0</text>
           <polyline class="series-line" points="${polyline}"></polyline>
           ${dots}
           ${labels}
         </svg>
       </div>
+      <p class="chart-help">Pase el cursor sobre los puntos para consultar el valor anual.</p>
+      <details class="chart-data"><summary>Ver datos anuales</summary><div class="chart-table-wrap"><table><thead><tr><th>Año</th><th>${escapeHtml(capitalize(measureLabel))}</th></tr></thead><tbody>${valid.map(item => `<tr><td>${escapeHtml(String(item.year))}</td><td>${escapeHtml(integerFormat(item[key]))}</td></tr>`).join("")}</tbody></table></div></details>
     </div>`;
+}
+
+function capitalize(value) {
+  const text = String(value || "");
+  return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
 }
 
 function qualitativeHtml(journal) {
   if (journal.qualitative_review_status !== "Completed") {
     return `
-      <div class="qualitative-pending">
-        <strong>Revisión cualitativa humana no realizada</strong>
-        <p>Las evidencias automatizadas que aparecen en esta ficha orientan la revisión, pero no sustituyen una evaluación humana documentada.</p>
+      <div class="human-review-status pending">
+        <span>Estado</span>
+        <strong>No realizada</strong>
       </div>`;
   }
 
   return `
-    <div class="qualitative-result">
-      <p><span>Resultado</span><strong>${escapeHtml(qualitativeLabel(journal.qualitative_review_result))}</strong>${journal.review_date ? ` · ${escapeHtml(journal.review_date)}` : ""}</p>
-      <p>${escapeHtml(journal.qualitative_summary || "Revisión completada.")}</p>
+    <div class="human-review-status completed">
+      <span>Resultado</span>
+      <strong>${escapeHtml(qualitativeLabel(journal.qualitative_review_result))}</strong>
+      ${journal.review_date ? `<small>Fecha de revisión: ${escapeHtml(journal.review_date)}</small>` : ""}
+      ${journal.qualitative_summary ? `<p>${escapeHtml(journal.qualitative_summary)}</p>` : ""}
     </div>`;
 }
 
@@ -866,12 +890,13 @@ function openAlexSectionHtml(openalex) {
   const source = openalex.source;
   const production = openalex.production_by_year || [];
   const confidence = openalex.match_status === "manual_override"
-    ? "Cruce revisado manualmente por ISSN y título"
+    ? "Cruce revisado por ISSN y título"
     : "Cruce automático de alta confianza por ISSN/eISSN";
   const hIndex = source.summary_stats?.h_index;
   const oaShare = openalex.oa_share == null ? "Sin dato" : `${openalex.oa_share} %`;
   const quality = openAlexQualityHtml(openalex.quality_flags || []);
-  const openAlexUrl = source.id ? source.id.replace("https://openalex.org/", "https://openalex.org/") : "";
+  const openAlexUrl = source.id || "";
+  const narrative = openAlexNarrative(production, openalex.oa_share);
 
   return `
     <section class="journal-section openalex-section">
@@ -886,12 +911,13 @@ function openAlexSectionHtml(openalex) {
         ${openAlexMetric("Índice h", hIndex == null ? "Sin dato" : integerFormat(hIndex), "Indicador calculado por OpenAlex")}
         ${openAlexMetric("Producción en acceso abierto", oaShare, "Participación en la serie utilizada")}
       </div>
+      ${narrative}
       <div class="charts-grid openalex-charts">
         ${chartBlock("Producción registrada en OpenAlex", production, "works_count", "openalex", "documentos")}
         ${chartBlock("Citas registradas en OpenAlex", production, "cited_by_count", "openalex-citations", "citas")}
       </div>
       ${quality}
-      ${openAlexTopHtml(openalex.top || {})}
+      ${openAlexExplorerHtml(openalex.top || {})}
       <div class="openalex-source-note">
         <span><strong>Fuente:</strong> ${escapeHtml(source.display_name || "OpenAlex")}${source.host_organization_name ? ` · ${escapeHtml(source.host_organization_name)}` : ""}</span>
         ${source.updated_date ? `<span><strong>Actualización en OpenAlex:</strong> ${escapeHtml(formatDate(source.updated_date))}</span>` : ""}
@@ -902,6 +928,28 @@ function openAlexSectionHtml(openalex) {
 
 function openAlexMetric(label, value, note) {
   return `<div class="openalex-metric"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong><small>${escapeHtml(note)}</small></div>`;
+}
+
+function openAlexNarrative(series, oaShare) {
+  const currentYear = new Date().getFullYear();
+  const complete = (series || [])
+    .filter(item => Number.isFinite(Number(item.year)) && Number.isFinite(Number(item.works_count)) && Number(item.year) <= currentYear - 1)
+    .sort((a, b) => Number(a.year) - Number(b.year));
+  if (!complete.length) return "";
+
+  const peak = complete.reduce((best, item) => Number(item.works_count) > Number(best.works_count) ? item : best, complete[0]);
+  const recent = complete.slice(-5);
+  const previous = complete.slice(-10, -5);
+  const recentAverage = recent.reduce((sum, item) => sum + Number(item.works_count), 0) / recent.length;
+  const previousAverage = previous.length ? previous.reduce((sum, item) => sum + Number(item.works_count), 0) / previous.length : null;
+  let trend = "";
+  if (previousAverage && previousAverage > 0) {
+    const change = ((recentAverage - previousAverage) / previousAverage) * 100;
+    const direction = change > 5 ? "un aumento" : change < -5 ? "una disminución" : "una trayectoria estable";
+    trend = ` En los cinco años completos más recientes, el promedio anual fue de ${integerFormat(Math.round(recentAverage))} documentos, frente a ${integerFormat(Math.round(previousAverage))} en los cinco años anteriores, lo que representa ${direction} (${change >= 0 ? "+" : ""}${change.toFixed(1)} %).`;
+  }
+  const oa = oaShare == null ? "" : ` La proporción de producción en acceso abierto registrada es de ${escapeHtml(String(oaShare))} %.`;
+  return `<div class="openalex-narrative"><strong>Lectura de la tendencia</strong><p>La mayor producción anual de la serie se registró en ${escapeHtml(String(peak.year))}, con ${integerFormat(peak.works_count)} documentos.${trend}${oa} Las citas de los años más recientes deben interpretarse considerando su menor tiempo de acumulación.</p></div>`;
 }
 
 function openAlexQualityHtml(flags) {
@@ -920,76 +968,142 @@ function openAlexQualityHtml(flags) {
   return `<div class="openalex-quality"><strong>Control de calidad de los datos</strong><ul>${messages.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul></div>`;
 }
 
-function openAlexTopHtml(top) {
+function openAlexExplorerHtml(top) {
   const groups = [
-    ["Temas principales", top.topics || []],
-    ["Países con mayor presencia", top.countries || []],
-    ["Instituciones con mayor presencia", top.institutions || []]
-  ].filter(([, items]) => items.length);
+    ["Temas", "Temas principales", top.topics || []],
+    ["Países", "Países con mayor presencia", top.countries || []],
+    ["Instituciones", "Instituciones con mayor presencia", top.institutions || []]
+  ].filter(([, , items]) => items.length);
   if (!groups.length) return "";
-  return `<div class="openalex-top-grid">${groups.map(([title, items]) => `
-    <div class="openalex-top-card"><h3>${escapeHtml(title)}</h3><ol>${items.map(item => `<li><span>${escapeHtml(item.name)}</span><strong>${integerFormat(item.count)}</strong></li>`).join("")}</ol></div>`).join("")}</div>`;
-}
 
-function externalEvidenceHtml(complementary, detail) {
-  const crossref = complementary?.crossref;
-  const web = complementary?.web;
-  const openalex = complementary?.openalex;
-  const legacy = detail.evidence || detail.web_evidence || detail.qualitative_evidence;
-  if (!crossref && !web && !openalex && (!Array.isArray(legacy) || !legacy.length)) return "";
-
-  const blocks = [];
-  if (crossref) blocks.push(crossrefEvidenceHtml(crossref));
-  if (openalex?.retracted_works?.length) blocks.push(openAlexRetractionsHtml(openalex.retracted_works));
-  if (web) blocks.push(webEvidenceHtml(web));
-  if (Array.isArray(legacy) && legacy.length) {
-    blocks.push(`<div class="evidence-panel neutral"><h3>Evidencias registradas previamente</h3><p>${legacy.length} evidencia(s) adicional(es), sujetas a revisión humana.</p></div>`);
-  }
-  return `<div class="external-evidence"><h3 class="evidence-heading">Evidencias externas automatizadas</h3><p class="evidence-intro">La información de esta sección fue localizada automáticamente y debe verificarse antes de formular una conclusión cualitativa.</p>${blocks.join("")}</div>`;
-}
-
-function crossrefEvidenceHtml(crossref) {
-  const high = Number(crossref.high_signal_count || 0);
-  const info = Number(crossref.informational_count || 0);
-  const counts = crossref.event_counts || {};
-  const highEvents = (crossref.events || []).filter(item => item.severity === "high_signal");
-  const className = high > 0 ? "high" : "neutral";
-  const title = high > 0 ? "Eventos editoriales de revisión prioritaria" : "Actualizaciones editoriales registradas";
-  const summary = high > 0
-    ? `Se identificaron ${high} evento(s) prioritario(s), como retractaciones, expresiones de preocupación, retiros o remociones. La existencia de estos eventos no permite valorar por sí sola a toda la revista, pero requiere revisión humana.`
-    : "No se identificaron eventos prioritarios en los registros consultados. Las correcciones y erratas se mantienen como información editorial, no como alertas por sí solas.";
-  return `<div class="evidence-panel ${className}">
-    <h3>${escapeHtml(title)}</h3><p>${escapeHtml(summary)}</p>
-    <div class="evidence-counts">
-      ${high > 0 ? `<span><strong>${high}</strong> prioritario(s)</span>` : ""}
-      <span><strong>${info}</strong> informativo(s)</span>
-      ${Object.keys(counts).length ? `<span><strong>${Object.values(counts).reduce((a, b) => a + Number(b || 0), 0)}</strong> evento(s) depurado(s)</span>` : ""}
+  return `<div class="openalex-explorer">
+    <div class="openalex-tabs" role="tablist" aria-label="Explorar datos complementarios de OpenAlex">
+      ${groups.map(([key, title], index) => `<button type="button" role="tab" class="openalex-tab${index === 0 ? " active" : ""}" aria-selected="${index === 0}" data-openalex-tab="${escapeHtml(key)}">${escapeHtml(key)}</button>`).join("")}
     </div>
-    ${highEvents.length ? `<ul class="priority-events">${highEvents.slice(0, 6).map(event => priorityEventHtml(event)).join("")}</ul>${highEvents.length > 6 ? `<p class="more-note">Se muestran 6 de ${highEvents.length} eventos prioritarios.</p>` : ""}` : ""}
+    <div class="openalex-tab-panels">
+      ${groups.map(([key, title, items], index) => openAlexRankPanel(key, title, items, index === 0)).join("")}
+    </div>
   </div>`;
 }
 
-function priorityEventHtml(event) {
-  const label = editorialEventLabel(event.event_type);
-  const date = event.notice_date ? ` · ${escapeHtml(event.notice_date)}` : "";
-  const title = event.notice_title || label;
-  const url = safeDoiUrl(event.notice_url || event.notice_doi);
-  return `<li><strong>${escapeHtml(label)}</strong>${date}<span>${escapeHtml(title)}</span>${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener">Ver registro</a>` : ""}</li>`;
+function openAlexRankPanel(key, title, items, active) {
+  const maximum = Math.max(...items.map(item => Number(item.count) || 0), 1);
+  return `<section class="openalex-tab-panel" data-openalex-panel="${escapeHtml(key)}" ${active ? "" : "hidden"}>
+    <h3>${escapeHtml(title)}</h3>
+    <div class="openalex-rank-list">
+      ${items.map((item, index) => {
+        const width = Math.max(4, Math.round(((Number(item.count) || 0) / maximum) * 100));
+        return `<div class="openalex-rank-item"><div class="openalex-rank-label"><span>${index + 1}. ${escapeHtml(item.name)}</span><strong>${integerFormat(item.count)}</strong></div><div class="openalex-rank-track"><span style="width:${width}%"></span></div></div>`;
+      }).join("")}
+    </div>
+  </section>`;
 }
 
-function openAlexRetractionsHtml(items) {
-  return `<div class="evidence-panel moderate"><h3>Obras marcadas como retractadas en OpenAlex</h3><p>OpenAlex marca ${items.length} obra(s) como retractada(s). Este dato se presenta para contraste y no constituye, por sí solo, una evaluación de la revista.</p><ul class="priority-events">${items.slice(0, 5).map(item => {
-    const url = safeDoiUrl(item.doi);
-    return `<li><strong>${item.year ? escapeHtml(item.year) : "Año no disponible"}</strong><span>${escapeHtml(item.title)}</span>${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener">Ver DOI</a>` : ""}</li>`;
-  }).join("")}</ul>${items.length > 5 ? `<p class="more-note">Se muestran 5 de ${items.length} obras marcadas.</p>` : ""}</div>`;
+function switchOpenAlexTab(button) {
+  const explorer = button.closest(".openalex-explorer");
+  if (!explorer) return;
+  const key = button.dataset.openalexTab;
+  explorer.querySelectorAll("[data-openalex-tab]").forEach(tab => {
+    const active = tab === button;
+    tab.classList.toggle("active", active);
+    tab.setAttribute("aria-selected", String(active));
+  });
+  explorer.querySelectorAll("[data-openalex-panel]").forEach(panel => {
+    panel.hidden = panel.dataset.openalexPanel !== key;
+  });
 }
 
-function webEvidenceHtml(web) {
-  if (web.status === "ok" && web.pages?.length) {
-    const categories = [...new Set(web.pages.flatMap(page => page.categories || []))];
-    return `<div class="evidence-panel web-ok"><h3>Información editorial localizada en el sitio web</h3><p>La consulta automatizada encontró páginas públicas relacionadas con ${categories.length ? categories.map(webCategoryLabel).join(", ") : "información editorial"}. La presencia de una página no implica que su contenido haya sido validado.</p><ul class="web-pages">${web.pages.slice(0, 6).map(page => `<li><a href="${escapeHtml(page.url)}" target="_blank" rel="noopener">${escapeHtml(page.title || "Página editorial")}</a>${page.categories?.length ? `<span>${page.categories.map(webCategoryLabel).join(" · ")}</span>` : ""}</li>`).join("")}</ul></div>`;
+function automatedQualitativeSectionHtml(complementary, detail) {
+  const evidence = collectAutomatedFindings(complementary, detail);
+  let content = "";
+
+  if (!complementary) {
+    content = `<div class="automated-status not-run"><span>Estado</span><strong>No ejecutada</strong></div>`;
+  } else if (!evidence.length) {
+    content = `<div class="automated-status no-results"><span>Resultado</span><strong>Sin resultados relevantes</strong></div>`;
+  } else {
+    const visible = evidence.slice(0, 6);
+    const extra = evidence.slice(6);
+    content = `<div class="automated-findings">${visible.map(automatedFindingCardHtml).join("")}${extra.length ? `<details class="automated-more"><summary>Ver ${extra.length} hallazgo(s) adicional(es)</summary><div>${extra.map(automatedFindingCardHtml).join("")}</div></details>` : ""}</div>`;
   }
-  return `<div class="evidence-panel limited"><h3>Consulta automatizada del sitio no disponible</h3><p>${escapeHtml(webStatusExplanation(web.status))} Esta limitación técnica no se interpreta como una señal adversa contra la revista.</p></div>`;
+
+  return `<section class="journal-section qualitative-automated-section">
+    <div class="section-heading">
+      <div><p class="section-kicker">Revisión automatizada de fuentes externas</p><h2>Evaluación cualitativa automatizada</h2></div>
+    </div>
+    ${content}
+  </section>`;
+}
+
+function collectAutomatedFindings(complementary, detail) {
+  if (!complementary) return [];
+  const findings = [];
+  const seenDois = new Set();
+  const crossrefEvents = (complementary.crossref?.events || []).filter(item => item.severity === "high_signal");
+
+  crossrefEvents.forEach(event => {
+    const doi = normalizeDoi(event.work_doi || event.notice_doi);
+    if (doi) seenDois.add(doi);
+    findings.push({
+      tone: "high",
+      type: editorialEventLabel(event.event_type),
+      title: event.notice_title || editorialEventLabel(event.event_type),
+      date: event.notice_date || "",
+      source: event.metadata_source === "retraction-watch" ? "Retraction Watch / Crossref" : "Crossref",
+      url: safeDoiUrl(event.notice_url || event.notice_doi),
+      detail: event.work_doi ? `Registro asociado: ${event.work_doi}` : ""
+    });
+  });
+
+  (complementary.openalex?.retracted_works || []).forEach(item => {
+    const doi = normalizeDoi(item.doi);
+    if (doi && seenDois.has(doi)) return;
+    if (doi) seenDois.add(doi);
+    findings.push({
+      tone: "high",
+      type: "Obra marcada como retractada",
+      title: item.title || "Obra retractada",
+      date: item.year ? String(item.year) : "",
+      source: "OpenAlex",
+      url: safeDoiUrl(item.doi),
+      detail: item.cited_by_count != null ? `${integerFormat(item.cited_by_count)} citas registradas en OpenAlex` : ""
+    });
+  });
+
+  if (complementary.web?.status === "ok") {
+    (complementary.web.pages || []).forEach(page => {
+      if (!page?.url) return;
+      const categories = (page.categories || []).map(webCategoryLabel);
+      findings.push({
+        tone: "informational",
+        type: "Información editorial localizada",
+        title: page.title || "Página editorial",
+        date: "",
+        source: "Sitio web de la revista",
+        url: page.url,
+        detail: categories.length ? categories.join(" · ") : "Contenido editorial público"
+      });
+    });
+  }
+
+  return findings;
+}
+
+function automatedFindingCardHtml(finding) {
+  return `<article class="automated-finding ${escapeHtml(finding.tone || "informational")}">
+    <div class="finding-type">${escapeHtml(finding.type || "Hallazgo")}</div>
+    <h3>${escapeHtml(finding.title || "Sin título")}</h3>
+    <dl>
+      ${finding.date ? `<div><dt>Fecha</dt><dd>${escapeHtml(finding.date)}</dd></div>` : ""}
+      <div><dt>Fuente</dt><dd>${escapeHtml(finding.source || "Fuente no especificada")}</dd></div>
+      ${finding.detail ? `<div><dt>Detalle</dt><dd>${escapeHtml(finding.detail)}</dd></div>` : ""}
+    </dl>
+    ${finding.url ? `<a class="finding-link" href="${escapeHtml(finding.url)}" target="_blank" rel="noopener">Ver fuente</a>` : ""}
+  </article>`;
+}
+
+function normalizeDoi(value) {
+  return String(value || "").toLowerCase().replace(/^https?:\/\/(dx\.)?doi\.org\//, "").trim();
 }
 
 function editorialEventLabel(value) {
