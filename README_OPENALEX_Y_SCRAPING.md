@@ -35,3 +35,11 @@ El flujo puede tardar varios minutos. Cuando termine, los resultados se incorpor
 ## Si el commit automático falla
 
 En **Settings → Actions → General → Workflow permissions**, seleccione **Read and write permissions** y guarde. Luego vuelva a ejecutar el flujo.
+
+
+## Cambios de la revisión 1.1
+- Corrige las consultas Crossref que devolvían HTTP 400 por un campo no admitido en `select`.
+- Añade una consulta específica para avisos de retractación.
+- Diferencia páginas editoriales reales de páginas de desafío, bloqueo o error 404.
+- Añade información de candidatos en cruces ambiguos de OpenAlex.
+- Genera un resumen crítico con errores y limitaciones del piloto.

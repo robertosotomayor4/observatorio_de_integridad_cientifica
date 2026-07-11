@@ -8,7 +8,7 @@ import urllib.error
 from common import http_json, normalize_issn, read_pilot_csv, utc_now, write_json
 
 BASE = "https://api.crossref.org/v1/works"
-SELECT = "DOI,title,container-title,ISSN,published,created,URL,update-to,relation,type,subtype"
+SELECT = "DOI,title,container-title,ISSN,published,created,URL,update-to,relation,type"
 
 
 def crossref_items(issn: str, relation_filter: str, max_items: int = 500) -> list[dict]:
@@ -73,22 +73,31 @@ def main() -> None:
             rec["status"] = "no_issn"
             records.append(rec)
             continue
-        try:
-            seen = set()
-            for filter_name, role in (("has-update:true", "work_updated"), ("is-update:true", "update_notice")):
+        seen = set()
+        rec["query_errors"] = []
+        queries = (
+            ("has-update:true", "work_updated"),
+            ("is-update:true", "update_notice"),
+            ("update-type:retraction", "retraction_notice"),
+        )
+        for filter_name, role in queries:
+            try:
                 for item in crossref_items(issn, filter_name):
-                    key = (item.get("DOI"), role)
+                    key = (item.get("DOI") or item.get("URL"), role)
                     if key in seen:
                         continue
                     seen.add(key)
                     rec["evidence"].append(compact(item, role))
+            except urllib.error.HTTPError as exc:
+                rec["query_errors"].append({"filter": filter_name, "error": f"HTTP {exc.code}"})
+            except Exception as exc:
+                rec["query_errors"].append({"filter": filter_name, "error": f"{type(exc).__name__}: {exc}"})
+        if rec["query_errors"] and not rec["evidence"]:
+            rec["status"] = "partial_error"
+        elif rec["query_errors"]:
+            rec["status"] = "ok_with_warnings"
+        else:
             rec["status"] = "ok"
-        except urllib.error.HTTPError as exc:
-            rec["status"] = "error"
-            rec["error"] = f"HTTP {exc.code}"
-        except Exception as exc:
-            rec["status"] = "error"
-            rec["error"] = f"{type(exc).__name__}: {exc}"
         records.append(rec)
 
     write_json(args.output, {

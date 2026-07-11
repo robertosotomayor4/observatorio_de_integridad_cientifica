@@ -16,6 +16,26 @@ from pathlib import Path
 
 from common import USER_AGENT, safe_public_url, utc_now, write_json
 
+
+BLOCK_PAGE_PATTERNS = [
+    "client challenge",
+    "access denied",
+    "page not found",
+    "404 not found",
+    "just a moment",
+    "enable javascript",
+    "security check",
+    "captcha",
+    "bot detection",
+]
+
+def block_page_reason(title: str, text: str) -> str:
+    sample = f"{title} {text[:5000]}".lower()
+    for pattern in BLOCK_PAGE_PATTERNS:
+        if pattern in sample:
+            return pattern
+    return ""
+
 KEYWORDS = {
     "ethics": ["publication ethics", "publishing ethics", "malpractice", "research integrity", "misconduct", "ética editorial", "buenas prácticas"],
     "peer_review": ["peer review", "review process", "arbitraje", "revisión por pares"],
@@ -151,6 +171,22 @@ def main() -> None:
                 parser_obj = PageParser()
                 parser_obj.feed(document)
                 text = " ".join(parser_obj.text_parts)
+                blocked_reason = block_page_reason(parser_obj.title, text)
+                if blocked_reason:
+                    result["pages"].append({
+                        "url": url,
+                        "http_status": status,
+                        "content_type": content_type,
+                        "title": parser_obj.title[:300],
+                        "meta_description": parser_obj.meta_description[:500],
+                        "categories_found": {},
+                        "candidate_links": [],
+                        "usable": False,
+                        "blocked_reason": blocked_reason,
+                        "review_status": "pending_human_review",
+                    })
+                    result["status"] = "challenge_or_invalid_page"
+                    break
                 categories = classify(text)
                 links = candidate_links(url, parser_obj.links)
                 result["pages"].append({
@@ -161,13 +197,16 @@ def main() -> None:
                     "meta_description": parser_obj.meta_description[:500],
                     "categories_found": categories,
                     "candidate_links": links,
+                    "usable": True,
                     "review_status": "pending_human_review",
                 })
                 for item in links:
                     if item["url"] not in visited and len(queue) < 12:
                         queue.append(item["url"])
                 time.sleep(1.0)
-            result["status"] = "ok"
+            if "status" not in result:
+                usable = sum(1 for page in result["pages"] if page.get("usable", True))
+                result["status"] = "ok" if usable else "no_usable_page"
         except urllib.error.HTTPError as exc:
             result["status"] = "http_error"
             result["error"] = f"HTTP {exc.code}"

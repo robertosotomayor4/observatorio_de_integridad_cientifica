@@ -5,6 +5,8 @@ from __future__ import annotations
 import argparse
 import os
 import urllib.error
+import re
+from difflib import SequenceMatcher
 from pathlib import Path
 
 from common import http_json, normalize_issn, read_pilot_csv, utc_now, write_csv, write_json
@@ -21,6 +23,17 @@ GROUP_FIELDS = {
 
 def source_key(source_id: str) -> str:
     return (source_id or "").rstrip("/").split("/")[-1]
+
+
+def normalized_title(value: str) -> str:
+    return " ".join(re.sub(r"[^a-z0-9]+", " ", (value or "").lower()).split())
+
+
+def title_similarity(left: str, right: str) -> float:
+    a, b = normalized_title(left), normalized_title(right)
+    if not a or not b:
+        return 0.0
+    return round(SequenceMatcher(None, a, b).ratio(), 4)
 
 
 def resolve_source(row: dict[str, str], api_key: str) -> tuple[dict | None, dict]:
@@ -41,6 +54,16 @@ def resolve_source(row: dict[str, str], api_key: str) -> tuple[dict | None, dict
     audit = {
         "attempted_issns": attempted,
         "candidate_source_ids": sorted(candidates),
+        "candidate_sources": [
+            {
+                "id": source.get("id"),
+                "display_name": source.get("display_name"),
+                "issn": source.get("issn") or [],
+                "works_count": source.get("works_count"),
+                "title_similarity": title_similarity(row.get("title", ""), source.get("display_name", "")),
+            }
+            for source in candidates.values()
+        ],
         "match_status": "not_found" if not candidates else ("exact_unique" if len(candidates) == 1 else "ambiguous"),
     }
     if len(candidates) != 1:
@@ -48,6 +71,7 @@ def resolve_source(row: dict[str, str], api_key: str) -> tuple[dict | None, dict
     source = next(iter(candidates.values()))
     source_issns = {normalize_issn(x) for x in source.get("issn", []) if normalize_issn(x)}
     audit["matched_issns"] = sorted(source_issns.intersection(attempted))
+    audit["title_similarity"] = title_similarity(row.get("title", ""), source.get("display_name", ""))
     audit["match_confidence"] = "high" if audit["matched_issns"] else "review"
     return source, audit
 
@@ -169,6 +193,8 @@ def main() -> None:
             "openalex_source_id": (record.get("source") or {}).get("id", ""),
             "openalex_title": (record.get("source") or {}).get("display_name", ""),
             "match_confidence": (record.get("match") or {}).get("match_confidence", ""),
+            "title_similarity": (record.get("match") or {}).get("title_similarity", ""),
+            "candidate_sources": str((record.get("match") or {}).get("candidate_sources", "")),
             "error": record.get("error", ""),
         })
 
@@ -182,7 +208,7 @@ def main() -> None:
     })
     write_csv(args.audit, audit_rows, [
         "journal_id", "title", "issn", "eissn", "status",
-        "openalex_source_id", "openalex_title", "match_confidence", "error",
+        "openalex_source_id", "openalex_title", "match_confidence", "title_similarity", "candidate_sources", "error",
     ])
 
 
