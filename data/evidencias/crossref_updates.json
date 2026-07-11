@@ -1,0 +1,248 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-07-11T08:42:24+00:00",
+  "source": "Crossref REST API (incluye metadatos de fuentes confiables como Retraction Watch cuando están disponibles)",
+  "scope": "pilot",
+  "records": [
+    {
+      "journal_id": "J14710072",
+      "title": "Nature Reviews Molecular Cell Biology",
+      "issn_used": "1471-0072",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J00015385",
+      "title": "Acta Cardiologica",
+      "issn_used": "0001-5385",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J23297662",
+      "title": "3D Printing and Additive Manufacturing",
+      "issn_used": "2329-7662",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J20133294",
+      "title": "452ºF",
+      "issn_used": "2013-3294",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J23321091",
+      "title": "Civil Engineering and Architecture",
+      "issn_used": "2332-1091",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J07981015",
+      "title": "Espacios",
+      "issn_used": "0798-1015",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J16904648",
+      "title": "Boletin de Malariologia y Salud Ambiental",
+      "issn_used": "1690-4648",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J21769079",
+      "title": "Comunicata Scientiae",
+      "issn_used": "2176-9079",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J2190572X",
+      "title": "3 Biotech",
+      "issn_used": "2190-572X",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J05912385",
+      "title": "Zygon",
+      "issn_used": "0591-2385",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J15717283",
+      "title": "Zutot",
+      "issn_used": "1571-7283",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J09671994",
+      "title": "Zygote",
+      "issn_used": "0967-1994",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J01924788",
+      "title": "Activities, Adaptation and Aging",
+      "issn_used": "0192-4788",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J23294906",
+      "title": "Business and Professional Communication Quarterly",
+      "issn_used": "2329-4906",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J00113840",
+      "title": "Current Problems in Surgery",
+      "issn_used": "0011-3840",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J16004469",
+      "title": "Dental Traumatology",
+      "issn_used": "1600-4469",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J03026701",
+      "title": "Egyptian Journal of Soil Science",
+      "issn_used": "0302-6701",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J01285157",
+      "title": "3L: Language, Linguistics, Literature",
+      "issn_used": "0128-5157",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J07434618",
+      "title": "AAC: Augmentative and Alternative Communication",
+      "issn_used": "0743-4618",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J03650359",
+      "title": "AAPP Atti della Accademia Peloritana dei Pericolanti, Classe di Scienze Fisiche, Matematiche e Naturali",
+      "issn_used": "0365-0359",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J23742895",
+      "title": "Academic Pathology",
+      "issn_used": "2374-2895",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J02107287",
+      "title": "1616-ANUARIO DE LITERATURA COMPARADA",
+      "issn_used": "0210-7287",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J16524772",
+      "title": "1700-tal: Nordic Journal for Eighteenth-Century Studies",
+      "issn_used": "1652-4772",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J08989575",
+      "title": "a/b: Auto/Biography Studies",
+      "issn_used": "0898-9575",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J25647474",
+      "title": "A/Z ITU Journal of the Faculty of Architecture",
+      "issn_used": "2564-7474",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J17917573",
+      "title": "Τεκμήρια",
+      "issn_used": "1791-7573",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J19947836",
+      "title": "Науковий вісник НЛТУ України",
+      "issn_used": "1994-7836",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J19979665",
+      "title": "Морфологія",
+      "issn_used": "1997-9665",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J20531583",
+      "title": "2D Materials",
+      "issn_used": "2053-1583",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    },
+    {
+      "journal_id": "J23656271",
+      "title": "3D Printing in Medicine",
+      "issn_used": "2365-6271",
+      "evidence": [],
+      "status": "error",
+      "error": "HTTP 400"
+    }
+  ]
+}
