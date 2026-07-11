@@ -1,0 +1,101 @@
+name: Piloto OpenAlex y evidencias
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_journals:
+        description: "Número de revistas del piloto"
+        required: true
+        default: "30"
+      run_scraping:
+        description: "Ejecutar scraping respetuoso de sitios editoriales"
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: openalex-evidencias-piloto
+  cancel-in-progress: false
+
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v6
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verificar secreto de OpenAlex
+        shell: bash
+        run: |
+          if [ -z "$OPENALEX_API_KEY" ]; then
+            echo "Falta el secreto OPENALEX_API_KEY" >&2
+            exit 1
+          fi
+
+      - name: Ejecutar cruce OpenAlex
+        run: |
+          python scripts/openalex_pilot.py \
+            --config config/pilot_journals.csv \
+            --output data/openalex/pilot_openalex.json \
+            --audit data/openalex/pilot_openalex_audit.csv \
+            --max-journals "${{ inputs.max_journals }}"
+
+      - name: Consultar Crossref y Retraction Watch
+        run: |
+          python scripts/crossref_pilot.py \
+            --config config/pilot_journals.csv \
+            --output data/evidencias/crossref_updates.json \
+            --max-journals "${{ inputs.max_journals }}"
+
+      - name: Ejecutar scraping piloto
+        if: ${{ inputs.run_scraping }}
+        run: |
+          python scripts/scraping_pilot.py \
+            --openalex data/openalex/pilot_openalex.json \
+            --output data/evidencias/web_scraping_pilot.json \
+            --max-pages-per-journal 4
+
+      - name: Crear archivo vacío si se omitió scraping
+        if: ${{ !inputs.run_scraping }}
+        run: |
+          mkdir -p data/evidencias
+          printf '{"version":"1.0","scope":"pilot","status":"skipped","records":[]}' > data/evidencias/web_scraping_pilot.json
+
+      - name: Generar resumen
+        run: python scripts/build_pilot_summary.py
+
+      - name: Guardar artefacto de auditoría
+        uses: actions/upload-artifact@v4
+        with:
+          name: piloto-openalex-evidencias
+          path: |
+            data/openalex/
+            data/evidencias/
+            data/piloto/
+          retention-days: 30
+
+      - name: Incorporar resultados al repositorio
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/openalex data/evidencias data/piloto
+          if git diff --cached --quiet; then
+            echo "No hay cambios que publicar."
+          else
+            git commit -m "Actualiza piloto OpenAlex y evidencias"
+            git push
+          fi
