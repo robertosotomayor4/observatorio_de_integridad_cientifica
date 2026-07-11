@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-07-11T08:48:35+00:00",
+  "generated_at": "2026-07-11T09:27:43+00:00",
   "scope": "pilot",
   "method": "Scraping limitado de páginas públicas; respeta robots.txt; no produce conclusiones automáticas",
   "records": [
@@ -16,17 +16,15 @@
           "content_type": "text/html; charset=utf-8",
           "title": "Client Challenge",
           "meta_description": "",
-          "categories_found": {
-            "contact": [
-              "contact"
-            ]
-          },
+          "categories_found": {},
           "candidate_links": [],
+          "usable": false,
+          "blocked_reason": "client challenge",
           "review_status": "pending_human_review"
         }
       ],
       "review_status": "pending_human_review",
-      "status": "ok"
+      "status": "challenge_or_invalid_page"
     },
     {
       "journal_id": "J00015385",
@@ -71,6 +69,7 @@
             ]
           },
           "candidate_links": [],
+          "usable": true,
           "review_status": "pending_human_review"
         }
       ],
@@ -127,17 +126,15 @@
           "content_type": "text/html; charset=utf-8",
           "title": "Client Challenge",
           "meta_description": "",
-          "categories_found": {
-            "contact": [
-              "contact"
-            ]
-          },
+          "categories_found": {},
           "candidate_links": [],
+          "usable": false,
+          "blocked_reason": "client challenge",
           "review_status": "pending_human_review"
         }
       ],
       "review_status": "pending_human_review",
-      "status": "ok"
+      "status": "challenge_or_invalid_page"
     },
     {
       "journal_id": "J05912385",
@@ -189,20 +186,15 @@
           "content_type": "text/html; charset=utf-8",
           "title": "404 - Page Not Found",
           "meta_description": "404 - Page Not Found",
-          "categories_found": {
-            "peer_review": [
-              "peer review"
-            ],
-            "contact": [
-              "contact"
-            ]
-          },
+          "categories_found": {},
           "candidate_links": [],
+          "usable": false,
+          "blocked_reason": "page not found",
           "review_status": "pending_human_review"
         }
       ],
       "review_status": "pending_human_review",
-      "status": "ok"
+      "status": "challenge_or_invalid_page"
     },
     {
       "journal_id": "J00113840",
@@ -278,6 +270,7 @@
               ]
             }
           ],
+          "usable": true,
           "review_status": "pending_human_review"
         },
         {
@@ -342,6 +335,7 @@
               ]
             }
           ],
+          "usable": true,
           "review_status": "pending_human_review"
         },
         {
@@ -406,6 +400,7 @@
               ]
             }
           ],
+          "usable": true,
           "review_status": "pending_human_review"
         },
         {
@@ -470,6 +465,7 @@
               ]
             }
           ],
+          "usable": true,
           "review_status": "pending_human_review"
         }
       ],
@@ -531,6 +527,7 @@
               ]
             }
           ],
+          "usable": true,
           "review_status": "pending_human_review"
         },
         {
@@ -587,6 +584,7 @@
               ]
             }
           ],
+          "usable": true,
           "review_status": "pending_human_review"
         },
         {
@@ -647,6 +645,7 @@
               ]
             }
           ],
+          "usable": true,
           "review_status": "pending_human_review"
         },
         {
@@ -679,6 +678,7 @@
               ]
             }
           ],
+          "usable": true,
           "review_status": "pending_human_review"
         }
       ],
@@ -730,6 +730,7 @@
               ]
             }
           ],
+          "usable": true,
           "review_status": "pending_human_review"
         },
         {
@@ -773,6 +774,7 @@
               ]
             }
           ],
+          "usable": true,
           "review_status": "pending_human_review"
         },
         {
@@ -795,6 +797,7 @@
               ]
             }
           ],
+          "usable": true,
           "review_status": "pending_human_review"
         },
         {
@@ -838,6 +841,7 @@
               ]
             }
           ],
+          "usable": true,
           "review_status": "pending_human_review"
         }
       ],
@@ -880,6 +884,7 @@
               ]
             }
           ],
+          "usable": true,
           "review_status": "pending_human_review"
         },
         {
@@ -933,6 +938,7 @@
               ]
             }
           ],
+          "usable": true,
           "review_status": "pending_human_review"
         },
         {
@@ -991,6 +997,7 @@
               ]
             }
           ],
+          "usable": true,
           "review_status": "pending_human_review"
         },
         {
@@ -1044,6 +1051,7 @@
               ]
             }
           ],
+          "usable": true,
           "review_status": "pending_human_review"
         }
       ],
@@ -1081,17 +1089,15 @@
           "content_type": "text/html; charset=utf-8",
           "title": "Client Challenge",
           "meta_description": "",
-          "categories_found": {
-            "contact": [
-              "contact"
-            ]
-          },
+          "categories_found": {},
           "candidate_links": [],
+          "usable": false,
+          "blocked_reason": "client challenge",
           "review_status": "pending_human_review"
         }
       ],
       "review_status": "pending_human_review",
-      "status": "ok"
+      "status": "challenge_or_invalid_page"
     }
   ]
 }

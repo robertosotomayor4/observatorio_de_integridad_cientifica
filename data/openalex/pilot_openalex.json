@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-07-11T08:42:19+00:00",
+  "generated_at": "2026-07-11T09:21:00+00:00",
   "source": "OpenAlex API",
   "scope": "pilot",
   "journal_count": 30,
@@ -20,11 +20,24 @@
         "candidate_source_ids": [
           "S196724125"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S196724125",
+            "display_name": "Nature Reviews Molecular Cell Biology",
+            "issn": [
+              "1471-0072",
+              "1471-0080"
+            ],
+            "works_count": 5019,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "1471-0072",
           "1471-0080"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -660,6 +673,27 @@
           "S18670189",
           "S4394735472"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S18670189",
+            "display_name": "Acta Cardiologica",
+            "issn": [
+              "0001-5385",
+              "1784-973X"
+            ],
+            "works_count": 1270,
+            "title_similarity": 1.0
+          },
+          {
+            "id": "https://openalex.org/S4394735472",
+            "display_name": "Acta cardiologica. Supplementum",
+            "issn": [
+              "0373-7934"
+            ],
+            "works_count": 2318,
+            "title_similarity": 0.7234
+          }
+        ],
         "match_status": "ambiguous"
       },
       "status": "ambiguous"
@@ -679,11 +713,24 @@
         "candidate_source_ids": [
           "S4210174904"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210174904",
+            "display_name": "3D Printing and Additive Manufacturing",
+            "issn": [
+              "2329-7662",
+              "2329-7670"
+            ],
+            "works_count": 768,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "2329-7662",
           "2329-7670"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -1149,10 +1196,22 @@
         "candidate_source_ids": [
           "S4210177177"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210177177",
+            "display_name": "452ºF Revista de Teoría de la literatura y Literatura Comparada",
+            "issn": [
+              "2013-3294"
+            ],
+            "works_count": 246,
+            "title_similarity": 0.1471
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "2013-3294"
         ],
+        "title_similarity": 0.1471,
         "match_confidence": "high"
       },
       "source": {
@@ -1502,11 +1561,24 @@
         "candidate_source_ids": [
           "S4210186571"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210186571",
+            "display_name": "Civil Engineering and Architecture",
+            "issn": [
+              "2332-1091",
+              "2332-1121"
+            ],
+            "works_count": 1935,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "2332-1091",
           "2332-1121"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -1945,10 +2017,23 @@
         "candidate_source_ids": [
           "S4210175031"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210175031",
+            "display_name": "ESPACIOS",
+            "issn": [
+              "0798-1015",
+              "2739-0071"
+            ],
+            "works_count": 1103,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "0798-1015"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -2435,10 +2520,22 @@
         "candidate_source_ids": [
           "S966885642"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S966885642",
+            "display_name": "Boletín de Malariología y Salud Ambiental",
+            "issn": [
+              "1690-4648"
+            ],
+            "works_count": 661,
+            "title_similarity": 0.9512
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "1690-4648"
         ],
+        "title_similarity": 0.9512,
         "match_confidence": "high"
       },
       "source": {
@@ -2935,11 +3032,24 @@
         "candidate_source_ids": [
           "S4210228716"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210228716",
+            "display_name": "Comunicata Scientiae",
+            "issn": [
+              "2176-9079",
+              "2177-5133"
+            ],
+            "works_count": 912,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "2176-9079",
           "2177-5133"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -3415,11 +3525,24 @@
         "candidate_source_ids": [
           "S4210190239"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210190239",
+            "display_name": "3 Biotech",
+            "issn": [
+              "2190-572X",
+              "2190-5738"
+            ],
+            "works_count": 4932,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "2190-572X",
           "2190-5738"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -4249,11 +4372,24 @@
         "candidate_source_ids": [
           "S128470386"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S128470386",
+            "display_name": "Zygon®",
+            "issn": [
+              "0591-2385",
+              "1467-9744"
+            ],
+            "works_count": 3787,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "0591-2385",
           "1467-9744"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -5272,11 +5408,24 @@
         "candidate_source_ids": [
           "S4210174357"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210174357",
+            "display_name": "Zutot",
+            "issn": [
+              "1571-7283",
+              "1875-0214"
+            ],
+            "works_count": 289,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "1571-7283",
           "1875-0214"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -5834,11 +5983,24 @@
         "candidate_source_ids": [
           "S99576920"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S99576920",
+            "display_name": "Zygote",
+            "issn": [
+              "0967-1994",
+              "1469-8730"
+            ],
+            "works_count": 2024,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "0967-1994",
           "1469-8730"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -6562,11 +6724,24 @@
         "candidate_source_ids": [
           "S185153313"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S185153313",
+            "display_name": "Activities Adaptation & Aging",
+            "issn": [
+              "0192-4788",
+              "1544-4368"
+            ],
+            "works_count": 1726,
+            "title_similarity": 0.931
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "0192-4788",
           "1544-4368"
         ],
+        "title_similarity": 0.931,
         "match_confidence": "high"
       },
       "source": {
@@ -7412,11 +7587,24 @@
         "candidate_source_ids": [
           "S4210193456"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210193456",
+            "display_name": "Business and Professional Communication Quarterly",
+            "issn": [
+              "2329-4906",
+              "2329-4922"
+            ],
+            "works_count": 521,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "2329-4906",
           "2329-4922"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -7866,11 +8054,24 @@
         "candidate_source_ids": [
           "S84847770"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S84847770",
+            "display_name": "Current Problems in Surgery",
+            "issn": [
+              "0011-3840",
+              "1535-6337"
+            ],
+            "works_count": 2684,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "0011-3840",
           "1535-6337"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -8921,11 +9122,24 @@
         "candidate_source_ids": [
           "S113867935"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S113867935",
+            "display_name": "Dental Traumatology",
+            "issn": [
+              "1600-4469",
+              "1600-9657"
+            ],
+            "works_count": 3442,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "1600-4469",
           "1600-9657"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -9716,11 +9930,24 @@
         "candidate_source_ids": [
           "S4210230455"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210230455",
+            "display_name": "Egyptian Journal of Soil Science",
+            "issn": [
+              "0302-6701",
+              "2357-0369"
+            ],
+            "works_count": 650,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "0302-6701",
           "2357-0369"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -10175,11 +10402,24 @@
         "candidate_source_ids": [
           "S4210230078"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210230078",
+            "display_name": "3L The Southeast Asian Journal of English Language Studies",
+            "issn": [
+              "0128-5157",
+              "2550-2247"
+            ],
+            "works_count": 781,
+            "title_similarity": 0.3478
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "0128-5157",
           "2550-2247"
         ],
+        "title_similarity": 0.3478,
         "match_confidence": "high"
       },
       "source": {
@@ -10631,11 +10871,24 @@
         "candidate_source_ids": [
           "S147155939"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S147155939",
+            "display_name": "Augmentative and Alternative Communication",
+            "issn": [
+              "0743-4618",
+              "1477-3848"
+            ],
+            "works_count": 1316,
+            "title_similarity": 0.9545
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "0743-4618",
           "1477-3848"
         ],
+        "title_similarity": 0.9545,
         "match_confidence": "high"
       },
       "source": {
@@ -11426,11 +11679,24 @@
         "candidate_source_ids": [
           "S2739114148"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S2739114148",
+            "display_name": "Atti della Accademia Peloritana dei Pericolanti. Classe di Scienze Fisiche, Matematiche e Naturali/Atti della Accademia Peloritana dei Pericolanti, Classe di Scienze Fisiche, Matematiche e Naturali",
+            "issn": [
+              "0365-0359",
+              "1825-1242"
+            ],
+            "works_count": 6,
+            "title_similarity": 0.6871
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "0365-0359",
           "1825-1242"
         ],
+        "title_similarity": 0.6871,
         "match_confidence": "high"
       },
       "source": {
@@ -11661,10 +11927,22 @@
         "candidate_source_ids": [
           "S4210212924"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210212924",
+            "display_name": "Academic Pathology",
+            "issn": [
+              "2374-2895"
+            ],
+            "works_count": 579,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "2374-2895"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -12132,11 +12410,24 @@
         "candidate_source_ids": [
           "S4210168538"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210168538",
+            "display_name": "1616 Anuario de Literatura Comparada",
+            "issn": [
+              "0210-7287",
+              "2445-2262"
+            ],
+            "works_count": 99,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "0210-7287",
           "2445-2262"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -12487,11 +12778,24 @@
         "candidate_source_ids": [
           "S4210168009"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210168009",
+            "display_name": "1700-tal Nordic Journal for Eighteenth-Century Studies",
+            "issn": [
+              "1652-4772",
+              "2001-9866"
+            ],
+            "works_count": 681,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "1652-4772",
           "2001-9866"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -12962,11 +13266,24 @@
         "candidate_source_ids": [
           "S4210179108"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210179108",
+            "display_name": "a/b Auto/Biography Studies",
+            "issn": [
+              "0898-9575",
+              "2151-7290"
+            ],
+            "works_count": 1448,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "0898-9575",
           "2151-7290"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -13745,10 +14062,22 @@
         "candidate_source_ids": [
           "S4387288082"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4387288082",
+            "display_name": "ITU Press Press of the Istanbul Technical University",
+            "issn": [
+              "2564-7474"
+            ],
+            "works_count": 124,
+            "title_similarity": 0.4286
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "2564-7474"
         ],
+        "title_similarity": 0.4286,
         "match_confidence": "high"
       },
       "source": {
@@ -14056,10 +14385,23 @@
         "candidate_source_ids": [
           "S4210192701"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210192701",
+            "display_name": "Τεκμήρια",
+            "issn": [
+              "1106-661X",
+              "1791-7573"
+            ],
+            "works_count": 194,
+            "title_similarity": 0.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "1791-7573"
         ],
+        "title_similarity": 0.0,
         "match_confidence": "high"
       },
       "source": {
@@ -14618,10 +14960,23 @@
         "candidate_source_ids": [
           "S2764816348"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S2764816348",
+            "display_name": "Scientific Bulletin of UNFU",
+            "issn": [
+              "1994-7836",
+              "2519-2477"
+            ],
+            "works_count": 2415,
+            "title_similarity": 0.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "1994-7836"
         ],
+        "title_similarity": 0.0,
         "match_confidence": "high"
       },
       "source": {
@@ -15055,10 +15410,22 @@
         "candidate_source_ids": [
           "S4210171323"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210171323",
+            "display_name": "Morphologia",
+            "issn": [
+              "1997-9665"
+            ],
+            "works_count": 815,
+            "title_similarity": 0.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "1997-9665"
         ],
+        "title_similarity": 0.0,
         "match_confidence": "high"
       },
       "source": {
@@ -15491,10 +15858,22 @@
         "candidate_source_ids": [
           "S4210229423"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210229423",
+            "display_name": "2D Materials",
+            "issn": [
+              "2053-1583"
+            ],
+            "works_count": 2261,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "2053-1583"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
@@ -15947,10 +16326,22 @@
         "candidate_source_ids": [
           "S4210191256"
         ],
+        "candidate_sources": [
+          {
+            "id": "https://openalex.org/S4210191256",
+            "display_name": "3D Printing in Medicine",
+            "issn": [
+              "2365-6271"
+            ],
+            "works_count": 377,
+            "title_similarity": 1.0
+          }
+        ],
         "match_status": "exact_unique",
         "matched_issns": [
           "2365-6271"
         ],
+        "title_similarity": 1.0,
         "match_confidence": "high"
       },
       "source": {
