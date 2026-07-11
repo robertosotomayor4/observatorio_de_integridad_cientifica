@@ -1,0 +1,13 @@
+ACTUALIZACIÓN: integración OpenAlex y evidencias automatizadas
+
+Copie TODO el contenido de esta carpeta en la raíz del repositorio local
+observatorio_de_integridad_cientifica y acepte combinar/reemplazar.
+
+Después, en GitHub Desktop:
+1. Summary: Integra OpenAlex y evidencias en el Verificador
+2. Commit to main
+3. Pull origin si aparece
+4. Push origin
+
+La versión visible del sitio permanece como Versión 1.0.
+La capa complementaria aparece únicamente en las 30 revistas del piloto.

@@ -4,6 +4,8 @@ const STATE = {
   catalog: [],
   details: new Map(),
   detailPromises: new Map(),
+  complementary: null,
+  complementaryPromise: null,
   loaded: false,
   suggestions: [],
   activeSuggestion: -1,
@@ -229,9 +231,13 @@ async function selectJournal(journal, options = {}) {
   history.replaceState({}, "", url);
 
   try {
-    const payload = await loadDetailChunk(journal.detail_chunk);
+    const [payload, complementaryRecords] = await Promise.all([
+      loadDetailChunk(journal.detail_chunk),
+      loadComplementaryData()
+    ]);
     const detail = payload.journals[journal.journal_id] || { events: [], sjr: [], incites: [], sources: [] };
-    $.journalContent.innerHTML = journalHtml(journal, detail);
+    const complementary = complementaryRecords[journal.journal_id] || null;
+    $.journalContent.innerHTML = journalHtml(journal, detail, complementary);
     $.journalLoading.hidden = true;
     if (!options.noScroll) {
       window.scrollTo({ top: $.journalView.offsetTop - 88, behavior: "smooth" });
@@ -306,7 +312,42 @@ async function loadDetailChunk(chunk) {
   return promise;
 }
 
-function journalHtml(journal, detail) {
+async function loadComplementaryData() {
+  if (STATE.complementary) return STATE.complementary;
+  if (STATE.complementaryPromise) return STATE.complementaryPromise;
+
+  STATE.complementaryPromise = (async () => {
+    try {
+      let payload;
+      if ("DecompressionStream" in window) {
+        try {
+          const response = await fetch("data/complementary/pilot_integrated.json.gz");
+          if (!response.ok) throw new Error("complementary-gzip");
+          const stream = response.body.pipeThrough(new DecompressionStream("gzip"));
+          payload = await new Response(stream).json();
+        } catch (error) {
+          const response = await fetch("data/complementary/pilot_integrated.json");
+          if (!response.ok) throw new Error("complementary-json");
+          payload = await response.json();
+        }
+      } else {
+        const response = await fetch("data/complementary/pilot_integrated.json");
+        if (!response.ok) throw new Error("complementary-json");
+        payload = await response.json();
+      }
+      STATE.complementary = payload.records || {};
+      return STATE.complementary;
+    } catch (error) {
+      console.warn("No se cargaron los datos complementarios.", error);
+      STATE.complementary = {};
+      return STATE.complementary;
+    }
+  })();
+
+  return STATE.complementaryPromise;
+}
+
+function journalHtml(journal, detail, complementary) {
   const hasEvents = Array.isArray(detail.events) && detail.events.length > 0;
   const displayQuantStatus = effectiveQuantitativeStatus(journal, detail);
   const officialSection = officialStatusHtml(journal, detail);
@@ -378,18 +419,20 @@ function journalHtml(journal, detail) {
           <div><p class="section-kicker">Información histórica disponible</p><h2>Evolución de la producción</h2></div>
         </div>
         <div class="charts-grid">
-          ${chartBlock("SCImago / Scopus", detail.sjr || [], "total_docs_year", "scopus")}
-          ${chartBlock("InCites / Web of Science", detail.incites || [], "wos_documents", "wos")}
+          ${chartBlock("SCImago / Scopus", detail.sjr || [], "total_docs_year", "scopus", "documentos")}
+          ${chartBlock("InCites / Web of Science", detail.incites || [], "wos_documents", "wos", "documentos")}
         </div>
         <p class="history-note">Se muestra toda la serie histórica disponible. La ausencia de datos recientes no elimina ni invalida la información de años anteriores.</p>
       </section>
+
+      ${openAlexSectionHtml(complementary?.openalex)}
 
       <section class="journal-section qualitative-section">
         <div class="section-heading">
           <div><p class="section-kicker">Revisión humana y evidencias</p><h2>Evaluación cualitativa</h2></div>
         </div>
         ${qualitativeHtml(journal)}
-        ${complementaryEvidenceHtml(detail)}
+        ${externalEvidenceHtml(complementary, detail)}
       </section>
 
       <aside class="interpretation-note">
@@ -749,7 +792,7 @@ function reasonSpanish(reason, type) {
   return "";
 }
 
-function chartBlock(title, series, key, sourceClass) {
+function chartBlock(title, series, key, sourceClass, measureLabel = "documentos") {
   const valid = series
     .filter(item => item[key] !== "" && item[key] != null && Number.isFinite(Number(item[key])))
     .sort((a, b) => Number(a.year) - Number(b.year));
@@ -781,7 +824,7 @@ function chartBlock(title, series, key, sourceClass) {
     <div class="chart-card ${sourceClass}">
       <h3>${escapeHtml(title)}</h3>
       <div class="chart-wrap">
-        <svg class="chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(title)}: documentos por año">
+        <svg class="chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(title)}: ${escapeHtml(measureLabel)} por año">
           <line class="axis" x1="${padding.left}" y1="${height - padding.bottom}" x2="${width - padding.right}" y2="${height - padding.bottom}"></line>
           <line class="axis" x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${height - padding.bottom}"></line>
           <text class="axis-value" x="10" y="${padding.top + 5}">${Math.round(maximum)}</text>
@@ -798,8 +841,8 @@ function qualitativeHtml(journal) {
   if (journal.qualitative_review_status !== "Completed") {
     return `
       <div class="qualitative-pending">
-        <strong>Revisión cualitativa no realizada</strong>
-        <p>Este estado no implica que la revista haya sido validada. La revisión humana se incorporará progresivamente junto con las evidencias verificables.</p>
+        <strong>Revisión cualitativa humana no realizada</strong>
+        <p>Las evidencias automatizadas que aparecen en esta ficha orientan la revisión, pero no sustituyen una evaluación humana documentada.</p>
       </div>`;
   }
 
@@ -818,19 +861,189 @@ function qualitativeLabel(value) {
   })[value] || value || "Realizada";
 }
 
-function complementaryEvidenceHtml(detail) {
-  const openAlex = detail.openalex || detail.openAlex;
-  const evidence = detail.evidence || detail.web_evidence || detail.qualitative_evidence;
-  if (!openAlex && (!Array.isArray(evidence) || !evidence.length)) return "";
+function openAlexSectionHtml(openalex) {
+  if (!openalex || !openalex.source) return "";
+  const source = openalex.source;
+  const production = openalex.production_by_year || [];
+  const confidence = openalex.match_status === "manual_override"
+    ? "Cruce revisado manualmente por ISSN y título"
+    : "Cruce automático de alta confianza por ISSN/eISSN";
+  const hIndex = source.summary_stats?.h_index;
+  const oaShare = openalex.oa_share == null ? "Sin dato" : `${openalex.oa_share} %`;
+  const quality = openAlexQualityHtml(openalex.quality_flags || []);
+  const openAlexUrl = source.id ? source.id.replace("https://openalex.org/", "https://openalex.org/") : "";
+
+  return `
+    <section class="journal-section openalex-section">
+      <div class="section-heading">
+        <div><p class="section-kicker">Fuente bibliométrica abierta</p><h2>Análisis complementario con OpenAlex</h2></div>
+        <span class="openalex-badge">${escapeHtml(confidence)}</span>
+      </div>
+      <p class="openalex-intro">OpenAlex aporta una lectura adicional sobre producción, citación, acceso abierto y procedencia institucional. No sustituye el estado oficial de Scopus, Web of Science o DOAJ ni modifica por sí solo la escala de evaluación.</p>
+      <div class="openalex-metrics">
+        ${openAlexMetric("Documentos registrados", integerFormat(source.works_count), "Total atribuido por OpenAlex")}
+        ${openAlexMetric("Citas registradas", integerFormat(source.cited_by_count), "Conteo acumulado en OpenAlex")}
+        ${openAlexMetric("Índice h", hIndex == null ? "Sin dato" : integerFormat(hIndex), "Indicador calculado por OpenAlex")}
+        ${openAlexMetric("Producción en acceso abierto", oaShare, "Participación en la serie utilizada")}
+      </div>
+      <div class="charts-grid openalex-charts">
+        ${chartBlock("Producción registrada en OpenAlex", production, "works_count", "openalex", "documentos")}
+        ${chartBlock("Citas registradas en OpenAlex", production, "cited_by_count", "openalex-citations", "citas")}
+      </div>
+      ${quality}
+      ${openAlexTopHtml(openalex.top || {})}
+      <div class="openalex-source-note">
+        <span><strong>Fuente:</strong> ${escapeHtml(source.display_name || "OpenAlex")}${source.host_organization_name ? ` · ${escapeHtml(source.host_organization_name)}` : ""}</span>
+        ${source.updated_date ? `<span><strong>Actualización en OpenAlex:</strong> ${escapeHtml(formatDate(source.updated_date))}</span>` : ""}
+        ${openAlexUrl ? `<a href="${escapeHtml(openAlexUrl)}" target="_blank" rel="noopener">Ver registro en OpenAlex</a>` : ""}
+      </div>
+    </section>`;
+}
+
+function openAlexMetric(label, value, note) {
+  return `<div class="openalex-metric"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong><small>${escapeHtml(note)}</small></div>`;
+}
+
+function openAlexQualityHtml(flags) {
+  if (!flags.length) return "";
+  const messages = flags.map(flag => {
+    if (flag.code === "isolated_early_records") {
+      return flag.stable_series_start
+        ? `Se excluyeron de las gráficas registros aislados anteriores a ${flag.stable_series_start}, porque podían distorsionar la tendencia histórica.`
+        : "Se excluyeron registros históricos aislados que podían distorsionar la tendencia.";
+    }
+    if (flag.code === "low_title_similarity") {
+      return "El cruce se sostuvo por ISSN/eISSN, pero OpenAlex presenta una variante significativa en el título; el caso permanece bajo control de calidad.";
+    }
+    return flag.message || "El registro presenta una observación de control de calidad.";
+  });
+  return `<div class="openalex-quality"><strong>Control de calidad de los datos</strong><ul>${messages.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul></div>`;
+}
+
+function openAlexTopHtml(top) {
+  const groups = [
+    ["Temas principales", top.topics || []],
+    ["Países con mayor presencia", top.countries || []],
+    ["Instituciones con mayor presencia", top.institutions || []]
+  ].filter(([, items]) => items.length);
+  if (!groups.length) return "";
+  return `<div class="openalex-top-grid">${groups.map(([title, items]) => `
+    <div class="openalex-top-card"><h3>${escapeHtml(title)}</h3><ol>${items.map(item => `<li><span>${escapeHtml(item.name)}</span><strong>${integerFormat(item.count)}</strong></li>`).join("")}</ol></div>`).join("")}</div>`;
+}
+
+function externalEvidenceHtml(complementary, detail) {
+  const crossref = complementary?.crossref;
+  const web = complementary?.web;
+  const openalex = complementary?.openalex;
+  const legacy = detail.evidence || detail.web_evidence || detail.qualitative_evidence;
+  if (!crossref && !web && !openalex && (!Array.isArray(legacy) || !legacy.length)) return "";
 
   const blocks = [];
-  if (openAlex) {
-    blocks.push(`<div class="evidence-block openalex"><strong>OpenAlex</strong><p>Datos complementarios disponibles para esta revista.</p></div>`);
+  if (crossref) blocks.push(crossrefEvidenceHtml(crossref));
+  if (openalex?.retracted_works?.length) blocks.push(openAlexRetractionsHtml(openalex.retracted_works));
+  if (web) blocks.push(webEvidenceHtml(web));
+  if (Array.isArray(legacy) && legacy.length) {
+    blocks.push(`<div class="evidence-panel neutral"><h3>Evidencias registradas previamente</h3><p>${legacy.length} evidencia(s) adicional(es), sujetas a revisión humana.</p></div>`);
   }
-  if (Array.isArray(evidence) && evidence.length) {
-    blocks.push(`<div class="evidence-block scraping"><strong>Evidencias web verificables</strong><p>${evidence.length} evidencia(s) registrada(s), sujetas a revisión humana.</p></div>`);
+  return `<div class="external-evidence"><h3 class="evidence-heading">Evidencias externas automatizadas</h3><p class="evidence-intro">La información de esta sección fue localizada automáticamente y debe verificarse antes de formular una conclusión cualitativa.</p>${blocks.join("")}</div>`;
+}
+
+function crossrefEvidenceHtml(crossref) {
+  const high = Number(crossref.high_signal_count || 0);
+  const info = Number(crossref.informational_count || 0);
+  const counts = crossref.event_counts || {};
+  const highEvents = (crossref.events || []).filter(item => item.severity === "high_signal");
+  const className = high > 0 ? "high" : "neutral";
+  const title = high > 0 ? "Eventos editoriales de revisión prioritaria" : "Actualizaciones editoriales registradas";
+  const summary = high > 0
+    ? `Se identificaron ${high} evento(s) prioritario(s), como retractaciones, expresiones de preocupación, retiros o remociones. La existencia de estos eventos no permite valorar por sí sola a toda la revista, pero requiere revisión humana.`
+    : "No se identificaron eventos prioritarios en los registros consultados. Las correcciones y erratas se mantienen como información editorial, no como alertas por sí solas.";
+  return `<div class="evidence-panel ${className}">
+    <h3>${escapeHtml(title)}</h3><p>${escapeHtml(summary)}</p>
+    <div class="evidence-counts">
+      ${high > 0 ? `<span><strong>${high}</strong> prioritario(s)</span>` : ""}
+      <span><strong>${info}</strong> informativo(s)</span>
+      ${Object.keys(counts).length ? `<span><strong>${Object.values(counts).reduce((a, b) => a + Number(b || 0), 0)}</strong> evento(s) depurado(s)</span>` : ""}
+    </div>
+    ${highEvents.length ? `<ul class="priority-events">${highEvents.slice(0, 6).map(event => priorityEventHtml(event)).join("")}</ul>${highEvents.length > 6 ? `<p class="more-note">Se muestran 6 de ${highEvents.length} eventos prioritarios.</p>` : ""}` : ""}
+  </div>`;
+}
+
+function priorityEventHtml(event) {
+  const label = editorialEventLabel(event.event_type);
+  const date = event.notice_date ? ` · ${escapeHtml(event.notice_date)}` : "";
+  const title = event.notice_title || label;
+  const url = safeDoiUrl(event.notice_url || event.notice_doi);
+  return `<li><strong>${escapeHtml(label)}</strong>${date}<span>${escapeHtml(title)}</span>${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener">Ver registro</a>` : ""}</li>`;
+}
+
+function openAlexRetractionsHtml(items) {
+  return `<div class="evidence-panel moderate"><h3>Obras marcadas como retractadas en OpenAlex</h3><p>OpenAlex marca ${items.length} obra(s) como retractada(s). Este dato se presenta para contraste y no constituye, por sí solo, una evaluación de la revista.</p><ul class="priority-events">${items.slice(0, 5).map(item => {
+    const url = safeDoiUrl(item.doi);
+    return `<li><strong>${item.year ? escapeHtml(item.year) : "Año no disponible"}</strong><span>${escapeHtml(item.title)}</span>${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener">Ver DOI</a>` : ""}</li>`;
+  }).join("")}</ul>${items.length > 5 ? `<p class="more-note">Se muestran 5 de ${items.length} obras marcadas.</p>` : ""}</div>`;
+}
+
+function webEvidenceHtml(web) {
+  if (web.status === "ok" && web.pages?.length) {
+    const categories = [...new Set(web.pages.flatMap(page => page.categories || []))];
+    return `<div class="evidence-panel web-ok"><h3>Información editorial localizada en el sitio web</h3><p>La consulta automatizada encontró páginas públicas relacionadas con ${categories.length ? categories.map(webCategoryLabel).join(", ") : "información editorial"}. La presencia de una página no implica que su contenido haya sido validado.</p><ul class="web-pages">${web.pages.slice(0, 6).map(page => `<li><a href="${escapeHtml(page.url)}" target="_blank" rel="noopener">${escapeHtml(page.title || "Página editorial")}</a>${page.categories?.length ? `<span>${page.categories.map(webCategoryLabel).join(" · ")}</span>` : ""}</li>`).join("")}</ul></div>`;
   }
-  return `<div class="complementary-evidence">${blocks.join("")}</div>`;
+  return `<div class="evidence-panel limited"><h3>Consulta automatizada del sitio no disponible</h3><p>${escapeHtml(webStatusExplanation(web.status))} Esta limitación técnica no se interpreta como una señal adversa contra la revista.</p></div>`;
+}
+
+function editorialEventLabel(value) {
+  return ({
+    retraction: "Retractación",
+    expression_of_concern: "Expresión de preocupación",
+    withdrawal: "Retiro",
+    removal: "Remoción",
+    correction: "Corrección",
+    erratum: "Errata",
+    corrigendum: "Corrigenda",
+    addendum: "Adenda"
+  })[value] || value || "Evento editorial";
+}
+
+function webCategoryLabel(value) {
+  return ({
+    ethics: "ética editorial",
+    peer_review: "revisión por pares",
+    fees_apc: "cargos y APC",
+    editorial_board: "comité editorial",
+    contact: "información de contacto",
+    preservation: "preservación digital",
+    retractions: "retractaciones y correcciones"
+  })[value] || value;
+}
+
+function webStatusExplanation(status) {
+  return ({
+    blocked_by_robots: "El sitio restringió la consulta automatizada mediante robots.txt.",
+    challenge_or_invalid_page: "El sitio devolvió una página de desafío, bloqueo o error en lugar del contenido editorial.",
+    http_error: "El servidor denegó o interrumpió el acceso automatizado.",
+    no_safe_homepage: "No se encontró una dirección web segura y utilizable para la consulta.",
+    error: "Se produjo un error técnico durante la consulta automatizada."
+  })[status] || "No fue posible recuperar información editorial utilizable mediante la consulta automatizada.";
+}
+
+function safeDoiUrl(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+  if (/^https?:\/\//i.test(raw)) return raw;
+  return `https://doi.org/${raw.replace(/^doi:\s*/i, "")}`;
+}
+
+function integerFormat(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "Sin dato";
+  return new Intl.NumberFormat("es-PE", { maximumFractionDigits: 0 }).format(number);
+}
+
+function formatDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value || "");
+  return new Intl.DateTimeFormat("es-PE", { year: "numeric", month: "short", day: "2-digit" }).format(date);
 }
 
 async function copyJournalLink(journalId) {

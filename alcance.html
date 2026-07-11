@@ -27,6 +27,8 @@
       <li>Series históricas de SCImago e InCites disponibles entre 2016 y 2025.</li>
       <li>Evaluación bibliométrica complementaria mediante un criterio metodológico explícito y documentado.</li>
       <li>Revisión cualitativa cuando existe un registro humano completado.</li>
+      <li>Integración piloto de OpenAlex para 30 revistas estratégicas, con producción, citas, acceso abierto, temas, países e instituciones.</li>
+      <li>Evidencias editoriales recuperadas mediante Crossref, Retraction Watch y consulta automatizada de sitios públicos.</li>
     </ul></section>
 
     <section class="content-card"><h2>3. Limitaciones</h2><ul class="clean-list">
@@ -36,6 +38,8 @@
       <li>Una revista puede presentar cambios de título, variaciones de ISSN, información incompleta o problemas de trazabilidad histórica.</li>
       <li>La indexación o un cuartil Q1/Q2 no garantizan por sí solos calidad editorial o integridad científica.</li>
       <li>Los resultados reflejan el estado de las fuentes disponibles en la fecha de actualización y pueden cambiar posteriormente.</li>
+      <li>La integración de OpenAlex y la consulta automatizada de sitios editoriales tienen inicialmente cobertura piloto; no todas las revistas disponen todavía de esta capa complementaria.</li>
+      <li>Los bloqueos técnicos, robots.txt, errores 403 o páginas de desafío limitan la consulta automatizada y no se interpretan como señales adversas.</li>
     </ul></section>
 
     <section class="content-card"><h2>4. Interpretación responsable</h2><ol class="steps">
@@ -46,7 +50,7 @@
       <li>Cuando existan alertas o datos limitados, complemente el análisis con revisión cualitativa y evidencia externa verificable.</li>
     </ol></section>
 
-    <section class="content-card"><h2>5. Implementaciones previstas dentro del proyecto</h2><p>La versión publicada deja preparada la arquitectura para incorporar la integración real de OpenAlex y la recolección automatizada de evidencias web. Estas funciones ampliarán el análisis bibliométrico y la revisión cualitativa sin modificar la estructura central del Verificador.</p><div class="info-callout"><strong>Importante:</strong> OpenAlex y el web scraping forman parte del mismo proyecto y se incorporarán después del despliegue inicial de la versión 1.0.</div></section>
+    <section class="content-card"><h2>5. Integración complementaria en la versión 1.0</h2><p>La versión 1.0 incorpora una primera integración real y validada con OpenAlex, Crossref, Retraction Watch y consulta automatizada de sitios editoriales para un conjunto piloto de 30 revistas. Esta capa se muestra solo cuando existe un cruce confiable y conserva la trazabilidad de la fuente, la fecha y las limitaciones técnicas.</p><div class="info-callout"><strong>Interpretación:</strong> los datos automatizados orientan la revisión, pero no modifican por sí solos el estado oficial ni sustituyen una evaluación cualitativa humana. La cobertura se ampliará mediante el mismo flujo automatizado ya incorporado al repositorio.</div></section>
   </div>
 </main>
 <footer><div class="container footer-simple">Versión 1.0 · Alcance y limitaciones del Verificador de Revistas.</div></footer>
