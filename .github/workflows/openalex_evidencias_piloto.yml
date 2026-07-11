@@ -1,4 +1,4 @@
-name: Piloto OpenAlex y evidencias v1.1
+name: Piloto OpenAlex y evidencias v1.2
 
 on:
   workflow_dispatch:
@@ -51,6 +51,7 @@ jobs:
             --config config/pilot_journals.csv \
             --output data/openalex/pilot_openalex.json \
             --audit data/openalex/pilot_openalex_audit.csv \
+            --overrides config/openalex_overrides.csv \
             --max-journals "${{ inputs.max_journals }}"
 
       - name: Consultar Crossref y Retraction Watch
@@ -58,6 +59,7 @@ jobs:
           python scripts/crossref_pilot.py \
             --config config/pilot_journals.csv \
             --output data/evidencias/crossref_updates.json \
+            --clean-output data/evidencias/crossref_events_clean.json \
             --max-journals "${{ inputs.max_journals }}"
 
       - name: Ejecutar scraping piloto
@@ -96,6 +98,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No hay cambios que publicar."
           else
-            git commit -m "Actualiza piloto OpenAlex y evidencias v1.1"
+            git commit -m "Actualiza piloto OpenAlex y evidencias v1.2"
             git push
           fi

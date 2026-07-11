@@ -36,7 +36,54 @@ def title_similarity(left: str, right: str) -> float:
     return round(SequenceMatcher(None, a, b).ratio(), 4)
 
 
-def resolve_source(row: dict[str, str], api_key: str) -> tuple[dict | None, dict]:
+def read_overrides(path: str | Path) -> dict[str, dict[str, str]]:
+    target = Path(path)
+    if not target.exists():
+        return {}
+    import csv
+    with target.open(encoding="utf-8-sig", newline="") as handle:
+        return {row["journal_id"]: row for row in csv.DictReader(handle) if row.get("journal_id") and row.get("openalex_source_id")}
+
+
+def source_by_id(source_id: str, api_key: str) -> dict:
+    sid = source_key(source_id)
+    return http_json(f"{BASE}/sources/{sid}", {"api_key": api_key})
+
+
+def production_quality_flags(source: dict, title_score: float) -> list[dict]:
+    flags: list[dict] = []
+    if title_score < 0.6:
+        flags.append({
+            "code": "low_title_similarity",
+            "message": "El ISSN coincide, pero el título de OpenAlex difiere significativamente; requiere revisión humana.",
+            "value": title_score,
+        })
+    counts = sorted((source.get("counts_by_year") or []), key=lambda x: x.get("year") or 0)
+    stable_start = None
+    for idx, item in enumerate(counts):
+        if (item.get("works_count") or 0) < 5:
+            continue
+        future = counts[idx:idx + 3]
+        if sum((x.get("works_count") or 0) >= 5 for x in future) >= 2:
+            stable_start = item.get("year")
+            break
+    if stable_start:
+        early = [
+            {"year": x.get("year"), "works_count": x.get("works_count", 0)}
+            for x in counts
+            if (x.get("year") or 0) < stable_start - 2 and (x.get("works_count") or 0) > 0
+        ]
+        if early:
+            flags.append({
+                "code": "isolated_early_records",
+                "message": "OpenAlex contiene registros aislados anteriores al inicio de la serie sostenida; no deben graficarse sin validación.",
+                "stable_series_start": stable_start,
+                "records": early,
+            })
+    return flags
+
+
+def resolve_source(row: dict[str, str], api_key: str, override: dict[str, str] | None = None) -> tuple[dict | None, dict]:
     attempted = []
     candidates: dict[str, dict] = {}
     for raw in (row.get("issn", ""), row.get("eissn", "")):
@@ -67,6 +114,16 @@ def resolve_source(row: dict[str, str], api_key: str) -> tuple[dict | None, dict
         "match_status": "not_found" if not candidates else ("exact_unique" if len(candidates) == 1 else "ambiguous"),
     }
     if len(candidates) != 1:
+        if override:
+            override_id = source_key(override.get("openalex_source_id", ""))
+            if override_id:
+                source = candidates.get(override_id) or source_by_id(override_id, api_key)
+                audit["match_status"] = "manual_override"
+                audit["override_source_id"] = source.get("id")
+                audit["override_reason"] = override.get("reason", "")
+                audit["match_confidence"] = "reviewed_override"
+                audit["title_similarity"] = title_similarity(row.get("title", ""), source.get("display_name", ""))
+                return source, audit
         return None, audit
     source = next(iter(candidates.values()))
     source_issns = {normalize_issn(x) for x in source.get("issn", []) if normalize_issn(x)}
@@ -137,6 +194,7 @@ def main() -> None:
     parser.add_argument("--config", default="config/pilot_journals.csv")
     parser.add_argument("--output", default="data/openalex/pilot_openalex.json")
     parser.add_argument("--audit", default="data/openalex/pilot_openalex_audit.csv")
+    parser.add_argument("--overrides", default="config/openalex_overrides.csv")
     parser.add_argument("--max-journals", type=int, default=30)
     args = parser.parse_args()
 
@@ -145,6 +203,7 @@ def main() -> None:
         raise SystemExit("Falta el secreto OPENALEX_API_KEY.")
 
     journals = read_pilot_csv(args.config, args.max_journals)
+    overrides = read_overrides(args.overrides)
     records = []
     audit_rows = []
     for index, row in enumerate(journals, start=1):
@@ -158,11 +217,12 @@ def main() -> None:
             "priority": row.get("priority", ""),
         }
         try:
-            source, audit = resolve_source(row, api_key)
+            source, audit = resolve_source(row, api_key, overrides.get(row["journal_id"]))
             record["match"] = audit
             if source:
                 sid = source.get("id", "")
                 record["source"] = compact_source(source)
+                record["quality_flags"] = production_quality_flags(source, audit.get("title_similarity", 0.0))
                 record["production_by_year"] = [
                     {
                         "year": item.get("year"),
@@ -177,7 +237,7 @@ def main() -> None:
                     for name, field in GROUP_FIELDS.items()
                 }
                 record["retracted_works"] = retracted_works(sid, api_key)
-                record["status"] = "matched"
+                record["status"] = "matched_manual_override" if audit.get("match_status") == "manual_override" else "matched"
             else:
                 record["status"] = audit["match_status"]
         except Exception as exc:
@@ -195,6 +255,8 @@ def main() -> None:
             "match_confidence": (record.get("match") or {}).get("match_confidence", ""),
             "title_similarity": (record.get("match") or {}).get("title_similarity", ""),
             "candidate_sources": str((record.get("match") or {}).get("candidate_sources", "")),
+            "override_reason": (record.get("match") or {}).get("override_reason", ""),
+            "quality_flags": str(record.get("quality_flags") or []),
             "error": record.get("error", ""),
         })
 
@@ -208,7 +270,7 @@ def main() -> None:
     })
     write_csv(args.audit, audit_rows, [
         "journal_id", "title", "issn", "eissn", "status",
-        "openalex_source_id", "openalex_title", "match_confidence", "title_similarity", "candidate_sources", "error",
+        "openalex_source_id", "openalex_title", "match_confidence", "title_similarity", "candidate_sources", "override_reason", "quality_flags", "error",
     ])
 
 

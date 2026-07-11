@@ -1,45 +1,56 @@
-# Paquete piloto OpenAlex y evidencias
+# Paquete piloto OpenAlex y evidencias v1.2
 
-Este paquete añade al repositorio del Observatorio un flujo manual de GitHub Actions para:
+Esta revisión mantiene el piloto de 30 revistas y añade controles de calidad antes de integrar resultados en la web pública.
 
-1. Resolver revistas en OpenAlex por ISSN/eISSN.
-2. Recuperar producción y citas por año, acceso abierto, temas, países, instituciones, autores y obras marcadas como retractadas.
-3. Consultar Crossref para identificar correcciones, retractaciones y otras actualizaciones registradas.
-4. Realizar un scraping limitado de páginas editoriales públicas, respetando `robots.txt` y dejando toda evidencia pendiente de revisión humana.
+## Cambios principales
 
-## Importante
+1. **Crossref depurado**
+   - Conserva un archivo bruto para auditoría.
+   - Genera `data/evidencias/crossref_events_clean.json` con eventos explícitos y deduplicados.
+   - Separa correcciones y erratas (informativas) de retractaciones, expresiones de preocupación, retiros y removals (revisión prioritaria).
 
-- La clave se toma del secreto `OPENALEX_API_KEY`; nunca se escribe en los archivos.
-- OpenAlex es una fuente bibliométrica complementaria, no una fuente oficial de indexación.
-- El scraping no declara automáticamente que una revista sea problemática.
-- Los resultados del piloto se guardan en `data/openalex`, `data/evidencias` y `data/piloto`.
+2. **Acta Cardiologica resuelta con trazabilidad**
+   - Se incorpora `config/openalex_overrides.csv`.
+   - La revista principal queda asociada al registro OpenAlex `S18670189`.
+   - El segundo candidato corresponde al suplemento y no se combina automáticamente con la revista principal.
+
+3. **Controles de calidad OpenAlex**
+   - Marca coincidencias con baja similitud de título aunque el ISSN coincida.
+   - Detecta registros aislados anteriores al inicio de la serie sostenida para evitar gráficas históricas engañosas.
+
+4. **Resumen más útil**
+   - Informa resultados brutos y depurados.
+   - Cuenta eventos por tipo.
+   - Registra banderas de calidad y cobertura real del scraping.
 
 ## Instalación
 
-Copie en la raíz del repositorio las carpetas `.github`, `config`, `scripts` y `data` incluidas aquí. Cuando Windows pregunte si desea combinar la carpeta `data`, acepte. No se reemplazan los archivos actuales del Verificador.
+Copie en la raíz del repositorio:
 
-Después haga commit y push desde GitHub Desktop.
+- `.github`
+- `config`
+- `scripts`
+- `README_OPENALEX_Y_SCRAPING.md`
+
+Cuando Windows pregunte, acepte combinar carpetas y reemplazar archivos.
+
+En GitHub Desktop use el resumen:
+
+`Depura evidencias OpenAlex y Crossref v1.2`
+
+Haga **Commit to main**, luego **Pull origin** si aparece y finalmente **Push origin**.
 
 ## Ejecución
 
-En GitHub:
+En GitHub → Actions seleccione **Piloto OpenAlex y evidencias v1.2**, mantenga 30 revistas y scraping activado.
 
-1. Abra **Actions**.
-2. Seleccione **Piloto OpenAlex y evidencias**.
-3. Pulse **Run workflow**.
-4. Mantenga `30` revistas y `run_scraping = true`.
-5. Pulse nuevamente **Run workflow**.
+## Archivos de salida
 
-El flujo puede tardar varios minutos. Cuando termine, los resultados se incorporarán automáticamente al repositorio y también quedarán disponibles como artefacto descargable.
+- `data/openalex/pilot_openalex.json`
+- `data/openalex/pilot_openalex_audit.csv`
+- `data/evidencias/crossref_updates.json` (bruto)
+- `data/evidencias/crossref_events_clean.json` (depurado)
+- `data/evidencias/web_scraping_pilot.json`
+- `data/piloto/resumen_piloto.md`
 
-## Si el commit automático falla
-
-En **Settings → Actions → General → Workflow permissions**, seleccione **Read and write permissions** y guarde. Luego vuelva a ejecutar el flujo.
-
-
-## Cambios de la revisión 1.1
-- Corrige las consultas Crossref que devolvían HTTP 400 por un campo no admitido en `select`.
-- Añade una consulta específica para avisos de retractación.
-- Diferencia páginas editoriales reales de páginas de desafío, bloqueo o error 404.
-- Añade información de candidatos en cruces ambiguos de OpenAlex.
-- Genera un resumen crítico con errores y limitaciones del piloto.
+Los resultados siguen siendo preliminares y requieren revisión humana antes de mostrarse en el Verificador.
