@@ -1218,3 +1218,85 @@ footer { background: #102d46; }
   .human-review-status small { margin-left: 0; }
   .automated-finding dl > div { grid-template-columns: 1fr; gap: 2px; }
 }
+
+/* Resumen superior, cronología y narrativa automatizada */
+.official-banner.positive {
+  background: #eefaf4;
+  border-color: #52a979;
+}
+.official-banner.positive h2 { color: #17623d; }
+.official-banner.positive .official-icon { color: #17623d; }
+.official-banner.moderate {
+  background: #fff7df;
+  border-color: #d89d15;
+}
+.official-banner.moderate h2 { color: #835600; }
+.official-banner.moderate .official-icon { color: #835600; }
+.summary-signal-list {
+  display: grid;
+  gap: 7px;
+  margin-top: 13px;
+}
+.summary-signal-list span {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 9px;
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(77,113,137,.22);
+  line-height: 1.4;
+}
+.timeline-intro {
+  margin: -4px 0 18px;
+  color: #526b7b;
+  max-width: 900px;
+}
+.timeline-event.evidence .timeline-marker {
+  background: #cf3f47;
+  box-shadow: 0 0 0 2px #cf3f47;
+}
+.timeline-event.evidence .timeline-content h3 { color: #96272e; }
+.timeline-title {
+  margin: 4px 0 !important;
+  color: #203f56 !important;
+  font-weight: 760;
+}
+.automated-narrative {
+  margin-bottom: 18px;
+  padding: 18px 20px;
+  border: 2px solid #d96367;
+  border-left-width: 8px;
+  border-radius: 14px;
+  background: #fff3f3;
+}
+.automated-narrative h3 {
+  margin: 0 0 10px;
+  color: #8d2026;
+  font-size: 1.08rem;
+  line-height: 1.42;
+}
+.automated-narrative p {
+  margin: 0 0 9px;
+  color: #563235;
+  line-height: 1.55;
+}
+.automated-narrative p:last-child { margin-bottom: 0; }
+.automated-caveat {
+  padding-top: 9px;
+  border-top: 1px solid #e7b4b6;
+  font-weight: 680;
+}
+.automated-findings { gap: 12px; }
+.automated-finding {
+  padding: 16px 18px 16px 20px;
+  box-shadow: none;
+}
+.automated-finding h3 {
+  max-width: 980px;
+  font-size: .98rem;
+}
+.automated-more > div { margin-top: 12px; }
+
+@media (max-width: 720px) {
+  .summary-signal-list span { padding: 8px; }
+  .automated-narrative { padding: 15px 16px; }
+}

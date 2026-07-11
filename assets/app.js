@@ -351,15 +351,17 @@ async function loadComplementaryData() {
 }
 
 function journalHtml(journal, detail, complementary) {
-  const hasEvents = Array.isArray(detail.events) && detail.events.length > 0;
+  const timelineEvents = combinedTimelineEvents(detail, complementary);
+  const hasEvents = timelineEvents.length > 0;
   const displayQuantStatus = effectiveQuantitativeStatus(journal, detail);
-  const officialSection = officialStatusHtml(journal, detail);
+  const officialSection = evaluationSummaryHtml(journal, detail, complementary);
   const timelineSection = hasEvents ? `
     <section class="journal-section timeline-section">
       <div class="section-heading">
-        <div><p class="section-kicker">Historia documentada</p><h2>Línea de tiempo</h2></div>
+        <div><p class="section-kicker">Historia documentada</p><h2>Cronología de eventos relevantes</h2></div>
       </div>
-      ${timelineHtml(detail.events)}
+      <p class="timeline-intro">Integra cambios de indexación documentados y, cuando existen, eventos editoriales prioritarios localizados en fuentes externas.</p>
+      ${timelineHtml(timelineEvents)}
     </section>` : "";
 
   return `
@@ -508,17 +510,21 @@ function quantitativeInterpretation(journal, detail) {
   return "No se dispone de información suficiente para aplicar la evaluación cuantitativa.";
 }
 
-function officialStatusHtml(journal, detail) {
+function evaluationSummaryHtml(journal, detail, complementary) {
   const scopusInactive = journal.scopus_status === "Inactive";
   const wosHistoricalAlert = wosNoLongerCurrent(journal, detail);
   const doajWithdrawn = journal.doaj_status === "Withdrawn";
+  const autoStats = automatedPriorityStats(complementary);
+  const quantStatus = effectiveQuantitativeStatus(journal, detail);
+  const humanCompleted = journal.qualitative_review_status === "Completed";
+  const humanResult = humanCompleted ? qualitativeLabel(journal.qualitative_review_result) : "";
 
   if (journal.official_status === "Current removal") {
     const additional = indexingAlertSummary(journal, detail, true);
     return `
       <section class="official-banner removal">
         <div class="official-icon">!</div>
-        <div><p class="section-kicker">Estado oficial</p><h2>Retirada / desindexada</h2><p>Se registró un retiro o una desindexación oficial vigente en al menos una de las fuentes integradas.</p>${officialMeta(journal)}${additional}</div>
+        <div><p class="section-kicker">Resumen de la evaluación</p><h2>Retirada / desindexada</h2><p>Se registró un retiro o una desindexación oficial vigente en al menos una de las fuentes integradas.</p>${officialMeta(journal)}${additional}${summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult)}</div>
       </section>`;
   }
 
@@ -526,7 +532,7 @@ function officialStatusHtml(journal, detail) {
     return `
       <section class="official-banner historical">
         <div class="official-icon">↺</div>
-        <div><p class="section-kicker">Estado oficial</p><h2>Antecedente histórico de retiro</h2><p>La revista presenta un retiro histórico documentado y un estado posterior que debe interpretarse junto con la cronología disponible.</p>${officialMeta(journal)}</div>
+        <div><p class="section-kicker">Resumen de la evaluación</p><h2>Antecedente histórico de retiro</h2><p>La revista presenta un retiro histórico documentado y un estado posterior que debe interpretarse junto con la cronología disponible.</p>${officialMeta(journal)}${summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult)}</div>
       </section>`;
   }
 
@@ -539,15 +545,94 @@ function officialStatusHtml(journal, detail) {
     return `
       <section class="official-banner removal">
         <div class="official-icon">!</div>
-        <div><p class="section-kicker">Alerta de indexación</p><h2>${escapeHtml(title)}</h2><p>La revista ${escapeHtml(joinSpanish(statements))}. Para fines de selección editorial, este resultado debe interpretarse como una señal de alerta.</p>${indexingAlertMeta(journal, detail)}</div>
+        <div><p class="section-kicker">Resumen de la evaluación</p><h2>${escapeHtml(title)}</h2><p>La revista ${escapeHtml(joinSpanish(statements))}. Para fines de selección editorial, este resultado debe interpretarse como una señal de alerta.</p>${indexingAlertMeta(journal, detail)}${summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult)}</div>
+      </section>`;
+  }
+
+  if (autoStats.total > 0) {
+    return `
+      <section class="official-banner removal">
+        <div class="official-icon">!</div>
+        <div><p class="section-kicker">Resumen de la evaluación</p><h2>Hallazgos editoriales que requieren revisión</h2><p>${escapeHtml(automatedPrioritySentence(autoStats))} Estos hallazgos aportan información relevante para la toma de decisiones, pero no permiten concluir por sí solos sobre la calidad o integridad global de la revista.</p>${summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult)}</div>
+      </section>`;
+  }
+
+  if (humanCompleted && journal.qualitative_review_result === "Observed") {
+    return `
+      <section class="official-banner removal">
+        <div class="official-icon">!</div>
+        <div><p class="section-kicker">Resumen de la evaluación</p><h2>Revista observada en la revisión cualitativa</h2><p>La revisión humana documentó hallazgos que deben considerarse antes de tomar una decisión editorial.</p>${summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult)}</div>
+      </section>`;
+  }
+
+  if (quantStatus === "High alert" || quantStatus === "Moderate alert" || (humanCompleted && journal.qualitative_review_result === "Monitor")) {
+    const high = quantStatus === "High alert";
+    return `
+      <section class="official-banner ${high ? "removal" : "moderate"}">
+        <div class="official-icon">${high ? "!" : "i"}</div>
+        <div><p class="section-kicker">Resumen de la evaluación</p><h2>${high ? "Alerta cuantitativa alta" : "Se requiere revisión adicional"}</h2><p>${escapeHtml(quantitativeInterpretation(journal, detail))}</p>${summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult)}</div>
+      </section>`;
+  }
+
+  if (humanCompleted && journal.qualitative_review_result === "No additional alert") {
+    return `
+      <section class="official-banner positive">
+        <div class="official-icon">✓</div>
+        <div><p class="section-kicker">Resumen de la evaluación</p><h2>Sin hallazgos adicionales en la revisión humana</h2><p>La revisión cualitativa realizada no identificó hallazgos adicionales. Esta conclusión debe leerse junto con el estado de indexación y la evaluación cuantitativa.</p>${summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult)}</div>
       </section>`;
   }
 
   return `
     <section class="official-banner neutral">
       <div class="official-icon">i</div>
-      <div><p class="section-kicker">Estado oficial</p><h2>Sin alertas oficiales documentadas</h2><p>No se identificaron retiros, desindexaciones u otros cambios adversos documentados en las fuentes integradas.</p></div>
+      <div><p class="section-kicker">Resumen de la evaluación</p><h2>Sin alertas oficiales documentadas</h2><p>No se identificaron retiros, desindexaciones u otros cambios adversos documentados en las fuentes integradas.</p>${summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult)}</div>
     </section>`;
+}
+
+function summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult) {
+  const items = [];
+  if (autoStats.total > 0) items.push(`<span><strong>Evaluación automatizada:</strong> ${escapeHtml(automatedPrioritySentence(autoStats))}</span>`);
+  if (["High alert", "Moderate alert"].includes(quantStatus)) items.push(`<span><strong>Evaluación cuantitativa:</strong> ${escapeHtml(quantLabel(quantStatus))}</span>`);
+  if (humanCompleted) items.push(`<span><strong>Revisión humana:</strong> ${escapeHtml(humanResult)}</span>`);
+  return items.length ? `<div class="summary-signal-list">${items.join("")}</div>` : "";
+}
+
+function automatedPriorityStats(complementary) {
+  const counts = {};
+  const events = (complementary?.crossref?.events || []).filter(item => item.severity === "high_signal");
+  const seen = new Set();
+  events.forEach(event => {
+    const key = normalizeDoi(event.notice_doi || event.work_doi) || `${event.event_type}|${event.notice_title}|${event.notice_date}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    counts[event.event_type || "other"] = (counts[event.event_type || "other"] || 0) + 1;
+  });
+  (complementary?.openalex?.retracted_works || []).forEach(item => {
+    const key = normalizeDoi(item.doi) || `openalex|${item.title}|${item.year}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    counts.retraction = (counts.retraction || 0) + 1;
+  });
+  return { counts, total: Object.values(counts).reduce((sum, value) => sum + value, 0) };
+}
+
+function automatedPrioritySentence(stats) {
+  const order = ["retraction", "expression_of_concern", "withdrawal", "removal"];
+  const labels = {
+    retraction: ["retractación", "retractaciones"],
+    expression_of_concern: ["expresión de preocupación", "expresiones de preocupación"],
+    withdrawal: ["retiro", "retiros"],
+    removal: ["remoción", "remociones"],
+    other: ["evento prioritario", "eventos prioritarios"]
+  };
+  const parts = [];
+  [...order, ...Object.keys(stats.counts).filter(key => !order.includes(key))].forEach(key => {
+    const count = stats.counts[key] || 0;
+    if (!count) return;
+    const pair = labels[key] || labels.other;
+    parts.push(`${count} ${count === 1 ? pair[0] : pair[1]}`);
+  });
+  return `Se localizaron ${stats.total} evento${stats.total === 1 ? "" : "s"} editorial${stats.total === 1 ? "" : "es"} prioritario${stats.total === 1 ? "" : "s"}: ${joinSpanish(parts)}`;
 }
 
 function hasHistoricalWosData(detail) {
@@ -745,21 +830,55 @@ function numberFormat(value) {
   return new Intl.NumberFormat("es-PE", { maximumFractionDigits: 2 }).format(Number(value));
 }
 
+function combinedTimelineEvents(detail, complementary) {
+  const combined = [...(Array.isArray(detail?.events) ? detail.events : [])];
+  const seen = new Set();
+  (complementary?.crossref?.events || []).filter(item => item.severity === "high_signal").forEach(event => {
+    const key = normalizeDoi(event.notice_doi || event.work_doi) || `${event.event_type}|${event.notice_title}|${event.notice_date}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    combined.push({
+      source: event.metadata_source === "retraction-watch" ? "Retraction Watch / Crossref" : "Crossref",
+      event_type: event.event_type,
+      event_date: event.notice_date || "",
+      title: event.notice_title || editorialEventLabel(event.event_type),
+      reason: event.work_doi ? `Registro asociado: ${event.work_doi}` : "",
+      automated_evidence: true
+    });
+  });
+  (complementary?.openalex?.retracted_works || []).forEach(item => {
+    const key = normalizeDoi(item.doi) || `openalex|${item.title}|${item.year}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    combined.push({
+      source: "OpenAlex",
+      event_type: "retraction",
+      event_year: item.year || "",
+      title: item.title || "Obra marcada como retractada",
+      reason: item.doi ? `DOI: ${normalizeDoi(item.doi)}` : "",
+      automated_evidence: true
+    });
+  });
+  return combined;
+}
+
 function timelineHtml(events) {
   const ordered = [...events].sort((a, b) => eventValue(a) - eventValue(b));
   return `<div class="timeline">${ordered.map(event => {
     const source = event.source === "WoS" ? "Web of Science" : event.source;
-    const sourceClass = event.source === "WoS" ? "wos" : String(event.source || "").toLowerCase();
+    const rawSource = String(event.source || "").toLowerCase();
+    const sourceClass = event.automated_evidence ? "evidence" : (event.source === "WoS" ? "wos" : rawSource);
     const eventType = event.event_type_normalized || event.event_type;
-    const adverse = ["Discontinuation", "Editorial De-listing", "Production De-listing", "Withdrawn"].includes(eventType);
+    const adverse = ["Discontinuation", "Editorial De-listing", "Production De-listing", "Withdrawn", "retraction", "expression_of_concern", "withdrawal", "removal"].includes(eventType);
     const reason = event.reason_normalized || event.reason || "";
-    const description = reasonSpanish(reason, eventType);
+    const description = event.automated_evidence ? reason : reasonSpanish(reason, eventType);
     return `
       <div class="timeline-event ${sourceClass} ${adverse ? "adverse" : ""}">
         <div class="timeline-marker"></div>
         <div class="timeline-content">
           <span class="timeline-date">${escapeHtml(event.event_date || event.event_year || "Fecha no disponible")}</span>
           <h3>${escapeHtml(source)} · ${escapeHtml(eventLabel(eventType))}</h3>
+          ${event.title ? `<p class="timeline-title">${escapeHtml(event.title)}</p>` : ""}
           ${description ? `<p>${escapeHtml(description)}${event.idx ? ` · Índice: ${escapeHtml(event.idx)}` : ""}</p>` : ""}
         </div>
       </div>`;
@@ -780,7 +899,11 @@ function eventLabel(value) {
     "Accepted": "Aceptada",
     "Accepted pending": "Aceptación pendiente",
     "Title Change": "Cambio de título",
-    "Cease": "Cese"
+    "Cease": "Cese",
+    "retraction": "Retractación",
+    "expression_of_concern": "Expresión de preocupación",
+    "withdrawal": "Retiro",
+    "removal": "Remoción"
   })[value] || value;
 }
 
@@ -1022,9 +1145,16 @@ function automatedQualitativeSectionHtml(complementary, detail) {
   } else if (!evidence.length) {
     content = `<div class="automated-status no-results"><span>Resultado</span><strong>Sin resultados relevantes</strong></div>`;
   } else {
-    const visible = evidence.slice(0, 6);
-    const extra = evidence.slice(6);
-    content = `<div class="automated-findings">${visible.map(automatedFindingCardHtml).join("")}${extra.length ? `<details class="automated-more"><summary>Ver ${extra.length} hallazgo(s) adicional(es)</summary><div>${extra.map(automatedFindingCardHtml).join("")}</div></details>` : ""}</div>`;
+    const stats = automatedPriorityStats(complementary);
+    const visible = evidence.slice(0, 4);
+    const extra = evidence.slice(4);
+    content = `
+      <div class="automated-narrative high">
+        <h3>${escapeHtml(automatedPrioritySentence(stats))}</h3>
+        <p>${escapeHtml(automatedEvidenceExplanation(stats))}</p>
+        <p class="automated-caveat">La información no es concluyente a favor ni en contra de toda la revista. Su finalidad es aportar contexto verificable para una decisión editorial o académica mejor informada.</p>
+      </div>
+      <div class="automated-findings">${visible.map(automatedFindingCardHtml).join("")}${extra.length ? `<details class="automated-more"><summary>Ver ${extra.length} hallazgo(s) adicional(es)</summary><div>${extra.map(automatedFindingCardHtml).join("")}</div></details>` : ""}</div>`;
   }
 
   return `<section class="journal-section qualitative-automated-section">
@@ -1033,6 +1163,14 @@ function automatedQualitativeSectionHtml(complementary, detail) {
     </div>
     ${content}
   </section>`;
+}
+
+function automatedEvidenceExplanation(stats) {
+  const parts = [];
+  if (stats.counts.retraction) parts.push("Las retractaciones indican que uno o más artículos fueron retirados del registro científico por problemas suficientemente relevantes como para invalidar o cuestionar su publicación; deben revisarse sus causas, concentración temporal y respuesta editorial.");
+  if (stats.counts.expression_of_concern) parts.push("Las expresiones de preocupación comunican dudas formales sobre trabajos publicados mientras se completa o documenta una investigación.");
+  if (stats.counts.withdrawal || stats.counts.removal) parts.push("Los retiros o remociones muestran que determinados registros dejaron de considerarse válidos o disponibles en su forma original.");
+  return parts.join(" ") || "Los eventos localizados requieren revisión de su contexto y de la respuesta editorial de la revista.";
 }
 
 function collectAutomatedFindings(complementary, detail) {
@@ -1069,22 +1207,6 @@ function collectAutomatedFindings(complementary, detail) {
       detail: item.cited_by_count != null ? `${integerFormat(item.cited_by_count)} citas registradas en OpenAlex` : ""
     });
   });
-
-  if (complementary.web?.status === "ok") {
-    (complementary.web.pages || []).forEach(page => {
-      if (!page?.url) return;
-      const categories = (page.categories || []).map(webCategoryLabel);
-      findings.push({
-        tone: "informational",
-        type: "Información editorial localizada",
-        title: page.title || "Página editorial",
-        date: "",
-        source: "Sitio web de la revista",
-        url: page.url,
-        detail: categories.length ? categories.join(" · ") : "Contenido editorial público"
-      });
-    });
-  }
 
   return findings;
 }
