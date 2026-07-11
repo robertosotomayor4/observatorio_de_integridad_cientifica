@@ -1,0 +1,4328 @@
+{
+  "version": "1.2",
+  "generated_at": "2026-07-11T09:58:29+00:00",
+  "source": "Crossref REST API; eventos normalizados y deduplicados",
+  "scope": "pilot",
+  "interpretation": "Las correcciones y erratas son informativas. Retracciones, expresiones de preocupación, retiros y removals requieren revisión humana prioritaria.",
+  "totals_by_event_type": {
+    "addendum": 6,
+    "correction": 170,
+    "corrigendum": 1,
+    "erratum": 54,
+    "expression_of_concern": 1,
+    "removal": 1,
+    "retraction": 12,
+    "withdrawal": 3
+  },
+  "high_signal_total": 17,
+  "records": [
+    {
+      "journal_id": "J14710072",
+      "title": "Nature Reviews Molecular Cell Biology",
+      "issn_used": "1471-0072",
+      "events": [
+        {
+          "event_type": "addendum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3170",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3156",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "addendum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3364",
+          "notice_title": "Illuminating the functional and structural repertoire of human TBC/RABGAPs",
+          "notice_url": "https://doi.org/10.1038/nrm3364",
+          "notice_date": "2012-05-22",
+          "work_doi": "10.1038/nrm3267",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "addendum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3900",
+          "notice_title": "Cell death: RIPK1 protects epithelial cells",
+          "notice_url": "https://doi.org/10.1038/nrm3900",
+          "notice_date": "2014-10-15",
+          "work_doi": "10.1038/nrm3876",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "addendum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm4075",
+          "notice_title": "Ciliary phosphoinositides regulate Hedgehog signalling",
+          "notice_url": "https://doi.org/10.1038/nrm4075",
+          "notice_date": "2015-10-14",
+          "work_doi": "10.1038/nrm4064",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm1525",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm1760",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-018-0018-x",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-018-0007-0",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-018-0021-2",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-018-0004-3",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-018-0046-6",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm.2017.107",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-018-0055-5",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm.2017.103",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-018-0066-2",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-018-0052-8",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-018-0070-6",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-018-0059-1",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-019-0106-6",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-018-0059-1",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-019-0112-8",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-019-0099-1",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-019-0130-6",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-019-0127-1",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-019-0138-y",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-019-0126-2",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-019-0156-9",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-018-0081-3",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-019-0166-7",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-019-0155-x",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-019-0171-x",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm.2017.138",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-019-0174-7",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm.2017.12",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-019-0192-5",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-019-0151-1",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-020-00304-y",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-020-00288-9",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-020-00312-y",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-020-00288-9",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-020-0222-3",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-020-0217-0",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-020-0249-5",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-020-0231-2",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-021-00330-4",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-020-00315-9",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-021-00353-x",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-021-00328-y",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-021-00361-x",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-018-0092-0",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-021-00374-6",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-021-00356-8",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-021-00396-0",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-021-00382-6",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-021-00428-9",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-020-0237-9",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-022-00494-7",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-022-00474-x",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-022-00495-6",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-021-00341-1",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-022-00501-x",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-022-00479-6",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-022-00548-w",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-022-00528-0",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-022-00551-1",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-021-00447-6",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-022-00560-0",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-022-00524-4",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-023-00621-y",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-023-00604-z",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-023-00632-9",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-023-00613-y",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-023-00654-3",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-019-0168-5",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-023-00670-3",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-023-00641-8",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-024-00701-7",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-023-00682-z",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-024-00712-4",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-023-00680-1",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-024-00744-w",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-024-00716-0",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-024-00745-9",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-023-00697-6",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-024-00754-8",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-024-00730-2",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-024-00760-w",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-023-00648-1",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-024-00782-4",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-022-00511-9",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-024-00786-0",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-024-00763-7",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-024-00787-z",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-024-00770-8",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-024-00810-3",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-024-00784-2",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-025-00845-0",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-024-00780-6",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-025-00877-6",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-025-00847-y",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-025-00886-5",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-024-00804-1",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-025-00911-7",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/s41580-025-00858-9",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm953",
+          "notice_title": "George Emil Palade: charismatic virtuoso of cell biology",
+          "notice_url": "https://doi.org/10.1038/nrm953",
+          "notice_date": "2002-11-01",
+          "work_doi": "10.1038/nrm1070",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm1048",
+          "notice_title": "Correction: Sorting out the cellular functions of sorting nexins",
+          "notice_url": "https://doi.org/10.1038/nrm1048",
+          "notice_date": "2003-02",
+          "work_doi": "10.1038/nrm974",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm1071",
+          "notice_title": "Correction: TOR signalling in bugs, brain and brawn",
+          "notice_url": "https://doi.org/10.1038/nrm1071",
+          "notice_date": "2003-03",
+          "work_doi": "10.1038/nrm1018",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm1311",
+          "notice_title": "Traffic jams affect plant development and signal transduction",
+          "notice_url": "https://doi.org/10.1038/nrm1311",
+          "notice_date": "2004-02-01",
+          "work_doi": "10.1038/nrm1383",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm.2017.116",
+          "notice_title": "Correction: Publisher correction: The essential kinase ATR: ensuring faithful duplication of a challenging genome.",
+          "notice_url": "https://doi.org/10.1038/nrm.2017.116",
+          "notice_date": "2017-11-08",
+          "work_doi": "10.1038/nrm.2017.67",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-018-0048-4",
+          "notice_title": "Publisher Correction: Autophagy as a promoter of longevity: insights from model organisms",
+          "notice_url": "https://doi.org/10.1038/s41580-018-0048-4",
+          "notice_date": "2018-07-25",
+          "work_doi": "10.1038/s41580-018-0033-y",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-018-0075-1",
+          "notice_title": "Publisher Correction: Post-transcriptional gene regulation by mRNA modifications",
+          "notice_url": "https://doi.org/10.1038/s41580-018-0075-1",
+          "notice_date": "2018-10-19",
+          "work_doi": "10.1038/nrm.2016.132",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-019-0113-7",
+          "notice_title": "Author Correction: Telomeres in cancer: tumour suppression and genome instability",
+          "notice_url": "https://doi.org/10.1038/s41580-019-0113-7",
+          "notice_date": "2019-02-28",
+          "work_doi": "10.1038/nrm.2016.171",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-020-0219-y",
+          "notice_title": "Author Correction: mTOR at the nexus of nutrition, growth, ageing and disease",
+          "notice_url": "https://doi.org/10.1038/s41580-020-0219-y",
+          "notice_date": "2020-01-31",
+          "work_doi": "10.1038/s41580-019-0199-y",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-021-00329-x",
+          "notice_title": "Author Correction: Two precious lessons from the HIV-1 RT structure",
+          "notice_url": "https://doi.org/10.1038/s41580-021-00329-x",
+          "notice_date": "2021-01-08",
+          "work_doi": "10.1038/s41580-020-00311-z",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-024-00705-3",
+          "notice_title": "Publisher Correction: Translating the midbody for cytokinesis",
+          "notice_url": "https://doi.org/10.1038/s41580-024-00705-3",
+          "notice_date": "2024-01-26",
+          "work_doi": "10.1038/s41580-024-00699-y",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-025-00885-6",
+          "notice_title": "Author Correction: Molecular machineries and pathways of mitochondrial protein transport",
+          "notice_url": "https://doi.org/10.1038/s41580-025-00885-6",
+          "notice_date": "2025-07-30",
+          "work_doi": "10.1038/s41580-025-00865-w",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-025-00932-2",
+          "notice_title": "Publisher Correction: Mechanisms and regulation of the Hsp70 chaperone network",
+          "notice_url": "https://doi.org/10.1038/s41580-025-00932-2",
+          "notice_date": "2025-11-06",
+          "work_doi": "10.1038/s41580-025-00890-9",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-026-00952-6",
+          "notice_title": "Publisher Correction: Advancing single-cell omics and cell-based therapeutics with quantum computing",
+          "notice_url": "https://doi.org/10.1038/s41580-026-00952-6",
+          "notice_date": "2026-02-03",
+          "work_doi": "10.1038/s41580-025-00918-0",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1038/s41580-026-00956-2",
+          "notice_title": "Author Correction: The hunter becomes the hunted in target-directed microRNA degradation",
+          "notice_url": "https://doi.org/10.1038/s41580-026-00956-2",
+          "notice_date": "2026-02-27",
+          "work_doi": "10.1038/s41580-025-00894-5",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm.2015.23",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm4074",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm.2017.72",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm.2016.62",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm1031",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm976",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm2645",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm2617",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm2675",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm2653",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm2955",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm2866",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm2975",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm2950",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm2982",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm2941",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3159",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3117",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3191",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3173",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3252",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3235",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3310",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3227",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3328",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3313",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3377",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3350",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3458",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3439",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3560",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3525",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3623",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3601",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3744",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3702",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3778",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3742",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3779",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3756",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3825",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3740",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3826",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3810",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm4027",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3918",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm4042",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm3965",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm4047",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1038/nrm4025",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm1203",
+          "notice_title": "Trefoil factors: initiators of mucosal healing",
+          "notice_url": "https://doi.org/10.1038/nrm1203",
+          "notice_date": "2003-09-01",
+          "work_doi": "10.1038/nrm1249",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm1662",
+          "notice_title": "Eph receptor signalling casts a wide net on cell behaviour",
+          "notice_url": "https://doi.org/10.1038/nrm1662",
+          "notice_date": "2005-06-01",
+          "work_doi": "10.1038/nrm1690",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm1759",
+          "notice_title": "Erratum: Meiosis: Cell-cycle controls shuffle and deal",
+          "notice_url": "https://doi.org/10.1038/nrm1759",
+          "notice_date": "2005-10",
+          "work_doi": "10.1038/nrm1526",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm1760",
+          "notice_title": "Correction: The complex architecture of organice photosynthesis",
+          "notice_url": "https://doi.org/10.1038/nrm1760",
+          "notice_date": "2005-10",
+          "work_doi": "10.1038/nrm1525",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm2598",
+          "notice_title": "Erratum: Ataxia-telangiectasia: from a rare disorder to a paradigm for cell signalling and cancer",
+          "notice_url": "https://doi.org/10.1038/nrm2598",
+          "notice_date": "2008-12",
+          "work_doi": "10.1038/nrm2514",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3077",
+          "notice_title": "Erratum: Open chromatin in pluripotency and reprogramming",
+          "notice_url": "https://doi.org/10.1038/nrm3077",
+          "notice_date": "2011-03-23",
+          "work_doi": "10.1038/nrm3036",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3094",
+          "notice_title": "Erratum: Asymmetric cell division in land plants and algae: the driving force for differentiation",
+          "notice_url": "https://doi.org/10.1038/nrm3094",
+          "notice_date": "2011-03-23",
+          "work_doi": "10.1038/nrm3064",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3155",
+          "notice_title": "Erratum: Cubism and the cell cycle: the many faces of the APC/C",
+          "notice_url": "https://doi.org/10.1038/nrm3155",
+          "notice_date": "2011-07-06",
+          "work_doi": "10.1038/nrm3132",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3245",
+          "notice_title": "Erratum: Dynamic niches in the origination and differentiation of haematopoietic stem cells",
+          "notice_url": "https://doi.org/10.1038/nrm3245",
+          "notice_date": "2011-12-07",
+          "work_doi": "10.1038/nrm3184",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3368",
+          "notice_title": "Erratum: How chromosomes find their 'soul mate'",
+          "notice_url": "https://doi.org/10.1038/nrm3368",
+          "notice_date": "2012-05-23",
+          "work_doi": "10.1038/nrm3346",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3887",
+          "notice_title": "Erratum: Capping protein regulators fine-tune actin assembly dynamics",
+          "notice_url": "https://doi.org/10.1038/nrm3887",
+          "notice_date": "2014-09-19",
+          "work_doi": "10.1038/nrm3869",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1038/nrm3936",
+          "notice_title": "Erratum: Slowly (translate) but surely (translocate)",
+          "notice_url": "https://doi.org/10.1038/nrm3936",
+          "notice_date": "2014-12-18",
+          "work_doi": "10.1038/nrm3921",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "event_counts": {
+        "addendum": 4,
+        "correction": 65,
+        "erratum": 37
+      },
+      "high_signal_count": 0,
+      "informational_count": 106,
+      "raw_evidence_count": 220,
+      "dropped_without_explicit_event": 24,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J00015385",
+      "title": "Acta Cardiologica",
+      "issn_used": "0001-5385",
+      "events": [
+        {
+          "event_type": "retraction",
+          "severity": "high_signal",
+          "notice_doi": "10.1080/00015385.2021.1963067",
+          "notice_title": "Retraction",
+          "notice_url": "https://doi.org/10.1080/00015385.2021.1963067",
+          "notice_date": "2021-08-17",
+          "work_doi": "10.1080/00015385.2020.1800963",
+          "metadata_source": "retraction-watch",
+          "record_id": "31633",
+          "evidence_roles": [
+            "retraction_notice",
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "addendum",
+          "severity": "informational",
+          "notice_doi": "10.1080/00015385.2020.1751978",
+          "notice_title": "Expresion of concern",
+          "notice_url": "https://doi.org/10.1080/00015385.2020.1751978",
+          "notice_date": "2020-04-14",
+          "work_doi": "10.1080/ac.66.3.2114137",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/00015385.2018.1505316",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1080/00015385.2018.1473825",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/ac.70.4.3096901",
+          "notice_title": "Corrigendum",
+          "notice_url": "https://doi.org/10.1080/ac.70.4.3096901",
+          "notice_date": "2015-08",
+          "work_doi": "10.1080/ac.66.2.2071254",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/ac.71.1.3132103",
+          "notice_title": "Corrigendum",
+          "notice_url": "https://doi.org/10.1080/ac.71.1.3132103",
+          "notice_date": "2016-02",
+          "work_doi": "10.1080/ac.70.4.3094651",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/00015385.2018.1465278",
+          "notice_title": "Correction to: Georges et al., Quality assessment in Belgian arrhythmology: the Belgian heart rhythm association (BeHRA) databases",
+          "notice_url": "https://doi.org/10.1080/00015385.2018.1465278",
+          "notice_date": "2018-05-29",
+          "work_doi": "10.1080/00015385.2018.1440904",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/00015385.2019.1593028",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/00015385.2019.1593028",
+          "notice_date": "2019-04-04",
+          "work_doi": "10.1080/00015385.2019.1570657",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/00015385.2021.1872880",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/00015385.2021.1872880",
+          "notice_date": "2021-01-13",
+          "work_doi": "10.1080/00015385.2020.1802903",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/00015385.2021.2000784",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/00015385.2021.2000784",
+          "notice_date": "2021-11-15",
+          "work_doi": "10.1080/00015385.2019.1656877",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "event_counts": {
+        "addendum": 1,
+        "correction": 7,
+        "retraction": 1
+      },
+      "high_signal_count": 1,
+      "informational_count": 8,
+      "raw_evidence_count": 19,
+      "dropped_without_explicit_event": 8,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J23297662",
+      "title": "3D Printing and Additive Manufacturing",
+      "issn_used": "2329-7662",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J20133294",
+      "title": "452ºF",
+      "issn_used": "2013-3294",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J23321091",
+      "title": "Civil Engineering and Architecture",
+      "issn_used": "2332-1091",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J07981015",
+      "title": "Espacios",
+      "issn_used": "0798-1015",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J16904648",
+      "title": "Boletin de Malariologia y Salud Ambiental",
+      "issn_used": "1690-4648",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J21769079",
+      "title": "Comunicata Scientiae",
+      "issn_used": "2176-9079",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J2190572X",
+      "title": "3 Biotech",
+      "issn_used": "2190-572X",
+      "events": [
+        {
+          "event_type": "expression_of_concern",
+          "severity": "high_signal",
+          "notice_doi": "10.1007/s13205-024-04115-2",
+          "notice_title": "Editorial Expression of Concern: Two species of Ulva inhibits the progression of cervical cancer cells SiHa by means of autophagic cell death induction",
+          "notice_url": "https://doi.org/10.1007/s13205-024-04115-2",
+          "notice_date": "2024-10-24",
+          "work_doi": "10.1007/s13205-020-02576-9",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "retraction",
+          "severity": "high_signal",
+          "notice_doi": "10.1007/s13205-014-0244-7",
+          "notice_title": "RETRACTED ARTICLE: Micropropagation and assessment of genetic fidelity of Dendrocalamus strictus (Roxb.) nees using RAPD and ISSR markers",
+          "notice_url": "https://doi.org/10.1007/s13205-014-0244-7",
+          "notice_date": "2014-08-09",
+          "work_doi": "10.1007/s13205-014-0244-7",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "retraction_notice",
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "retraction",
+          "severity": "high_signal",
+          "notice_doi": "10.1007/s13205-022-03161-y",
+          "notice_title": "Retraction Note to: A novel self-nanoemulsifying drug delivery system for curcumin used in the treatment of wound healing and inflammation",
+          "notice_url": "https://doi.org/10.1007/s13205-022-03161-y",
+          "notice_date": "2022-03-16",
+          "work_doi": "10.1007/s13205-019-1885-3",
+          "metadata_source": "retraction-watch",
+          "record_id": "36404",
+          "evidence_roles": [
+            "retraction_notice",
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "retraction",
+          "severity": "high_signal",
+          "notice_doi": "10.1007/s13205-022-03266-4",
+          "notice_title": "Retraction Note to: Elucidate genetic diversity and population structure of Olea europaea L. germplasm in Iran using AFLP and IRAP molecular markers",
+          "notice_url": "https://doi.org/10.1007/s13205-022-03266-4",
+          "notice_date": "2022-08-01",
+          "work_doi": "10.1007/s13205-017-0669-x",
+          "metadata_source": "retraction-watch",
+          "record_id": "38501",
+          "evidence_roles": [
+            "retraction_notice",
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "retraction",
+          "severity": "high_signal",
+          "notice_doi": "10.1007/s13205-022-03345-6",
+          "notice_title": "Retraction Note: MicroRNA-199a-5p suppresses the cell growth of colorectal cancer by targeting oncogene Caprin1",
+          "notice_url": "https://doi.org/10.1007/s13205-022-03345-6",
+          "notice_date": "2022-09-29",
+          "work_doi": "10.1007/s13205-020-02433-9",
+          "metadata_source": "retraction-watch",
+          "record_id": "40010",
+          "evidence_roles": [
+            "retraction_notice",
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "retraction",
+          "severity": "high_signal",
+          "notice_doi": "10.1007/s13205-023-03504-3",
+          "notice_title": "Retraction Note to: 7-H-Pyrrolo[2,3-d]pyrimidine derivative acts as promising agent for gastric cancer treatment by inducing cell death",
+          "notice_url": "https://doi.org/10.1007/s13205-023-03504-3",
+          "notice_date": "2023-02-09",
+          "work_doi": "10.1007/s13205-019-1937-8",
+          "metadata_source": "retraction-watch",
+          "record_id": "42660",
+          "evidence_roles": [
+            "retraction_notice",
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "retraction",
+          "severity": "high_signal",
+          "notice_doi": "10.1007/s13205-023-03531-0",
+          "notice_title": "Retraction Note: Long noncoding RNA LINC00968 inhibits proliferation, migration and invasion of lung adenocarcinoma through targeting miR-22-5p/CDC14A axis",
+          "notice_url": "https://doi.org/10.1007/s13205-023-03531-0",
+          "notice_date": "2023-04-05",
+          "work_doi": "10.1007/s13205-021-02981-8",
+          "metadata_source": "retraction-watch",
+          "record_id": "43746",
+          "evidence_roles": [
+            "retraction_notice",
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "retraction",
+          "severity": "high_signal",
+          "notice_doi": "10.1007/s13205-024-04007-5",
+          "notice_title": "Retraction Note to: Anti-tumor effect of PEG-coated PLGA nanoparticles of febuxostat on A549 non-small cell lung cancer cells",
+          "notice_url": "https://doi.org/10.1007/s13205-024-04007-5",
+          "notice_date": "2024-05-30",
+          "work_doi": "10.1007/s13205-020-2077-x",
+          "metadata_source": "retraction-watch",
+          "record_id": "53900",
+          "evidence_roles": [
+            "retraction_notice",
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "retraction",
+          "severity": "high_signal",
+          "notice_doi": "10.1007/s13205-024-04047-x",
+          "notice_title": "Retraction Note: Ameliorative potential of Operculina turpethum against streptozotocin-induced diabetes in rats: biochemical and histopathological studies",
+          "notice_url": "https://doi.org/10.1007/s13205-024-04047-x",
+          "notice_date": "2024-08-19",
+          "work_doi": "10.1007/s13205-021-02811-x",
+          "metadata_source": "retraction-watch",
+          "record_id": "66467",
+          "evidence_roles": [
+            "retraction_notice",
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-011-0002-z",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-010-0001-5",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-013-0171-z",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-012-0075-3",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-016-0451-5",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-016-0428-4",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-016-0571-y",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-016-0558-8",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-018-1111-8",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-016-0576-6",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-018-1554-y",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-018-1485-7",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-019-1852-z",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-019-1797-2",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-019-1864-8",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-018-1511-9",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-020-02503-y",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-020-02446-4",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-021-02895-5",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-020-2136-3",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-021-02906-5",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-021-02817-5",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-021-02916-3",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-021-02857-x",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-021-02965-8",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-020-02318-x",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-021-03005-1",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-021-02950-1",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-023-03800-y",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-023-03754-1",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-024-03994-9",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-019-1697-5",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-025-04479-z",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-025-04245-1",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-014-0250-9",
+          "notice_title": "Erratum to: Production of chitin and bioactive materials from Black tiger shrimp (Penaeus monodon) shell waste by the treatment of bacterial protease cocktail",
+          "notice_url": "https://doi.org/10.1007/s13205-014-0250-9",
+          "notice_date": "2014-09-26",
+          "work_doi": "10.1007/s13205-014-0245-6",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-017-0747-0",
+          "notice_title": "Erratum to: A molecular phylogenetic framework for Bacillus subtilis using genome sequences and its application to Bacillus subtilis subspecies stecoris strain D7XPN1, an isolate from a commercial food-waste degrading bioreactor",
+          "notice_url": "https://doi.org/10.1007/s13205-017-0747-0",
+          "notice_date": "2017-06",
+          "work_doi": "10.1007/s13205-016-0408-8",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-017-0867-6",
+          "notice_title": "Erratum to: Shift in microbial group during remediation by enhanced natural attenuation (RENA) of a crude oil-impacted soil: a case study of Ikarama Community, Bayelsa, Nigeria",
+          "notice_url": "https://doi.org/10.1007/s13205-017-0867-6",
+          "notice_date": "2017-07",
+          "work_doi": "10.1007/s13205-017-0782-x",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-018-1334-8",
+          "notice_title": "Correction to: The production of UL16-binding protein 1 targeted pigs using CRISPR technology",
+          "notice_url": "https://doi.org/10.1007/s13205-018-1334-8",
+          "notice_date": "2018-07",
+          "work_doi": "10.1007/s13205-018-1107-4",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-018-1335-7",
+          "notice_title": "Correction to: Increasing of activity and thermostability of cold active butanol-tolerant endoglucanase from a marine Rhodococcus sp. under high concentrations of butanol condition",
+          "notice_url": "https://doi.org/10.1007/s13205-018-1335-7",
+          "notice_date": "2018-07-19",
+          "work_doi": "10.1007/s13205-018-1249-4",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-020-02402-2",
+          "notice_title": "Correction to: Molecular mapping of dominant gene responsible for leaf curl virus resistance in chilli pepper (Capsicum annuum L.)",
+          "notice_url": "https://doi.org/10.1007/s13205-020-02402-2",
+          "notice_date": "2020-09-04",
+          "work_doi": "10.1007/s13205-020-02168-7",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-020-02404-0",
+          "notice_title": "Correction to: Novel xylanase producing Bacillus strain X2: molecular phylogenetic analysis and its application for production of xylooligosaccharides",
+          "notice_url": "https://doi.org/10.1007/s13205-020-02404-0",
+          "notice_date": "2020-09-09",
+          "work_doi": "10.1007/s13205-020-02322-1",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-024-04076-6",
+          "notice_title": "Correction: Genome-wide identification and characterization of glutathione S-transferase gene family in quinoa (Chenopodium quinoa Willd.)",
+          "notice_url": "https://doi.org/10.1007/s13205-024-04076-6",
+          "notice_date": "2024-10-12",
+          "work_doi": "10.1007/s13205-023-03659-z",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-024-04149-6",
+          "notice_title": "Correction: Investigating the role of prognostic mitophagy-related genes in non-small cell lung cancer pathogenesis via multiomics and network-based approach",
+          "notice_url": "https://doi.org/10.1007/s13205-024-04149-6",
+          "notice_date": "2024-11-20",
+          "work_doi": "10.1007/s13205-024-04127-y",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-025-04390-7",
+          "notice_title": "Correction: Biosynthesis of iron oxide nanoparticles (FeONPs) using Merremia quinquefolia (L.) Hallier f. leaf extract; Their antibacterial, antioxidant, anti-inflammatory, anticancer activity on against MCF-7 breast cancer cell lines and Photocatalytic degradation",
+          "notice_url": "https://doi.org/10.1007/s13205-025-04390-7",
+          "notice_date": "2025-06-25",
+          "work_doi": "10.1007/s13205-025-04338-x",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-025-04629-3",
+          "notice_title": "Correction: Exploring the spectrum of heroin-induced changes in the rat brain",
+          "notice_url": "https://doi.org/10.1007/s13205-025-04629-3",
+          "notice_date": "2025-12-08",
+          "work_doi": "10.1007/s13205-025-04387-2",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-025-04669-9",
+          "notice_title": "Correction: Phytochemical composition, biological activities, and molecular docking studies of ethanolic fruit extract of Tribulus terrestris: an in vitro and in silico approach",
+          "notice_url": "https://doi.org/10.1007/s13205-025-04669-9",
+          "notice_date": "2025-12-19",
+          "work_doi": "10.1007/s13205-025-04587-w",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-026-04700-7",
+          "notice_title": "Correction: Adjunctive use of Streptococcus salivarius M18 probiotic in the treatment of periodontitis: a randomized controlled trial",
+          "notice_url": "https://doi.org/10.1007/s13205-026-04700-7",
+          "notice_date": "2026-01-20",
+          "work_doi": "10.1007/s13205-025-04363-w",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-026-04736-9",
+          "notice_title": "Correction: Unveiling the synergistic enhancement of cefotaxime efficacy with magnetic iron nanoparticles using co-culture technique and tooth model: a promising approach to combat antibiotic resistance",
+          "notice_url": "https://doi.org/10.1007/s13205-026-04736-9",
+          "notice_date": "2026-02-20",
+          "work_doi": "10.1007/s13205-025-04690-y",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-026-04970-1",
+          "notice_title": "Correction: Molecular tagging of seed size using MITE markers in an induced large seed mutant with higher cotyledon cell size in groundnut",
+          "notice_url": "https://doi.org/10.1007/s13205-026-04970-1",
+          "notice_date": "2026-07-08",
+          "work_doi": "10.1007/s13205-023-03909-0",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1007/s13205-016-0374-1",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1007/s13205-015-0314-5",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "event_counts": {
+        "correction": 32,
+        "erratum": 1,
+        "expression_of_concern": 1,
+        "retraction": 8
+      },
+      "high_signal_count": 9,
+      "informational_count": 33,
+      "raw_evidence_count": 92,
+      "dropped_without_explicit_event": 23,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J05912385",
+      "title": "Zygon",
+      "issn_used": "0591-2385",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J15717283",
+      "title": "Zutot",
+      "issn_used": "1571-7283",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J09671994",
+      "title": "Zygote",
+      "issn_used": "0967-1994",
+      "events": [
+        {
+          "event_type": "retraction",
+          "severity": "high_signal",
+          "notice_doi": "10.1017/s0967199416000010",
+          "notice_title": "Relationship between Sloan-Kettering virus expression and mammalian follicular development-RETRACTION",
+          "notice_url": "https://doi.org/10.1017/s0967199416000010",
+          "notice_date": "2016-01-18",
+          "work_doi": "10.1017/s0967199415000362",
+          "metadata_source": "retraction-watch",
+          "record_id": "9647",
+          "evidence_roles": [
+            "retraction_notice",
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "retraction",
+          "severity": "high_signal",
+          "notice_doi": "10.1017/s0967199425100063",
+          "notice_title": "Ultrastructural study: in vitro and in vivo differentiation of mice spermatogonial stem cells – RETRACTION",
+          "notice_url": "https://doi.org/10.1017/s0967199425100063",
+          "notice_date": "2025-06",
+          "work_doi": "10.1017/s096719942300062x",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "retraction_notice",
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1017/s0967199423000187",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1017/s0967199423000114",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1017/s096719942510018x",
+          "notice_title": "Does high serum oestradiol during stimulation influence obstetrical outcomes and placental pathology in subsequent frozen embryo transfers? – ERRATUM",
+          "notice_url": "https://doi.org/10.1017/s096719942510018x",
+          "notice_date": "2025-08",
+          "work_doi": "10.1017/s0967199425100154",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "event_counts": {
+        "correction": 2,
+        "retraction": 2
+      },
+      "high_signal_count": 2,
+      "informational_count": 2,
+      "raw_evidence_count": 10,
+      "dropped_without_explicit_event": 3,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J01924788",
+      "title": "Activities, Adaptation and Aging",
+      "issn_used": "0192-4788",
+      "events": [
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/01924788.2022.2127068",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1080/01924788.2022.2116531",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/01924788.2024.2341209",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/01924788.2024.2341209",
+          "notice_date": "2024-04-09",
+          "work_doi": "10.1080/01924788.2023.2202455",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "event_counts": {
+        "correction": 2
+      },
+      "high_signal_count": 0,
+      "informational_count": 2,
+      "raw_evidence_count": 4,
+      "dropped_without_explicit_event": 1,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J23294906",
+      "title": "Business and Professional Communication Quarterly",
+      "issn_used": "2329-4906",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J00113840",
+      "title": "Current Problems in Surgery",
+      "issn_used": "0011-3840",
+      "events": [
+        {
+          "event_type": "removal",
+          "severity": "high_signal",
+          "notice_doi": "10.1016/j.cpsurg.2023.101336",
+          "notice_title": "REMOVED: An Ecological Framework for Racial and Ethnic Disparities in Surgery",
+          "notice_url": "https://doi.org/10.1016/j.cpsurg.2023.101336",
+          "notice_date": "2023-05",
+          "work_doi": "10.1016/j.cpsurg.2023.101336",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "retraction",
+          "severity": "high_signal",
+          "notice_doi": "10.1067/j.cpsurg.2007.06.003",
+          "notice_title": "Retraction",
+          "notice_url": "https://doi.org/10.1067/j.cpsurg.2007.06.003",
+          "notice_date": "2007-06",
+          "work_doi": "10.1016/s0011-3840(03)00035-2",
+          "metadata_source": "retraction-watch",
+          "record_id": "3727",
+          "evidence_roles": [
+            "retraction_notice",
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "withdrawal",
+          "severity": "high_signal",
+          "notice_doi": "10.1067/j.cpsurg.2013.12.002",
+          "notice_title": "WITHDRAWN: Current Problems in Surgery: Pancreatic Neuroendocrine Tumors",
+          "notice_url": "https://doi.org/10.1067/j.cpsurg.2013.12.002",
+          "notice_date": "2014-02",
+          "work_doi": "10.1067/j.cpsurg.2013.12.002",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "withdrawal",
+          "severity": "high_signal",
+          "notice_doi": "10.1067/j.cpsurg.2014.02.002",
+          "notice_title": "WITHDRAWN: In Brief",
+          "notice_url": "https://doi.org/10.1067/j.cpsurg.2014.02.002",
+          "notice_date": "2014-02",
+          "work_doi": "10.1067/j.cpsurg.2014.02.002",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "withdrawal",
+          "severity": "high_signal",
+          "notice_doi": "10.1067/j.cpsurg.2018.12.005",
+          "notice_title": "WITHDRAWN: In Brief",
+          "notice_url": "https://doi.org/10.1067/j.cpsurg.2018.12.005",
+          "notice_date": "2018-12",
+          "work_doi": "10.1067/j.cpsurg.2018.12.005",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1016/j.cpsurg.2019.100647",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1067/j.cpsurg.2019.03.003",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1067/j.cpsurg.2019.01.001",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1067/j.cpsurg.2018.01.001",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1016/j.cpsurg.2023.101306",
+          "notice_title": "Erratum to Thrombosis prophylaxis in surgical patients using the Caprini Risk Score’ [Current Problems in Surgery 59/11 (2022) 101221]",
+          "notice_url": "https://doi.org/10.1016/j.cpsurg.2023.101306",
+          "notice_date": "2023-04",
+          "work_doi": "10.1016/j.cpsurg.2022.101220",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1016/j.cpsurg.2023.101306",
+          "notice_title": "Erratum to Thrombosis prophylaxis in surgical patients using the Caprini Risk Score’ [Current Problems in Surgery 59/11 (2022) 101221]",
+          "notice_url": "https://doi.org/10.1016/j.cpsurg.2023.101306",
+          "notice_date": "2023-04",
+          "work_doi": "10.1016/j.cpsurg.2022.101221",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1016/j.cpsurg.2024.101665",
+          "notice_title": "Corrigendum to “Metabolic and bariatric surgery: An update from 2010'' [Curr. Probl. Surg. 61 (11) (2024) 101549]",
+          "notice_url": "https://doi.org/10.1016/j.cpsurg.2024.101665",
+          "notice_date": "2025-01",
+          "work_doi": "10.1016/j.cpsurg.2024.101549",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1016/j.cpsurg.2025.101802",
+          "notice_title": "Corrigendum to “Mucin-secreting type follicular thyroid carcinoma: A case report” [Current problems in surgery, 66, 2025, 101737]",
+          "notice_url": "https://doi.org/10.1016/j.cpsurg.2025.101802",
+          "notice_date": "2025-08",
+          "work_doi": "10.1016/j.cpsurg.2025.101737",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1016/j.cpsurg.2025.101831",
+          "notice_title": "Corrigendum to “Predictive value of the neutrophil-to-lymphocyte ratio for clinical outcome of fractures: A systematic review and meta-analysis” [Curr Probl Surg, 2025;67:101774]",
+          "notice_url": "https://doi.org/10.1016/j.cpsurg.2025.101831",
+          "notice_date": "2025-08",
+          "work_doi": "10.1016/j.cpsurg.2025.101774",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1016/j.cpsurg.2025.101881",
+          "notice_title": "Corrigendum to “Effects of Permissive Hypercapnia on Anxiety, Depression and Early Cognitive Function in Elderly Patients After Laparoscopic Hepatectomy” [Current Problems in Surgery 70 (2025) 101860]",
+          "notice_url": "https://doi.org/10.1016/j.cpsurg.2025.101881",
+          "notice_date": "2025-12",
+          "work_doi": "10.1016/j.cpsurg.2025.101860",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1016/j.cpsurg.2025.101916",
+          "notice_title": "Corrigendum to “Clinical effectiveness of percutaneous vertebroplasty in elderly patients with osteoporotic lumbar vertebral fractures: A retrospective study” [Curr Prob Surg, 69, 2025, 101820]",
+          "notice_url": "https://doi.org/10.1016/j.cpsurg.2025.101916",
+          "notice_date": "2025-12",
+          "work_doi": "10.1016/j.cpsurg.2025.101820",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1016/j.cpsurg.2025.101960",
+          "notice_title": "Corrigendum to “Role of Circulating Tumor Cells in Locally Advanced Gastric Cancer Patients Treated with Neoadjuvant Chemotherapy Combined with Surgery” [Current Problems in Surgery Volume 73, December 2025, 101909, doi.org/10.1016/j.cpsurg.2025.101909]",
+          "notice_url": "https://doi.org/10.1016/j.cpsurg.2025.101960",
+          "notice_date": "2026-02",
+          "work_doi": "10.1016/j.cpsurg.2025.101909",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1067/j.cpsurg.2026.101979",
+          "notice_title": "Corrigendum to “Dose sarcopenia affect the clinical outcomes of elder patients treated with posterior cervical laminoplasty? A retrospective cohort study”. [Curr Problem Surg. 2026;74:101932]",
+          "notice_url": "https://doi.org/10.1067/j.cpsurg.2026.101979",
+          "notice_date": "2026-02",
+          "work_doi": "10.1016/j.cpsurg.2025.101932",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1016/j.cpsurg.2026.102004",
+          "notice_title": "Corrigendum to “Automatic liver Couinaud segmentation from computed tomography scans with a gradient-enhanced hierarchical cascade deep learning network” [Current Problems in Surgery 75 (2026) 101957]",
+          "notice_url": "https://doi.org/10.1016/j.cpsurg.2026.102004",
+          "notice_date": "2026-04",
+          "work_doi": "10.1016/j.cpsurg.2025.101957",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1016/j.cpsurg.2026.102018",
+          "notice_title": "Corrigendum to “Precision in steel: Early evaluation of robotic surgery effectiveness in the management of nutcracker syndrome - A systematic review” [Current Problems in Surgery, Volume 62, January 2025, 101667]",
+          "notice_url": "https://doi.org/10.1016/j.cpsurg.2026.102018",
+          "notice_date": "2026-04",
+          "work_doi": "10.1016/j.cpsurg.2024.101667",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1016/j.cpsurg.2026.102076",
+          "notice_title": "Corrigendum to ‘Transforming Orthotopic Liver Transplantation: Innovative Dry-Lab Simulation Model in Mice’",
+          "notice_url": "https://doi.org/10.1016/j.cpsurg.2026.102076",
+          "notice_date": "2026-06",
+          "work_doi": "10.1016/j.cpsurg.2025.101920",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1067/j.cpsurg.2026.102077",
+          "notice_title": "Corrigendum to ‘Revolutionizing Small Bowel Transplantation in Mice and Rats: A Cutting-Edge Dry-Lab Simulation Model’",
+          "notice_url": "https://doi.org/10.1067/j.cpsurg.2026.102077",
+          "notice_date": "2026-06",
+          "work_doi": "10.1016/j.cpsurg.2025.101917",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "event_counts": {
+        "erratum": 15,
+        "removal": 1,
+        "retraction": 1,
+        "withdrawal": 3
+      },
+      "high_signal_count": 5,
+      "informational_count": 15,
+      "raw_evidence_count": 40,
+      "dropped_without_explicit_event": 14,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J16004469",
+      "title": "Dental Traumatology",
+      "issn_used": "1600-4469",
+      "events": [
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1111/edt.12454",
+          "notice_title": "Teeth fracture among visually impaired and sighted children of 12 and 15 years age groups of Udaipur city, India—A comparative study",
+          "notice_url": "https://doi.org/10.1111/edt.12454",
+          "notice_date": "2019-01-15",
+          "work_doi": "10.1111/j.1600-9657.2011.01007.x",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "event_counts": {
+        "correction": 1
+      },
+      "high_signal_count": 0,
+      "informational_count": 1,
+      "raw_evidence_count": 2,
+      "dropped_without_explicit_event": 1,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J03026701",
+      "title": "Egyptian Journal of Soil Science",
+      "issn_used": "0302-6701",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J01285157",
+      "title": "3L: Language, Linguistics, Literature",
+      "issn_used": "0128-5157",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J07434618",
+      "title": "AAC: Augmentative and Alternative Communication",
+      "issn_used": "0743-4618",
+      "events": [
+        {
+          "event_type": "addendum",
+          "severity": "informational",
+          "notice_doi": "10.1080/07434618.2018.1509530",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1080/07434618.2018.1458900",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/07434618.2017.1345504",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1080/07434618.2017.1336571",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "event_counts": {
+        "addendum": 1,
+        "correction": 1
+      },
+      "high_signal_count": 0,
+      "informational_count": 2,
+      "raw_evidence_count": 4,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J03650359",
+      "title": "AAPP Atti della Accademia Peloritana dei Pericolanti, Classe di Scienze Fisiche, Matematiche e Naturali",
+      "issn_used": "0365-0359",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J23742895",
+      "title": "Academic Pathology",
+      "issn_used": "2374-2895",
+      "events": [
+        {
+          "event_type": "erratum",
+          "severity": "informational",
+          "notice_doi": "10.1177/2374289520947529",
+          "notice_title": "Corrigendum to “Association of Pathology Chairs: Abstracts of the 2019 Annual Meeting: Innovation: Through Collective Excellence: Shaping the Future of Pathology July 21 to 24, 2019, Boston Seaport Hotel and World Trade Center, Boston, MA”",
+          "notice_url": "https://doi.org/10.1177/2374289520947529",
+          "notice_date": "2020-01",
+          "work_doi": "10.1177/2374289519852559",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "event_counts": {
+        "erratum": 1
+      },
+      "high_signal_count": 0,
+      "informational_count": 1,
+      "raw_evidence_count": 2,
+      "dropped_without_explicit_event": 1,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J02107287",
+      "title": "1616-ANUARIO DE LITERATURA COMPARADA",
+      "issn_used": "0210-7287",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J16524772",
+      "title": "1700-tal: Nordic Journal for Eighteenth-Century Studies",
+      "issn_used": "1652-4772",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J08989575",
+      "title": "a/b: Auto/Biography Studies",
+      "issn_used": "0898-9575",
+      "events": [
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2017.1308050",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1080/08989575.2017.1247224",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2017.1334417",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1080/08989575.2017.1288892",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1588530",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1080/08989575.2018.1499495",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1588530",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1080/08989575.2018.1504393",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1637084",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1080/08989575.2019.1592379",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2020.1729002",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1080/08989575.2019.1664167",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2016.1272254",
+          "notice_title": "Erratum",
+          "notice_url": "https://doi.org/10.1080/08989575.2016.1272254",
+          "notice_date": "2016-12-20",
+          "work_doi": "10.1080/08989575.2017.1245090",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2017.1378165",
+          "notice_title": "Erratum",
+          "notice_url": "https://doi.org/10.1080/08989575.2017.1378165",
+          "notice_date": "2017-09-12",
+          "work_doi": "10.1080/08989575.2017.1339447",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2018.1395621",
+          "notice_title": "Erratum",
+          "notice_url": "https://doi.org/10.1080/08989575.2018.1395621",
+          "notice_date": "2017-11-06",
+          "work_doi": "10.1080/08989575.2017.1339447",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1588527",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1588527",
+          "notice_date": "2018-09-02",
+          "work_doi": "10.1080/08989575.2018.1503399",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1588530",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1588530",
+          "notice_date": "2018-09-02",
+          "work_doi": "10.1080/08989575.2018.1499491",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1588530",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1588530",
+          "notice_date": "2018-09-02",
+          "work_doi": "10.1080/08989575.2018.1499492",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1588530",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1588530",
+          "notice_date": "2018-09-02",
+          "work_doi": "10.1080/08989575.2018.1499493",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1588530",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1588530",
+          "notice_date": "2018-09-02",
+          "work_doi": "10.1080/08989575.2018.1499497",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1588530",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1588530",
+          "notice_date": "2018-09-02",
+          "work_doi": "10.1080/08989575.2018.1499498",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1588530",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1588530",
+          "notice_date": "2018-09-02",
+          "work_doi": "10.1080/08989575.2018.1499505",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1588530",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1588530",
+          "notice_date": "2018-09-02",
+          "work_doi": "10.1080/08989575.2018.1499525",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1588530",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1588530",
+          "notice_date": "2018-09-02",
+          "work_doi": "10.1080/08989575.2018.1499536",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1588530",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1588530",
+          "notice_date": "2018-09-02",
+          "work_doi": "10.1080/08989575.2018.1499565",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1588530",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1588530",
+          "notice_date": "2018-09-02",
+          "work_doi": "10.1080/08989575.2018.1499566",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1588530",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1588530",
+          "notice_date": "2018-09-02",
+          "work_doi": "10.1080/08989575.2018.1499567",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1588530",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1588530",
+          "notice_date": "2018-09-02",
+          "work_doi": "10.1080/08989575.2018.1499577",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1588530",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1588530",
+          "notice_date": "2018-09-02",
+          "work_doi": "10.1080/08989575.2018.1503437",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1637083",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1637083",
+          "notice_date": "2019-05-04",
+          "work_doi": "10.1080/08989575.2019.1592377",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1637084",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1637084",
+          "notice_date": "2019-05-04",
+          "work_doi": "10.1080/08989575.2019.1592380",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1637084",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1637084",
+          "notice_date": "2019-05-04",
+          "work_doi": "10.1080/08989575.2019.1592381",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1637084",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1637084",
+          "notice_date": "2019-05-04",
+          "work_doi": "10.1080/08989575.2019.1592383",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1637084",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1637084",
+          "notice_date": "2019-05-04",
+          "work_doi": "10.1080/08989575.2019.1592384",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1637084",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1637084",
+          "notice_date": "2019-05-04",
+          "work_doi": "10.1080/08989575.2019.1592385",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1637084",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1637084",
+          "notice_date": "2019-05-04",
+          "work_doi": "10.1080/08989575.2019.1592386",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1080/08989575.2019.1637084",
+          "notice_title": "Correction",
+          "notice_url": "https://doi.org/10.1080/08989575.2019.1637084",
+          "notice_date": "2019-05-04",
+          "work_doi": "10.1080/08989575.2019.1592387",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "event_counts": {
+        "correction": 31
+      },
+      "high_signal_count": 0,
+      "informational_count": 31,
+      "raw_evidence_count": 40,
+      "dropped_without_explicit_event": 24,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J25647474",
+      "title": "A/Z ITU Journal of the Faculty of Architecture",
+      "issn_used": "2564-7474",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J17917573",
+      "title": "Τεκμήρια",
+      "issn_used": "1791-7573",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J19947836",
+      "title": "Науковий вісник НЛТУ України",
+      "issn_used": "1994-7836",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J19979665",
+      "title": "Морфологія",
+      "issn_used": "1997-9665",
+      "events": [],
+      "event_counts": {},
+      "high_signal_count": 0,
+      "informational_count": 0,
+      "raw_evidence_count": 0,
+      "dropped_without_explicit_event": 0,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J20531583",
+      "title": "2D Materials",
+      "issn_used": "2053-1583",
+      "events": [
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1088/2053-1583/3/1/019501",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1088/2053-1583/3/1/010401",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1088/2053-1583/3/4/049501",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1088/2053-1583/3/3/031011",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1088/2053-1583/aa610b",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1088/2053-1583/aa551c",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1088/2053-1583/aa7690",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1088/2053-1583/aa6f4d",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1088/2053-1583/aa78ac",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1088/2053-1583/aa5290",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1088/2053-1583/aad5fd",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1088/2053-1583/aa7cd3",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1088/2053-1583/aaf9bb",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1088/2053-1583/3/3/035009",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1088/2053-1583/ac1fa7",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1088/2053-1583/aa65c2",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1088/2053-1583/ad3090",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1088/2053-1583/ad0403",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1088/2053-1583/ab1771",
+          "notice_title": "Corrigendum: Semiclassical Boltzmann transport theory of few-layer black phosphorus in various phases (2019\n                    <i>2D Mater</i>\n                    .\n                    <b>6</b>\n                    025016)",
+          "notice_url": "https://doi.org/10.1088/2053-1583/ab1771",
+          "notice_date": "2019-05-02",
+          "work_doi": "10.1088/2053-1583/ab01c3",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1088/2053-1583/ab1df2",
+          "notice_title": "Corrigendum: Van der Waals 2D layered-material bipolar transistor (2019\n                    <i>2D Mater</i>\n                    .\n                    <b>6</b>\n                    035005)",
+          "notice_url": "https://doi.org/10.1088/2053-1583/ab1df2",
+          "notice_date": "2019-05-13",
+          "work_doi": "10.1088/2053-1583/ab1457",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1088/2053-1583/ab7bfb",
+          "notice_title": "Corrigendum: High throughput computational screening for 2D ferromagnetic materials: the critical role of anisotropy and local correlations (2D Mater. 6 045018)",
+          "notice_url": "https://doi.org/10.1088/2053-1583/ab7bfb",
+          "notice_date": "2020-07-23",
+          "work_doi": "10.1088/2053-1583/ab2c43",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1088/2053-1583/ae16b9",
+          "notice_title": "Corrigendum: Advances and challenges in 2D semiconductor devices for monolithic 3D integration (2025\n                    <i>2D Mater.</i>\n                     12 043003)",
+          "notice_url": "https://doi.org/10.1088/2053-1583/ae16b9",
+          "notice_date": "2025-11-11",
+          "work_doi": "10.1088/2053-1583/adf236",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1088/2053-1583/ae2630",
+          "notice_title": "Corrigendum: ‘Excitons and trions in WSSe monolayers’ (2023\n                    <i>2D Mater.</i>\n                    10 015018)",
+          "notice_url": "https://doi.org/10.1088/2053-1583/ae2630",
+          "notice_date": "2025-12-16",
+          "work_doi": "10.1088/2053-1583/aca915",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "corrigendum",
+          "severity": "informational",
+          "notice_doi": "10.1088/2053-1583/2/4/049501",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1088/2053-1583/2/2/022001",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "event_counts": {
+        "correction": 14,
+        "corrigendum": 1
+      },
+      "high_signal_count": 0,
+      "informational_count": 15,
+      "raw_evidence_count": 30,
+      "dropped_without_explicit_event": 5,
+      "query_errors": [],
+      "status": "ok"
+    },
+    {
+      "journal_id": "J23656271",
+      "title": "3D Printing in Medicine",
+      "issn_used": "2365-6271",
+      "events": [
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1186/s41205-019-0051-1",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1186/s41205-019-0046-y",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1186/s41205-020-00088-z",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1186/s41205-020-00082-5",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1186/s41205-021-00109-5",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1186/s41205-021-00095-8",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1186/s41205-021-00126-4",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1186/s41205-021-00118-4",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1186/s41205-021-00126-4",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1186/s41205-021-00116-6",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1186/s41205-021-00126-4",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1186/s41205-021-00103-x",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1186/s41205-021-00126-4",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1186/s41205-021-00105-9",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1186/s41205-021-00126-4",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1186/s41205-021-00120-w",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1186/s41205-023-00194-8",
+          "notice_title": "",
+          "notice_url": "",
+          "notice_date": "",
+          "work_doi": "10.1186/s41205-023-00175-x",
+          "metadata_source": "crossref_relation",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice",
+            "work_updated"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1186/s41205-021-00094-9",
+          "notice_title": "Correction to: Urgent need hybrid production - what COVID-19 can teach us about dislocated production through 3d-printing and the maker scene",
+          "notice_url": "https://doi.org/10.1186/s41205-021-00094-9",
+          "notice_date": "2021-02-08",
+          "work_doi": "10.1186/s41205-020-00090-5",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1186/s41205-021-00126-4",
+          "notice_title": "Correction to Acknowledgement",
+          "notice_url": "https://doi.org/10.1186/s41205-021-00126-4",
+          "notice_date": "2021-11-17",
+          "work_doi": "10.1186/s41205-021-00100-0",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1186/s41205-021-00126-4",
+          "notice_title": "Correction to Acknowledgement",
+          "notice_url": "https://doi.org/10.1186/s41205-021-00126-4",
+          "notice_date": "2021-11-17",
+          "work_doi": "10.1186/s41205-021-00112-w",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1186/s41205-021-00126-4",
+          "notice_title": "Correction to Acknowledgement",
+          "notice_url": "https://doi.org/10.1186/s41205-021-00126-4",
+          "notice_date": "2021-11-17",
+          "work_doi": "10.1186/s41205-021-00119-3",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1186/s41205-022-00153-9",
+          "notice_title": "Correction: Accuracy of guide wire placement for femoral neck stabilization using 3D printed drill guides",
+          "notice_url": "https://doi.org/10.1186/s41205-022-00153-9",
+          "notice_date": "2022-08-09",
+          "work_doi": "10.1186/s41205-022-00146-8",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "event_type": "correction",
+          "severity": "informational",
+          "notice_doi": "10.1186/s41205-023-00188-6",
+          "notice_title": "Correction to: Design, printing optimization, and material testing of a 3D-printed nasal osteotomy task trainer",
+          "notice_url": "https://doi.org/10.1186/s41205-023-00188-6",
+          "notice_date": "2023-08-21",
+          "work_doi": "10.1186/s41205-023-00185-9",
+          "metadata_source": "publisher",
+          "record_id": null,
+          "evidence_roles": [
+            "update_notice"
+          ],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "event_counts": {
+        "correction": 15
+      },
+      "high_signal_count": 0,
+      "informational_count": 15,
+      "raw_evidence_count": 23,
+      "dropped_without_explicit_event": 6,
+      "query_errors": [],
+      "status": "ok"
+    }
+  ]
+}
