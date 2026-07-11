@@ -1,0 +1,1097 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-07-11T08:48:35+00:00",
+  "scope": "pilot",
+  "method": "Scraping limitado de páginas públicas; respeta robots.txt; no produce conclusiones automáticas",
+  "records": [
+    {
+      "journal_id": "J14710072",
+      "title": "Nature Reviews Molecular Cell Biology",
+      "openalex_source_id": "https://openalex.org/S196724125",
+      "homepage_url": "https://www.nature.com/nrm/",
+      "pages": [
+        {
+          "url": "https://www.nature.com/nrm/",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Client Challenge",
+          "meta_description": "",
+          "categories_found": {
+            "contact": [
+              "contact"
+            ]
+          },
+          "candidate_links": [],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "review_status": "pending_human_review",
+      "status": "ok"
+    },
+    {
+      "journal_id": "J00015385",
+      "title": "Acta Cardiologica",
+      "openalex_source_id": null,
+      "homepage_url": "",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "no_safe_homepage"
+    },
+    {
+      "journal_id": "J23297662",
+      "title": "3D Printing and Additive Manufacturing",
+      "openalex_source_id": "https://openalex.org/S4210174904",
+      "homepage_url": "",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "no_safe_homepage"
+    },
+    {
+      "journal_id": "J20133294",
+      "title": "452ºF",
+      "openalex_source_id": "https://openalex.org/S4210177177",
+      "homepage_url": "http://www.452f.com/index.php",
+      "pages": [
+        {
+          "url": "http://www.452f.com/index.php",
+          "http_status": 200,
+          "content_type": "text/html; charset=UTF-8",
+          "title": "Número 33 - 452F",
+          "meta_description": "",
+          "categories_found": {
+            "peer_review": [
+              "arbitraje"
+            ],
+            "fees_apc": [
+              "apc"
+            ],
+            "contact": [
+              "contact",
+              "contacto"
+            ]
+          },
+          "candidate_links": [],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "review_status": "pending_human_review",
+      "status": "ok"
+    },
+    {
+      "journal_id": "J23321091",
+      "title": "Civil Engineering and Architecture",
+      "openalex_source_id": "https://openalex.org/S4210186571",
+      "homepage_url": "http://www.hrpub.org/journals/jour_archive.php?id=48",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "error",
+      "error": "URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)>"
+    },
+    {
+      "journal_id": "J07981015",
+      "title": "Espacios",
+      "openalex_source_id": "https://openalex.org/S4210175031",
+      "homepage_url": "",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "no_safe_homepage"
+    },
+    {
+      "journal_id": "J16904648",
+      "title": "Boletin de Malariologia y Salud Ambiental",
+      "openalex_source_id": "https://openalex.org/S966885642",
+      "homepage_url": "",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "no_safe_homepage"
+    },
+    {
+      "journal_id": "J21769079",
+      "title": "Comunicata Scientiae",
+      "openalex_source_id": "https://openalex.org/S4210228716",
+      "homepage_url": "http://comunicata.ufpi.br/index.php/comunicata",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "error",
+      "error": "URLError: <urlopen error timed out>"
+    },
+    {
+      "journal_id": "J2190572X",
+      "title": "3 Biotech",
+      "openalex_source_id": "https://openalex.org/S4210190239",
+      "homepage_url": "https://www.springer.com/journal/13205",
+      "pages": [
+        {
+          "url": "https://www.springer.com/journal/13205",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Client Challenge",
+          "meta_description": "",
+          "categories_found": {
+            "contact": [
+              "contact"
+            ]
+          },
+          "candidate_links": [],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "review_status": "pending_human_review",
+      "status": "ok"
+    },
+    {
+      "journal_id": "J05912385",
+      "title": "Zygon",
+      "openalex_source_id": "https://openalex.org/S128470386",
+      "homepage_url": "https://onlinelibrary.wiley.com/journal/14679744",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "http_error",
+      "error": "HTTP 403"
+    },
+    {
+      "journal_id": "J15717283",
+      "title": "Zutot",
+      "openalex_source_id": "https://openalex.org/S4210174357",
+      "homepage_url": "http://booksandjournals.brillonline.com/content/journals/18750214",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "blocked_by_robots"
+    },
+    {
+      "journal_id": "J09671994",
+      "title": "Zygote",
+      "openalex_source_id": "https://openalex.org/S99576920",
+      "homepage_url": "https://www.cambridge.org/core/journals/zygote",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "blocked_by_robots"
+    },
+    {
+      "journal_id": "J01924788",
+      "title": "Activities, Adaptation and Aging",
+      "openalex_source_id": "https://openalex.org/S185153313",
+      "homepage_url": "https://www.tandfonline.com/toc/waaa20/current",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "http_error",
+      "error": "HTTP 403"
+    },
+    {
+      "journal_id": "J23294906",
+      "title": "Business and Professional Communication Quarterly",
+      "openalex_source_id": "https://openalex.org/S4210193456",
+      "homepage_url": "https://us.sagepub.com/en-us/nam/journal/business-and-professional-communication-quarterly",
+      "pages": [
+        {
+          "url": "https://us.sagepub.com/en-us/nam/journal/business-and-professional-communication-quarterly",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "404 - Page Not Found",
+          "meta_description": "404 - Page Not Found",
+          "categories_found": {
+            "peer_review": [
+              "peer review"
+            ],
+            "contact": [
+              "contact"
+            ]
+          },
+          "candidate_links": [],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "review_status": "pending_human_review",
+      "status": "ok"
+    },
+    {
+      "journal_id": "J00113840",
+      "title": "Current Problems in Surgery",
+      "openalex_source_id": "https://openalex.org/S84847770",
+      "homepage_url": "https://www.journals.elsevier.com/current-problems-in-surgery",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "blocked_by_robots"
+    },
+    {
+      "journal_id": "J16004469",
+      "title": "Dental Traumatology",
+      "openalex_source_id": "https://openalex.org/S113867935",
+      "homepage_url": "https://onlinelibrary.wiley.com/journal/16009657",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "http_error",
+      "error": "HTTP 403"
+    },
+    {
+      "journal_id": "J03026701",
+      "title": "Egyptian Journal of Soil Science",
+      "openalex_source_id": "https://openalex.org/S4210230455",
+      "homepage_url": "",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "no_safe_homepage"
+    },
+    {
+      "journal_id": "J01285157",
+      "title": "3L: Language, Linguistics, Literature",
+      "openalex_source_id": "https://openalex.org/S4210230078",
+      "homepage_url": "http://ejournals.ukm.my/3l",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "error",
+      "error": "RemoteDisconnected: Remote end closed connection without response"
+    },
+    {
+      "journal_id": "J07434618",
+      "title": "AAC: Augmentative and Alternative Communication",
+      "openalex_source_id": "https://openalex.org/S147155939",
+      "homepage_url": "https://www.tandfonline.com/toc/iaac20/current",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "http_error",
+      "error": "HTTP 403"
+    },
+    {
+      "journal_id": "J03650359",
+      "title": "AAPP Atti della Accademia Peloritana dei Pericolanti, Classe di Scienze Fisiche, Matematiche e Naturali",
+      "openalex_source_id": "https://openalex.org/S2739114148",
+      "homepage_url": "http://www.actapeloritana.it",
+      "pages": [
+        {
+          "url": "http://www.actapeloritana.it",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Atti della Accademia Peloritana dei Pericolanti - Classe di Scienze Fisiche, Matematiche e Naturali",
+          "meta_description": "",
+          "categories_found": {
+            "contact": [
+              "contact"
+            ]
+          },
+          "candidate_links": [
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/about/contact",
+              "label": "Contact",
+              "categories": [
+                "contact"
+              ]
+            }
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "url": "https://riviste.unime.it/index.php/AAPP/about/contact",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Contact | Atti della Accademia Peloritana dei Pericolanti - Classe di Scienze Fisiche, Matematiche e Naturali",
+          "meta_description": "",
+          "categories_found": {
+            "contact": [
+              "contact"
+            ]
+          },
+          "candidate_links": [
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/about/contact#pkp_content_main",
+              "label": "Skip to main content",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/about/contact#siteNav",
+              "label": "Skip to main navigation menu",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/about/contact#pkp_content_footer",
+              "label": "Skip to site footer Open Menu",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/about/contact",
+              "label": "Contact",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/index",
+              "label": "Home / Contact Contact Accademia Peloritana dei Pericolanti Palazzo del Rettorato, Piazza Pugliatti 1, 98122 Messina, Italy Principal Contact Paolo V. Giaquinta document.write(unescape('%3c%61%20%68%72%65%66%3d%22%6d%61%69%6c%74%6f%3a%61%61%70%70%40%",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/user/setLocale/en?source=%2Findex.php%2FAAPP%2Fabout%2Fcontact",
+              "label": "English",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/user/setLocale/it?source=%2Findex.php%2FAAPP%2Fabout%2Fcontact",
+              "label": "Italiano Information",
+              "categories": [
+                "contact"
+              ]
+            }
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "url": "https://riviste.unime.it/index.php/AAPP/about/contact#pkp_content_main",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Contact | Atti della Accademia Peloritana dei Pericolanti - Classe di Scienze Fisiche, Matematiche e Naturali",
+          "meta_description": "",
+          "categories_found": {
+            "contact": [
+              "contact"
+            ]
+          },
+          "candidate_links": [
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/about/contact#pkp_content_main",
+              "label": "Skip to main content",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/about/contact#siteNav",
+              "label": "Skip to main navigation menu",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/about/contact#pkp_content_footer",
+              "label": "Skip to site footer Open Menu",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/about/contact",
+              "label": "Contact",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/index",
+              "label": "Home / Contact Contact Accademia Peloritana dei Pericolanti Palazzo del Rettorato, Piazza Pugliatti 1, 98122 Messina, Italy Principal Contact Paolo V. Giaquinta document.write(unescape('%3c%61%20%68%72%65%66%3d%22%6d%61%69%6c%74%6f%3a%61%61%70%70%40%",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/user/setLocale/en?source=%2Findex.php%2FAAPP%2Fabout%2Fcontact",
+              "label": "English",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/user/setLocale/it?source=%2Findex.php%2FAAPP%2Fabout%2Fcontact",
+              "label": "Italiano Information",
+              "categories": [
+                "contact"
+              ]
+            }
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "url": "https://riviste.unime.it/index.php/AAPP/about/contact#siteNav",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Contact | Atti della Accademia Peloritana dei Pericolanti - Classe di Scienze Fisiche, Matematiche e Naturali",
+          "meta_description": "",
+          "categories_found": {
+            "contact": [
+              "contact"
+            ]
+          },
+          "candidate_links": [
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/about/contact#pkp_content_main",
+              "label": "Skip to main content",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/about/contact#siteNav",
+              "label": "Skip to main navigation menu",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/about/contact#pkp_content_footer",
+              "label": "Skip to site footer Open Menu",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/about/contact",
+              "label": "Contact",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/index",
+              "label": "Home / Contact Contact Accademia Peloritana dei Pericolanti Palazzo del Rettorato, Piazza Pugliatti 1, 98122 Messina, Italy Principal Contact Paolo V. Giaquinta document.write(unescape('%3c%61%20%68%72%65%66%3d%22%6d%61%69%6c%74%6f%3a%61%61%70%70%40%",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/user/setLocale/en?source=%2Findex.php%2FAAPP%2Fabout%2Fcontact",
+              "label": "English",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://riviste.unime.it/index.php/AAPP/user/setLocale/it?source=%2Findex.php%2FAAPP%2Fabout%2Fcontact",
+              "label": "Italiano Information",
+              "categories": [
+                "contact"
+              ]
+            }
+          ],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "review_status": "pending_human_review",
+      "status": "ok"
+    },
+    {
+      "journal_id": "J23742895",
+      "title": "Academic Pathology",
+      "openalex_source_id": "https://openalex.org/S4210212924",
+      "homepage_url": "https://www.sciencedirect.com/journal/academic-pathology",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "blocked_by_robots"
+    },
+    {
+      "journal_id": "J02107287",
+      "title": "1616-ANUARIO DE LITERATURA COMPARADA",
+      "openalex_source_id": "https://openalex.org/S4210168538",
+      "homepage_url": "http://revistas.usal.es/index.php/1616_Anuario_Literatura_Comp/index",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "error",
+      "error": "URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)>"
+    },
+    {
+      "journal_id": "J16524772",
+      "title": "1700-tal: Nordic Journal for Eighteenth-Century Studies",
+      "openalex_source_id": "https://openalex.org/S4210168009",
+      "homepage_url": "https://septentrio.uit.no/index.php/1700",
+      "pages": [
+        {
+          "url": "https://septentrio.uit.no/index.php/1700",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "1700-tal: Nordic Journal for Eighteenth-Century Studies",
+          "meta_description": "",
+          "categories_found": {
+            "ethics": [
+              "publication ethics"
+            ],
+            "contact": [
+              "contact"
+            ]
+          },
+          "candidate_links": [
+            {
+              "url": "https://septentrio.uit.no/index.php/1700/ethics",
+              "label": "Publication ethics statement",
+              "categories": [
+                "ethics"
+              ]
+            },
+            {
+              "url": "https://septentrio.uit.no/index.php/1700/about/contact",
+              "label": "Contact",
+              "categories": [
+                "contact"
+              ]
+            }
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "url": "https://septentrio.uit.no/index.php/1700/ethics",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Publication ethics statement | 1700-tal: Nordic Journal for Eighteenth-Century Studies",
+          "meta_description": "",
+          "categories_found": {
+            "ethics": [
+              "publication ethics"
+            ],
+            "editorial_board": [
+              "editors"
+            ],
+            "contact": [
+              "contact"
+            ]
+          },
+          "candidate_links": [
+            {
+              "url": "https://septentrio.uit.no/index.php/1700/ethics",
+              "label": "Publication ethics statement",
+              "categories": [
+                "ethics"
+              ]
+            },
+            {
+              "url": "https://septentrio.uit.no/index.php/1700/about/contact",
+              "label": "Contact",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://septentrio.uit.no/index.php/1700/index",
+              "label": "Home / Publication ethics statement Publication ethics statement 1700-tal follows the Principles of Transparency and Best Practice in Scholarly Publishing as developed by The",
+              "categories": [
+                "ethics"
+              ]
+            },
+            {
+              "url": "https://publicationethics.org/",
+              "label": "Committee on Publication Ethics (COPE), the",
+              "categories": [
+                "ethics"
+              ]
+            },
+            {
+              "url": "http://www.wame.org/",
+              "label": "World Association of Medical Editors (WAME), see the full document at",
+              "categories": [
+                "editorial_board"
+              ]
+            }
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "url": "https://septentrio.uit.no/index.php/1700/about/contact",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Contact | 1700-tal: Nordic Journal for Eighteenth-Century Studies",
+          "meta_description": "",
+          "categories_found": {
+            "ethics": [
+              "publication ethics"
+            ],
+            "contact": [
+              "contact"
+            ]
+          },
+          "candidate_links": [
+            {
+              "url": "https://septentrio.uit.no/index.php/1700/about/contact#pkp_content_main",
+              "label": "Skip to main content",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://septentrio.uit.no/index.php/1700/about/contact#siteNav",
+              "label": "Skip to main navigation menu",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://septentrio.uit.no/index.php/1700/about/contact#pkp_content_footer",
+              "label": "Skip to site footer Open Menu",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://septentrio.uit.no/index.php/1700/ethics",
+              "label": "Publication ethics statement",
+              "categories": [
+                "ethics"
+              ]
+            },
+            {
+              "url": "https://septentrio.uit.no/index.php/1700/about/contact",
+              "label": "Contact",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://septentrio.uit.no/index.php/1700/index",
+              "label": "Home / Contact Contact . Principal Contact Johannes Ljungberg University of Copenhagen document.write(unescape('%3c%61%20%68%72%65%66%3d%22%6d%61%69%6c%74%6f%3a%6a%62%6c%40%74%65%6f%6c%2e%6b%75%2e%64%6b%22%20%3e%6a%62%6c%40%74%65%6f%6c%2e%6b%75%2e%64",
+              "categories": [
+                "contact"
+              ]
+            }
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "url": "https://septentrio.uit.no/index.php/1700/index",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "1700-tal: Nordic Journal for Eighteenth-Century Studies",
+          "meta_description": "",
+          "categories_found": {
+            "ethics": [
+              "publication ethics"
+            ],
+            "contact": [
+              "contact"
+            ]
+          },
+          "candidate_links": [
+            {
+              "url": "https://septentrio.uit.no/index.php/1700/ethics",
+              "label": "Publication ethics statement",
+              "categories": [
+                "ethics"
+              ]
+            },
+            {
+              "url": "https://septentrio.uit.no/index.php/1700/about/contact",
+              "label": "Contact",
+              "categories": [
+                "contact"
+              ]
+            }
+          ],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "review_status": "pending_human_review",
+      "status": "ok"
+    },
+    {
+      "journal_id": "J08989575",
+      "title": "a/b: Auto/Biography Studies",
+      "openalex_source_id": "https://openalex.org/S4210179108",
+      "homepage_url": "https://www.tandfonline.com/toc/raut20/current",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "http_error",
+      "error": "HTTP 403"
+    },
+    {
+      "journal_id": "J25647474",
+      "title": "A/Z ITU Journal of the Faculty of Architecture",
+      "openalex_source_id": "https://openalex.org/S4387288082",
+      "homepage_url": "",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "no_safe_homepage"
+    },
+    {
+      "journal_id": "J17917573",
+      "title": "Τεκμήρια",
+      "openalex_source_id": "https://openalex.org/S4210192701",
+      "homepage_url": "http://ejournals.epublishing.ekt.gr/index.php/tekmiria/index",
+      "pages": [
+        {
+          "url": "http://ejournals.epublishing.ekt.gr/index.php/tekmiria/index",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Tekmeria",
+          "meta_description": "",
+          "categories_found": {
+            "contact": [
+              "contact"
+            ]
+          },
+          "candidate_links": [
+            {
+              "url": "https://ejournals.epublishing.ekt.gr/index.php/tekmiria/about/contact",
+              "label": "Contact",
+              "categories": [
+                "contact"
+              ]
+            }
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "url": "https://ejournals.epublishing.ekt.gr/index.php/tekmiria/about/contact",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Contact|Tekmeria",
+          "meta_description": "",
+          "categories_found": {
+            "contact": [
+              "contact"
+            ]
+          },
+          "candidate_links": [
+            {
+              "url": "https://ejournals.epublishing.ekt.gr/index.php/tekmiria/about/contact",
+              "label": "Contact",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://ejournals.epublishing.ekt.gr/index.php/tekmiria/index",
+              "label": "Home Contact Contact Εθνικό Ίδρυμα Ερευνών Ινστιτούτο Ιστορικών Ερευνών Τομέας Ελληνικής και Ρωμαϊκής Αρχαιότητας (ΚΕΡΑ) Λεωφ. Βασιλέως Κωνσταντίνου 48 11635 Αθήνα Greece Principal Contact Christina Kokkinia National Hellenic Research Foundation docu",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://ejournals.epublishing.ekt.gr/index.php/tekmiria/user/setLocale/en_US?source=%2Findex.php%2Ftekmiria%2Fabout%2Fcontact",
+              "label": "English",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://ejournals.epublishing.ekt.gr/index.php/tekmiria/user/setLocale/el_GR?source=%2Findex.php%2Ftekmiria%2Fabout%2Fcontact",
+              "label": "ελληνικά Information",
+              "categories": [
+                "contact"
+              ]
+            }
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "url": "https://ejournals.epublishing.ekt.gr/index.php/tekmiria/index",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Tekmeria",
+          "meta_description": "",
+          "categories_found": {
+            "contact": [
+              "contact"
+            ]
+          },
+          "candidate_links": [
+            {
+              "url": "https://ejournals.epublishing.ekt.gr/index.php/tekmiria/about/contact",
+              "label": "Contact",
+              "categories": [
+                "contact"
+              ]
+            }
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "url": "https://ejournals.epublishing.ekt.gr/index.php/tekmiria/user/setLocale/en_US?source=%2Findex.php%2Ftekmiria%2Fabout%2Fcontact",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Contact|Tekmeria",
+          "meta_description": "",
+          "categories_found": {
+            "contact": [
+              "contact"
+            ]
+          },
+          "candidate_links": [
+            {
+              "url": "https://ejournals.epublishing.ekt.gr/index.php/tekmiria/about/contact",
+              "label": "Contact",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://ejournals.epublishing.ekt.gr/index.php/tekmiria/index",
+              "label": "Home Contact Contact Εθνικό Ίδρυμα Ερευνών Ινστιτούτο Ιστορικών Ερευνών Τομέας Ελληνικής και Ρωμαϊκής Αρχαιότητας (ΚΕΡΑ) Λεωφ. Βασιλέως Κωνσταντίνου 48 11635 Αθήνα Greece Principal Contact Christina Kokkinia National Hellenic Research Foundation docu",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://ejournals.epublishing.ekt.gr/index.php/tekmiria/user/setLocale/en_US?source=%2Findex.php%2Ftekmiria%2Fabout%2Fcontact",
+              "label": "English",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://ejournals.epublishing.ekt.gr/index.php/tekmiria/user/setLocale/el_GR?source=%2Findex.php%2Ftekmiria%2Fabout%2Fcontact",
+              "label": "ελληνικά Information",
+              "categories": [
+                "contact"
+              ]
+            }
+          ],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "review_status": "pending_human_review",
+      "status": "ok"
+    },
+    {
+      "journal_id": "J19947836",
+      "title": "Науковий вісник НЛТУ України",
+      "openalex_source_id": "https://openalex.org/S2764816348",
+      "homepage_url": "https://nv.nltu.edu.ua",
+      "pages": [
+        {
+          "url": "https://nv.nltu.edu.ua",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Scientific Bulletin of UNFU",
+          "meta_description": "Науковий вісник НЛТУ України",
+          "categories_found": {},
+          "candidate_links": [
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/retraction-of-publications",
+              "label": "Положення про відкликання публікацій",
+              "categories": [
+                "corrections_retractions"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/apc",
+              "label": "Оплата за обробку статті",
+              "categories": [
+                "fees_apc"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/contacts",
+              "label": "Контакти Пошук",
+              "categories": [
+                "contact"
+              ]
+            }
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "url": "https://nv.nltu.edu.ua/index.php/journal/retraction-of-publications",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Положення про відкликання публікацій | Scientific Bulletin of UNFU",
+          "meta_description": "",
+          "categories_found": {},
+          "candidate_links": [
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/retraction-of-publications#pkp_content_main",
+              "label": "Перейти до головного",
+              "categories": [
+                "corrections_retractions"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/retraction-of-publications#pkp_content_nav",
+              "label": "Перейти в головне навігаційне меню",
+              "categories": [
+                "corrections_retractions"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/retraction-of-publications#pkp_content_footer",
+              "label": "Перейти на нижній колонтитул сайту",
+              "categories": [
+                "corrections_retractions"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/retraction-of-publications",
+              "label": "Положення про відкликання публікацій",
+              "categories": [
+                "corrections_retractions"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/apc",
+              "label": "Оплата за обробку статті",
+              "categories": [
+                "fees_apc"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/contacts",
+              "label": "Контакти Пошук",
+              "categories": [
+                "contact"
+              ]
+            }
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "url": "https://nv.nltu.edu.ua/index.php/journal/apc",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Оплата за обробку статті | Scientific Bulletin of UNFU",
+          "meta_description": "",
+          "categories_found": {
+            "fees_apc": [
+              "article processing charge",
+              "apc"
+            ]
+          },
+          "candidate_links": [
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/apc#pkp_content_main",
+              "label": "Перейти до головного",
+              "categories": [
+                "fees_apc"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/apc#pkp_content_nav",
+              "label": "Перейти в головне навігаційне меню",
+              "categories": [
+                "fees_apc"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/apc#pkp_content_footer",
+              "label": "Перейти на нижній колонтитул сайту",
+              "categories": [
+                "fees_apc"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/retraction-of-publications",
+              "label": "Положення про відкликання публікацій",
+              "categories": [
+                "corrections_retractions"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/apc",
+              "label": "Оплата за обробку статті",
+              "categories": [
+                "fees_apc"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/contacts",
+              "label": "Контакти Пошук",
+              "categories": [
+                "contact"
+              ]
+            }
+          ],
+          "review_status": "pending_human_review"
+        },
+        {
+          "url": "https://nv.nltu.edu.ua/index.php/journal/contacts",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Контакти | Scientific Bulletin of UNFU",
+          "meta_description": "",
+          "categories_found": {},
+          "candidate_links": [
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/contacts#pkp_content_main",
+              "label": "Перейти до головного",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/contacts#pkp_content_nav",
+              "label": "Перейти в головне навігаційне меню",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/contacts#pkp_content_footer",
+              "label": "Перейти на нижній колонтитул сайту",
+              "categories": [
+                "contact"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/retraction-of-publications",
+              "label": "Положення про відкликання публікацій",
+              "categories": [
+                "corrections_retractions"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/apc",
+              "label": "Оплата за обробку статті",
+              "categories": [
+                "fees_apc"
+              ]
+            },
+            {
+              "url": "https://nv.nltu.edu.ua/index.php/journal/contacts",
+              "label": "Контакти Пошук",
+              "categories": [
+                "contact"
+              ]
+            }
+          ],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "review_status": "pending_human_review",
+      "status": "ok"
+    },
+    {
+      "journal_id": "J19979665",
+      "title": "Морфологія",
+      "openalex_source_id": "https://openalex.org/S4210171323",
+      "homepage_url": "http://morphology.dma.dp.ua",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "error",
+      "error": "URLError: <urlopen error [Errno 101] Network is unreachable>"
+    },
+    {
+      "journal_id": "J20531583",
+      "title": "2D Materials",
+      "openalex_source_id": "https://openalex.org/S4210229423",
+      "homepage_url": "http://iopscience.iop.org/2053-1583",
+      "pages": [],
+      "review_status": "pending_human_review",
+      "status": "blocked_by_robots"
+    },
+    {
+      "journal_id": "J23656271",
+      "title": "3D Printing in Medicine",
+      "openalex_source_id": "https://openalex.org/S4210191256",
+      "homepage_url": "https://threedmedprint.biomedcentral.com/",
+      "pages": [
+        {
+          "url": "https://threedmedprint.biomedcentral.com/",
+          "http_status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "title": "Client Challenge",
+          "meta_description": "",
+          "categories_found": {
+            "contact": [
+              "contact"
+            ]
+          },
+          "candidate_links": [],
+          "review_status": "pending_human_review"
+        }
+      ],
+      "review_status": "pending_human_review",
+      "status": "ok"
+    }
+  ]
+}
