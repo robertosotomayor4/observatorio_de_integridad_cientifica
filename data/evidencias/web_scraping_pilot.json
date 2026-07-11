@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-07-11T09:27:43+00:00",
+  "generated_at": "2026-07-11T10:04:40+00:00",
   "scope": "pilot",
   "method": "Scraping limitado de páginas públicas; respeta robots.txt; no produce conclusiones automáticas",
   "records": [
@@ -29,11 +29,11 @@
     {
       "journal_id": "J00015385",
       "title": "Acta Cardiologica",
-      "openalex_source_id": null,
-      "homepage_url": "",
+      "openalex_source_id": "https://openalex.org/S18670189",
+      "homepage_url": "http://www.actacardiologica.be/",
       "pages": [],
       "review_status": "pending_human_review",
-      "status": "no_safe_homepage"
+      "status": "blocked_by_robots"
     },
     {
       "journal_id": "J23297662",
