@@ -1,0 +1,92 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-07-10T20:38:52+00:00",
+  "total_journals": 61806,
+  "quantitative_counts": {
+    "Not applicable": 29262,
+    "Limited data": 10709,
+    "No quantitative signals": 20537,
+    "Moderate alert": 1270,
+    "High alert": 28
+  },
+  "official_counts": {
+    "No documented removal": 58515,
+    "Current removal": 3059,
+    "Historical removal": 232
+  },
+  "current_source_counts": {
+    "DOAJ": 22875,
+    "WoS": 22946,
+    "Scopus": 29901
+  },
+  "qualitative_counts": {
+    "Not performed": 61781,
+    "Completed": 25
+  },
+  "areas": [
+    "Agricultural and Biological Sciences",
+    "Arts and Humanities",
+    "Biochemistry, Genetics and Molecular Biology",
+    "Business, Management and Accounting",
+    "Chemical Engineering",
+    "Chemistry",
+    "Computer Science",
+    "Decision Sciences",
+    "Dentistry",
+    "Earth and Planetary Sciences",
+    "Economics, Econometrics and Finance",
+    "Energy",
+    "Engineering",
+    "Environmental Science",
+    "Health Professions",
+    "Immunology and Microbiology",
+    "Materials Science",
+    "Mathematics",
+    "Medicine",
+    "Multidisciplinary",
+    "Neuroscience",
+    "Nursing",
+    "Pharmacology, Toxicology and Pharmaceutics",
+    "Physics and Astronomy",
+    "Psychology",
+    "Social Sciences",
+    "Veterinary"
+  ],
+  "event_years": [
+    "2026",
+    "2025",
+    "2024",
+    "2023",
+    "2022",
+    "2021",
+    "2020",
+    "2019",
+    "2018",
+    "2017",
+    "2016",
+    "2015",
+    "2014",
+    "2013",
+    "2012",
+    "2011",
+    "2010",
+    "2009"
+  ],
+  "reason_groups": [
+    "Cese de publicación",
+    "Descontinuación en Scopus",
+    "No adherencia a buenas prácticas",
+    "Retiro de DOAJ",
+    "Retiro editorial en Web of Science",
+    "Retiro por producción en Web of Science",
+    "Sitio web no disponible o inválido"
+  ],
+  "source_coverage": {
+    "Scopus": "Listas de fuentes, aceptadas y descontinuadas disponibles en el paquete institucional, marzo de 2026.",
+    "Web of Science": "Listas vigentes y cambios históricos disponibles hasta abril de 2026.",
+    "DOAJ": "Listado vigente y change log disponibles hasta junio de 2026.",
+    "SCImago": "Series históricas 2016–2025.",
+    "InCites": "Series históricas 2016–2025."
+  },
+  "wos_historical_noncurrent_alerts": 988
+}

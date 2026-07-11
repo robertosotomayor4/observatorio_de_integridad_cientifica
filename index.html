@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Consulta el estado documentado de una revista en Scopus, Web of Science y DOAJ, y revisa su evaluación cuantitativa e historia disponible.">
+  <meta name="theme-color" content="#173b5d">
+  <title>Verificador de revistas · Observatorio de Integridad Científica</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Observatorio de Integridad Científica – Verificador de revistas","applicationCategory":"EducationalApplication","operatingSystem":"Web","inLanguage":"es"}</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Observatorio de Integridad Científica, inicio">
+      <span class="brand-mark">OIC</span>
+      <span><strong>Observatorio de Integridad Científica</strong></span>
+    </a>
+    <nav aria-label="Navegación principal">
+      <a class="active" href="index.html">Verificador</a>
+      <a href="metodologia.html">Metodología</a>
+      <a href="alcance.html">Alcance</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="searchSection">
+    <div class="container hero-inner">
+      <h1>Verificador de revistas</h1>
+      <p class="hero-copy">Busque una revista por título, ISSN o eISSN.</p>
+
+      <div class="live-search">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <label class="sr-only" for="query">Título, ISSN o eISSN</label>
+        <input id="query" type="search" autocomplete="off" placeholder="Escriba el título, ISSN o eISSN…" aria-controls="suggestions" aria-expanded="false" aria-autocomplete="list">
+        <button id="clearQuery" class="clear-query" type="button" aria-label="Limpiar búsqueda" hidden>×</button>
+        <div id="suggestions" class="suggestions" role="listbox" hidden></div>
+      </div>
+
+      <div id="catalogLoading" class="catalog-loading"><span class="spinner"></span> Preparando el catálogo…</div>
+      <div id="loadError" class="error-box hero-error" hidden></div>
+    </div>
+  </section>
+
+  <section id="welcome" class="container welcome" aria-label="Cómo funciona la consulta">
+    <p>Seleccione una revista para consultar su estado oficial, su situación en Scopus, Web of Science y DOAJ, su evaluación cuantitativa, la línea de tiempo de eventos y la información histórica disponible.</p>
+  </section>
+
+  <section id="journalView" class="container journal-view" aria-live="polite" hidden>
+    <div id="journalLoading" class="journal-loading" hidden><span class="spinner"></span> Cargando la ficha seleccionada…</div>
+    <div id="journalContent"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="container footer-simple">Versión 1.0 · Datos integrados a 2026.</div>
+</footer>
+<script src="assets/app.js" defer></script>
+</body>
+</html>
