@@ -6,6 +6,10 @@ const STATE = {
   detailPromises: new Map(),
   complementary: null,
   complementaryPromise: null,
+  openAlexCore: new Map(),
+  openAlexCorePromises: new Map(),
+  openAlexEnriched: new Map(),
+  openAlexEnrichedPromises: new Map(),
   loaded: false,
   suggestions: [],
   activeSuggestion: -1,
@@ -234,12 +238,11 @@ async function selectJournal(journal, options = {}) {
   history.replaceState({}, "", url);
 
   try {
-    const [payload, complementaryRecords] = await Promise.all([
+    const [payload, complementary] = await Promise.all([
       loadDetailChunk(journal.detail_chunk),
-      loadComplementaryData()
+      loadComplementaryForJournal(journal)
     ]);
     const detail = payload.journals[journal.journal_id] || { events: [], sjr: [], incites: [], sources: [] };
-    const complementary = complementaryRecords[journal.journal_id] || null;
     $.journalContent.innerHTML = journalHtml(journal, detail, complementary);
     $.journalLoading.hidden = true;
     if (!options.noScroll) {
@@ -348,6 +351,75 @@ async function loadComplementaryData() {
   })();
 
   return STATE.complementaryPromise;
+}
+
+
+async function loadOpenAlexShard(kind, chunk) {
+  const cache = kind === "core" ? STATE.openAlexCore : STATE.openAlexEnriched;
+  const promises = kind === "core" ? STATE.openAlexCorePromises : STATE.openAlexEnrichedPromises;
+  if (cache.has(chunk)) return cache.get(chunk);
+  if (promises.has(chunk)) return promises.get(chunk);
+
+  const promise = (async () => {
+    let payload = { records: {} };
+    const base = `data/openalex_full/${kind}/${chunk}.json`;
+    try {
+      if ("DecompressionStream" in window) {
+        try {
+          const response = await fetch(`${base}.gz`);
+          if (!response.ok) throw new Error(`openalex-${kind}-gzip`);
+          const stream = response.body.pipeThrough(new DecompressionStream("gzip"));
+          payload = await new Response(stream).json();
+        } catch (error) {
+          const response = await fetch(base);
+          if (response.ok) payload = await response.json();
+        }
+      } else {
+        const response = await fetch(base);
+        if (response.ok) payload = await response.json();
+      }
+    } catch (error) {
+      console.warn(`No se cargó el shard OpenAlex ${kind} ${chunk}.`, error);
+    }
+    cache.set(chunk, payload);
+    return payload;
+  })();
+
+  promises.set(chunk, promise);
+  return promise;
+}
+
+function mergeOpenAlexRecords(...records) {
+  const result = {};
+  records.filter(Boolean).forEach(record => {
+    Object.assign(result, record);
+    if (record.source) result.source = { ...(result.source || {}), ...record.source };
+    if (record.top) {
+      result.top = { ...(result.top || {}) };
+      ["topics", "countries", "institutions"].forEach(key => {
+        if (Array.isArray(record.top[key]) && record.top[key].length) result.top[key] = record.top[key];
+      });
+    }
+    if (Array.isArray(record.production_by_year) && record.production_by_year.length) result.production_by_year = record.production_by_year;
+    if (Array.isArray(record.quality_flags) && record.quality_flags.length) result.quality_flags = record.quality_flags;
+    if (Array.isArray(record.retracted_works) && record.retracted_works.length) result.retracted_works = record.retracted_works;
+  });
+  return Object.keys(result).length ? result : null;
+}
+
+async function loadComplementaryForJournal(journal) {
+  const [pilotRecords, corePayload, enrichedPayload] = await Promise.all([
+    loadComplementaryData(),
+    loadOpenAlexShard("core", journal.detail_chunk),
+    loadOpenAlexShard("enriched", journal.detail_chunk)
+  ]);
+  const pilot = pilotRecords[journal.journal_id] || {};
+  const core = (corePayload.records || {})[journal.journal_id] || null;
+  const enriched = (enrichedPayload.records || {})[journal.journal_id] || null;
+  const output = { ...pilot };
+  const mergedOpenAlex = mergeOpenAlexRecords(pilot.openalex, core, enriched);
+  if (mergedOpenAlex) output.openalex = mergedOpenAlex;
+  return Object.keys(output).length ? output : null;
 }
 
 function journalHtml(journal, detail, complementary) {

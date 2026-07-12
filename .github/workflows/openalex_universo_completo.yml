@@ -1,0 +1,113 @@
+name: OpenAlex — universo completo
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Operación"
+        required: true
+        type: choice
+        default: bootstrap
+        options:
+          - bootstrap
+          - core
+          - enrich
+      max_enrichment:
+        description: "Máximo de revistas a enriquecer en esta ejecución"
+        required: true
+        default: "2000"
+  schedule:
+    - cron: "23 3 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: openalex-universo-completo
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    env:
+      OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Determinar operación
+        id: operation
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            echo "mode=enrich" >> "$GITHUB_OUTPUT"
+            echo "max_enrichment=2500" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=${{ inputs.mode }}" >> "$GITHUB_OUTPUT"
+            echo "max_enrichment=${{ inputs.max_enrichment }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Verificar secreto de OpenAlex
+        shell: bash
+        run: |
+          if [ -z "$OPENALEX_API_KEY" ]; then
+            echo "Falta el secreto OPENALEX_API_KEY" >&2
+            exit 1
+          fi
+
+      - name: Construir núcleo para todo el catálogo
+        if: ${{ steps.operation.outputs.mode == 'bootstrap' || steps.operation.outputs.mode == 'core' }}
+        run: |
+          python scripts/openalex_full_core.py \
+            --catalog data/catalog.json \
+            --overrides config/openalex_overrides.csv \
+            --output-dir data/openalex_full/core \
+            --manifest data/openalex_full/manifest.json \
+            --audit data/openalex_full/audit/openalex_core_audit.csv.gz \
+            --batch-size 50
+
+      - name: Enriquecer temas, países e instituciones
+        if: ${{ steps.operation.outputs.mode == 'bootstrap' || steps.operation.outputs.mode == 'enrich' }}
+        run: |
+          python scripts/openalex_full_enrich.py \
+            --core-dir data/openalex_full/core \
+            --enriched-dir data/openalex_full/enriched \
+            --manifest data/openalex_full/manifest.json \
+            --max-journals "${{ steps.operation.outputs.max_enrichment }}" \
+            --workers 8 \
+            --minimum-budget-usd 0.08
+
+      - name: Guardar auditoría de la ejecución
+        uses: actions/upload-artifact@v5
+        with:
+          name: openalex-universo-${{ github.run_number }}
+          path: |
+            data/openalex_full/manifest.json
+            data/openalex_full/manifest.json.gz
+            data/openalex_full/audit/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Incorporar resultados al repositorio
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/openalex_full
+          if git diff --cached --quiet; then
+            echo "No hay cambios que publicar."
+            exit 0
+          fi
+          git commit -m "Actualiza OpenAlex para el universo completo"
+          git pull --rebase origin main
+          git push origin main

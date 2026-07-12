@@ -1,0 +1,8 @@
+1. Copie todo el contenido de esta carpeta a la raíz del repositorio local.
+2. Acepte combinar carpetas y reemplazar assets/app.js.
+3. En GitHub Desktop haga commit con el mensaje:
+   Amplía OpenAlex al universo completo
+4. Pulse Push origin.
+5. En GitHub abra Actions > OpenAlex — universo completo.
+6. Ejecute Run workflow con mode=bootstrap y max_enrichment=2000.
+7. No repita el proceso manualmente: el enriquecimiento continuará cada día.
