@@ -1063,9 +1063,9 @@ function selfCitationMetric(journal) {
   if (!hasMetricValue(journal.source_self_cite_share)) return { label: "Autocitación de la fuente", value: "Dato no reportado", note: "InCites no aporta los dos conteos necesarios para calcular la proporción de autocitación de la revista.", tone: "missing" };
   const confidenceLabels = { High: "alta", Moderate: "media", Limited: "limitada" };
   const confidence = journal.source_self_confidence ? ` · confianza ${confidenceLabels[journal.source_self_confidence] || String(journal.source_self_confidence).toLowerCase()}` : "";
-  if (journal.source_self_signal === "Extreme") return { label: "Autocitación de la fuente", value: percentage(journal.source_self_cite_share), note: `Dependencia extrema${confidence}`, tone: "high" };
-  if (journal.source_self_signal === "Moderate") return { label: "Autocitación de la fuente", value: percentage(journal.source_self_cite_share), note: `Dependencia elevada${confidence}`, tone: "moderate" };
-  return { label: "Autocitación de la fuente", value: percentage(journal.source_self_cite_share), note: `Dato evaluable, sin anomalía detectada${confidence}`, tone: "normal" };
+  if (journal.source_self_signal === "Extreme") return { label: "Autocitación de la revista", value: percentage(journal.source_self_cite_share), note: `${percentage(journal.source_self_cite_share)} de las citas registradas provienen de artículos publicados en la misma revista. Proporción muy alta; requiere revisión cualitativa.`, tone: "high" };
+  if (journal.source_self_signal === "Moderate") return { label: "Autocitación de la revista", value: percentage(journal.source_self_cite_share), note: `${percentage(journal.source_self_cite_share)} de las citas registradas provienen de artículos publicados en la misma revista. Proporción elevada; conviene revisarla.`, tone: "moderate" };
+  return { label: "Autocitación de la revista", value: percentage(journal.source_self_cite_share), note: `${percentage(journal.source_self_cite_share)} de las citas registradas provienen de artículos publicados en la misma revista. No se detectó una proporción atípica.`, tone: "normal" };
 }
 
 function cnciMetric(journal) {
@@ -1085,10 +1085,11 @@ function jifDependencyMetric(journal) {
   if (!hasMetricValue(journal.jif_without_self) || !hasMetricValue(journal.jif_self_dependency)) {
     return { label: "JIF sin autocitas", value: "Información insuficiente para evaluar", note: "Existe un JIF disponible, pero falta el valor sin autocitas o alguno de los datos necesarios para medir la dependencia.", tone: "limited" };
   }
-  const note = `JIF: ${numberFormat(journal.jif_current)} · dependencia: ${percentage(journal.jif_self_dependency)}`;
-  if (journal.jif_self_signal === "Extreme") return { label: "JIF sin autocitas", value: numberFormat(journal.jif_without_self), note: `Dependencia extrema · ${note}`, tone: "high" };
-  if (journal.jif_self_signal === "Moderate") return { label: "JIF sin autocitas", value: numberFormat(journal.jif_without_self), note: `Dependencia elevada · ${note}`, tone: "moderate" };
-  return { label: "JIF sin autocitas", value: numberFormat(journal.jif_without_self), note: `Dato evaluable, sin anomalía detectada · ${note}`, tone: "normal" };
+  const dependency = percentage(journal.jif_self_dependency);
+  const explanation = `El JIF disminuye de ${numberFormat(journal.jif_current)} a ${numberFormat(journal.jif_without_self)} al excluir las autocitas. Esto indica que ${dependency} del JIF depende de citas provenientes de la propia revista.`;
+  if (journal.jif_self_signal === "Extreme") return { label: "JIF sin autocitas", value: numberFormat(journal.jif_without_self), note: `${explanation} Dependencia muy alta; requiere revisión cualitativa.`, tone: "high" };
+  if (journal.jif_self_signal === "Moderate") return { label: "JIF sin autocitas", value: numberFormat(journal.jif_without_self), note: `${explanation} Dependencia elevada; conviene revisarla.`, tone: "moderate" };
+  return { label: "JIF sin autocitas", value: numberFormat(journal.jif_without_self), note: `${explanation} No se detectó una dependencia atípica.`, tone: "normal" };
 }
 
 function jciMetric(journal) {
