@@ -1761,3 +1761,90 @@ footer { background: #102d46; }
 }
 .openalex-history-details > p { margin: 14px 18px 0; color: #526f7d; line-height: 1.5; }
 .openalex-history-details .openalex-charts { padding: 16px; }
+
+
+/* v0.8.4: lectura pública por fuente, fin de cobertura y jerarquía visual consolidada */
+.metric.primary-metric::after { display: none !important; content: none !important; }
+
+/* Dato disponible: el violeta retoma el tono aprobado del antiguo distintivo. */
+.wos-panel .metric.normal {
+  background: linear-gradient(145deg,#d3c0ff 0%,#e4d8ff 58%,#f4efff 100%);
+  border-color: #6630cf;
+  box-shadow: 0 10px 23px rgba(80,33,170,.23), inset 0 0 0 1px rgba(255,255,255,.45);
+}
+.wos-panel .metric.normal span,
+.wos-panel .metric.normal strong { color: #43148f; }
+.wos-panel .metric.normal small { color: #54367e; }
+
+.source-readings-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 16px;
+  margin: 18px 0;
+}
+.source-readings-grid.single-source { grid-template-columns: minmax(0,1fr); }
+.source-reading {
+  padding: 16px 18px;
+  border: 2px solid #9fc7de;
+  border-left-width: 7px;
+  border-radius: 13px;
+  background: #f5fbfe;
+}
+.source-reading strong { display: block; margin-bottom: 6px; font-size: .96rem; }
+.source-reading p { margin: 0; line-height: 1.58; color: #405f73; }
+.source-reading.scopus {
+  border-color: #f3a04d;
+  border-left-color: var(--scopus);
+  background: linear-gradient(145deg,#fff0de 0%,#fff8ef 100%);
+}
+.source-reading.scopus strong { color: #9a3f00; }
+.source-reading.wos {
+  border-color: #9b79e8;
+  border-left-color: var(--wos);
+  background: linear-gradient(145deg,#eee5ff 0%,#faf7ff 100%);
+}
+.source-reading.wos strong { color: #4f1cad; }
+.impact-reading { margin: 18px 0; }
+
+.chart .post-coverage-zone { fill: #e8eef2; opacity: .78; }
+.chart .post-coverage-label {
+  fill: #657984;
+  font-size: 12px;
+  font-weight: 800;
+}
+.chart-card.scopus .post-coverage-line {
+  stroke: #7d8e98 !important;
+  stroke-dasharray: 10 8;
+  opacity: .9;
+}
+.chart-card.scopus circle.post-coverage-point {
+  fill: #8799a4 !important;
+  stroke: #ffffff !important;
+}
+.chart-card.scopus .post-coverage-value { fill: #657984 !important; }
+
+.timeline-event.adverse .timeline-content h3 { color: #a51f28; }
+
+@media (max-width: 900px) {
+  .source-readings-grid { grid-template-columns: 1fr; }
+}
+
+
+/* Microajuste v0.8.4.1: gráficos sin desplazamiento y etiquetas legibles */
+.adaptive-charts { grid-template-columns: minmax(0, 1fr); }
+.adaptive-charts .chart-wrap,
+.openalex-charts .chart-wrap {
+  min-height: 0;
+  overflow-x: hidden;
+}
+.adaptive-charts .chart,
+.openalex-charts .chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-width: 0;
+}
+.chart .post-coverage-label {
+  font-size: 10px;
+  letter-spacing: .01em;
+}

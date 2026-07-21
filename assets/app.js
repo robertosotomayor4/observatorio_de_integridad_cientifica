@@ -423,13 +423,14 @@ async function loadComplementaryForJournal(journal) {
 }
 
 function journalHtml(journal, detail, complementary) {
+  const publicTitle = publicJournalTitle(journal.preferred_title);
   const timelineEvents = combinedTimelineEvents(journal, detail, complementary);
   const hasEvents = timelineEvents.length > 0;
   const displayQuantStatus = effectiveQuantitativeStatus(journal, detail);
   const officialSection = evaluationSummaryHtml(journal, detail, complementary);
   const sourceAvailability = bibliometricSourceAvailability(journal, detail);
-  const productionHistory = productionHistoryHtml(detail, sourceAvailability);
-  const impactHistory = impactHistoryHtml(detail, sourceAvailability);
+  const productionHistory = productionHistoryHtml(journal, detail, sourceAvailability);
+  const impactHistory = impactHistoryHtml(journal, detail, sourceAvailability);
   const timelineSection = hasEvents ? `
     <section class="journal-section timeline-section">
       <div class="section-heading">
@@ -445,7 +446,7 @@ function journalHtml(journal, detail, complementary) {
         <div class="journal-heading-main">
           <div>
             <p class="sheet-kicker">Revista seleccionada</p>
-            <h1>${escapeHtml(journal.preferred_title)}</h1>
+            <h1>${escapeHtml(publicTitle)}</h1>
             <p class="journal-identifiers"><strong>ISSN/eISSN:</strong> ${escapeHtml(journal.issns || "No disponible")}</p>
           </div>
         </div>
@@ -522,6 +523,14 @@ function journalHtml(journal, detail, complementary) {
   `;
 }
 
+function publicJournalTitle(value) {
+  const title = String(value || "");
+  const overrides = {
+    "Boletin de Malariologia y Salud Ambiental": "Boletín de Malariología y Salud Ambiental"
+  };
+  return overrides[title] || title;
+}
+
 function infoItem(label, value) {
   if (!value || value === "Unclassified") return "";
   return `<div class="info-item"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`;
@@ -584,56 +593,106 @@ function bibliometricSourceAvailability(journal, detail) {
   return { scimago, wos };
 }
 
-function productionHistoryHtml(detail, availability) {
+function productionHistoryHtml(journal, detail, availability) {
   const charts = [];
-  if (availability.scimago && sourceSeriesValues(detail?.sjr, "total_docs_year").length) {
-    charts.push(chartBlock("SCImago / Scopus", detail.sjr || [], "total_docs_year", "scopus", "documentos", { showPointValues: true }));
+  const readings = [];
+  if (availability.scimago) {
+    const series = productionSeriesForSource(journal, detail, "scimago");
+    if (series.length) {
+      readings.push(sourceProductionReadingHtml(journal, detail, "scimago"));
+      charts.push(chartBlock("SCImago / Scopus", series, "total_docs_year", "scopus", "documentos", { showPointValues: true }));
+    }
   }
-  if (availability.wos && sourceSeriesValues(detail?.incites, "wos_documents").length) {
-    charts.push(chartBlock("InCites / Web of Science", detail.incites || [], "wos_documents", "wos", "documentos", { showPointValues: true }));
+  if (availability.wos) {
+    const series = productionSeriesForSource(journal, detail, "incites");
+    if (series.length) {
+      readings.push(sourceProductionReadingHtml(journal, detail, "incites"));
+      charts.push(chartBlock("InCites / Web of Science", series, "wos_documents", "wos", "documentos", { showPointValues: true }));
+    }
   }
   if (!charts.length) return "";
   return `<section class="journal-section history-section">
     <div class="section-heading"><div><p class="section-kicker">Información histórica disponible</p><h2>Evolución de la producción</h2></div></div>
+    <div class="source-readings-grid ${readings.length === 1 ? "single-source" : ""}">${readings.join("")}</div>
     <div class="charts-grid adaptive-charts ${charts.length === 1 ? "single-source" : ""}">${charts.join("")}</div>
-    <p class="history-note">Se muestra únicamente la información de las fuentes en las que la revista tiene o tuvo cobertura. La ausencia de datos recientes no elimina la trayectoria histórica disponible.</p>
+    <p class="history-note">Los años posteriores al fin de la cobertura no se representan como producción cero. La trayectoria se limita al periodo efectivamente registrado por cada fuente.</p>
   </section>`;
 }
 
-function impactHistoryHtml(detail, availability) {
+function sourceProductionReadingHtml(journal, detail, source) {
+  const isScimago = source === "scimago";
+  const series = productionSeriesForSource(journal, detail, source);
+  const key = isScimago ? "total_docs_year" : "wos_documents";
+  const label = isScimago ? "Lectura de Scopus / SCImago" : "Lectura de Web of Science / InCites";
+  const css = isScimago ? "scopus" : "wos";
+  if (!series.length) return "";
+  const peak = series.reduce((best, item) => Number(item[key]) > Number(best[key]) ? item : best, series[0]);
+  const latest = series.at(-1);
+  const ended = sourceCoverageEndedBeforeCurrentPeriod(journal, detail, source);
+  let text = `La mayor producción registrada fue de ${integerFormat(peak[key])} documentos en ${peak.year}. El último año disponible es ${latest.year}, con ${integerFormat(latest[key])} documentos.`;
+  if (ended) {
+    text += ` La cobertura disponible termina en ${latest.year}; por ello, los años posteriores no se interpretan como producción cero ni se utilizan para evaluar una tendencia actual.`;
+  } else if (series.length >= 2) {
+    const previous = series.at(-2);
+    const difference = Number(latest[key]) - Number(previous[key]);
+    const direction = difference > 0 ? "aumentó" : difference < 0 ? "disminuyó" : "se mantuvo estable";
+    text += ` Entre ${previous.year} y ${latest.year}, la producción ${direction}.`;
+  }
+  if (!isScimago && series.length < 3) text += " La serie es demasiado corta para establecer una tendencia reciente.";
+  return `<div class="source-reading ${css}"><strong>${escapeHtml(label)}</strong><p>${escapeHtml(text)}</p></div>`;
+}
+
+function impactHistoryHtml(journal, detail, availability) {
   const sjrSeries = availability.scimago ? sourceSeriesValues(detail?.sjr, "sjr") : [];
   if (!sjrSeries.length) return "";
-  const chart = chartBlock("Evolución histórica del SJR / SCImago", detail.sjr || [], "sjr", "scopus", "SJR", { decimals: 3, showPointValues: true, annotationKey: "quartile", annotationLabel: "Cuartil" });
+  const coverageEnd = sourceCoverageEnd(journal, detail, "scimago");
+  const inCoverage = coverageEnd ? sjrSeries.filter(item => Number(item.year) <= coverageEnd) : sjrSeries;
+  const reference = inCoverage.length ? inCoverage.at(-1) : sjrSeries.at(-1);
+  const chart = chartBlock("Evolución histórica del SJR / SCImago", detail.sjr || [], "sjr", "scopus", "SJR", { decimals: 3, showPointValues: true, annotationKey: "quartile", annotationLabel: "Cuartil", coverageEnd, headlineItem: reference });
   return `<section class="journal-section impact-history-section">
     <div class="section-heading"><div><p class="section-kicker">Trayectoria del impacto de la revista</p><h2>Evolución histórica del SJR</h2></div></div>
+    ${scimagoImpactReadingHtml(journal, detail)}
     <div class="charts-grid adaptive-charts single-source">${chart}</div>
-    <p class="history-note">Los archivos SCImago permiten mostrar una serie anual real del SJR. El JIF se presenta en el bloque Web of Science / InCites como el valor disponible en la exportación, sin reconstruir una trayectoria histórica. El CNCI se mantiene como indicador documental complementario y no sustituye al JIF.</p>
+    <p class="history-note">El SJR puede seguir apareciendo después del último año de cobertura porque refleja citas a documentos anteriores. Esos valores se conservan como información histórica, pero no implican que la revista continúe indexada.</p>
   </section>`;
+}
+
+function scimagoImpactReadingHtml(journal, detail) {
+  const series = sourceSeriesValues(detail?.sjr, "sjr");
+  if (!series.length) return "";
+  const coverageEnd = sourceCoverageEnd(journal, detail, "scimago");
+  const inCoverage = coverageEnd ? series.filter(item => Number(item.year) <= coverageEnd) : series;
+  const usable = inCoverage.length ? inCoverage : series;
+  const latest = usable.at(-1);
+  const peak = usable.reduce((best, item) => Number(item.sjr) > Number(best.sjr) ? item : best, usable[0]);
+  const best = bestQuartile(usable);
+  let text = `Durante el periodo de cobertura, el SJR osciló entre ${numberFormat(Math.min(...usable.map(item => Number(item.sjr))))} y ${numberFormat(peak.sjr)}. El mejor cuartil alcanzado fue ${best} en ${peak.year}. El último SJR correspondiente al periodo de cobertura fue ${numberFormat(latest.sjr)} (${latest.quartile || "cuartil no reportado"}) en ${latest.year}.`;
+  if (coverageEnd && series.some(item => Number(item.year) > coverageEnd)) text += " Los valores posteriores se muestran de forma diferenciada y no representan cobertura vigente.";
+  return `<div class="source-reading scopus impact-reading"><strong>Lectura de la trayectoria del SJR</strong><p>${escapeHtml(text)}</p></div>`;
 }
 
 function quantitativeInterpretation(journal, detail) {
   const status = effectiveQuantitativeStatus(journal, detail);
   const availability = bibliometricSourceAvailability(journal, detail);
-  const sjrRange = sourceSeriesRange(detail?.sjr, "total_docs_year");
-  const incitesRange = sourceSeriesRange(detail?.incites, "wos_documents");
   if (status === "Limited data") {
     const parts = [];
     if (availability.scimago) {
-      const latest = sourceSeriesValues(detail?.sjr, "total_docs_year").at(-1);
-      if (sjrRange && latest && Number(latest.year) < 2025) {
-        parts.push(`SCImago dispone de una serie histórica ${sjrRange}, pero termina antes del periodo de evaluación 2025`);
+      const context = metricSeriesContext(journal, detail, "scimago");
+      if (context.latest && sourceCoverageEndedBeforeCurrentPeriod(journal, detail, "scimago")) {
+        parts.push(`Scopus/SCImago dispone de información hasta ${context.latest.year}, pero la cobertura terminó antes del periodo de evaluación 2025`);
       } else if (!hasMetricValue(journal.sjr_production_ratio)) {
-        parts.push("SCImago no reúne todavía los años o el volumen mínimo para calcular crecimiento reciente");
+        parts.push("Scopus/SCImago no reúne los años o el volumen mínimo para calcular crecimiento reciente");
       }
     }
     if (availability.wos) {
-      if (incitesRange && !hasMetricValue(journal.incites_production_ratio)) {
-        parts.push(`InCites dispone de información para ${incitesRange}, pero no reúne todos los mínimos para evaluar crecimiento reciente`);
-      } else if (!incitesRange) {
-        parts.push("InCites no reporta una serie anual comparable en los archivos integrados");
+      const context = metricSeriesContext(journal, detail, "incites");
+      if (context.latest && sourceCoverageEndedBeforeCurrentPeriod(journal, detail, "incites")) {
+        parts.push(`Web of Science/InCites dispone de información hasta ${context.latest.year}, pero no de una serie reciente evaluable`);
+      } else if (!hasMetricValue(journal.incites_production_ratio)) {
+        parts.push("Web of Science/InCites no reúne todos los mínimos para evaluar crecimiento reciente");
       }
     }
-    if (parts.length) return `${parts.join(". ")}. Los datos existentes se muestran para describir la trayectoria de la revista, pero no permiten aplicar todos los criterios cuantitativos actuales.`;
+    if (parts.length) return `${parts.join(". ")}. Los datos existentes permiten describir la trayectoria histórica, pero no aplicar todos los criterios cuantitativos actuales.`;
     return "Existe información bibliométrica parcial, pero no alcanza los mínimos de años, continuidad o volumen requeridos para una evaluación cuantitativa completa.";
   }
   if (status === "No quantitative signals") return "Con los datos disponibles no se identificaron anomalías cuantitativas relevantes. Este resultado no equivale a una certificación de calidad o integridad editorial.";
@@ -929,7 +988,7 @@ function metricsHtml(journal, detail, availability = bibliometricSourceAvailabil
     panels.push(quantSourcePanel(
       "wos",
       "Web of Science / InCites",
-      "Indicadores obtenidos de las exportaciones de InCites. El JIF disponible se presenta como la principal métrica de revista; el CNCI y el JCI se conservan como indicadores complementarios.",
+      "Indicadores disponibles en Web of Science / InCites. El JIF se muestra como métrica de revista; el CNCI y el JCI se presentan como indicadores complementarios.",
       [
         sourceProductionMetric(journal, detail, "incites"),
         jifMetric(journal),
@@ -953,8 +1012,7 @@ function quantSourcePanel(sourceClass, title, description, metrics) {
 }
 
 function metricCardHtml(metric) {
-  const priorityClass = metric.priority ? " primary-metric" : "";
-  return `<div class="metric ${escapeHtml(metric.tone || "normal")}${priorityClass}">
+  return `<div class="metric ${escapeHtml(metric.tone || "normal")}">
     <span>${escapeHtml(metric.label)}</span>
     <strong>${escapeHtml(metric.value)}</strong>
     <small>${escapeHtml(metric.note)}</small>
@@ -971,12 +1029,36 @@ function signalTone(signal) {
   return "normal";
 }
 
-function metricSeriesContext(detail, source) {
+function sourceCoverageEnd(journal, detail, source) {
+  if (source === "scimago") {
+    const coverage = extractCoverageYears(journal?.scopus_coverage);
+    return coverage.end || null;
+  }
+  const series = sourceSeriesValues(detail?.incites, "wos_documents");
+  if (journal?.wos_status === "Current") return null;
+  return series.length ? Number(series.at(-1).year) : null;
+}
+
+function productionSeriesForSource(journal, detail, source) {
   const isScimago = source === "scimago";
-  const series = sourceSeriesValues(isScimago ? detail?.sjr : detail?.incites, isScimago ? "total_docs_year" : "wos_documents");
+  const raw = sourceSeriesValues(isScimago ? detail?.sjr : detail?.incites, isScimago ? "total_docs_year" : "wos_documents");
+  const end = sourceCoverageEnd(journal, detail, source);
+  if (!end) return raw;
+  return raw.filter(item => Number(item.year) <= end);
+}
+
+function sourceCoverageEndedBeforeCurrentPeriod(journal, detail, source) {
+  const end = sourceCoverageEnd(journal, detail, source);
+  if (!end || end >= 2025) return false;
+  if (source === "scimago") return journal?.scopus_status !== "Active" || end < 2025;
+  return journal?.wos_status !== "Current";
+}
+
+function metricSeriesContext(journal, detail, source) {
+  const series = productionSeriesForSource(journal, detail, source);
   const first = series[0];
   const latest = series.at(-1);
-  return { series, first, latest, range: series.length ? `${first.year}–${latest.year}` : "" };
+  return { series, first, latest, range: series.length ? `${first.year}–${latest.year}` : "", coverageEnd: sourceCoverageEnd(journal, detail, source) };
 }
 
 function sourceProductionMetric(journal, detail, source) {
@@ -986,19 +1068,21 @@ function sourceProductionMetric(journal, detail, source) {
   const baseline = isScimago ? journal.sjr_docs_baseline_median : journal.incites_docs_baseline_median;
   const ratio = isScimago ? journal.sjr_production_ratio : journal.incites_production_ratio;
   const signal = isScimago ? journal.production_signal_scimago : journal.production_signal_incites;
-  const context = metricSeriesContext(detail, source);
+  const context = metricSeriesContext(journal, detail, source);
+  if (context.latest && sourceCoverageEndedBeforeCurrentPeriod(journal, detail, source)) {
+    const sourceName = isScimago ? "Scopus" : "Web of Science/InCites";
+    return { label, value: "No evaluable en el periodo actual", note: `La cobertura disponible en ${sourceName} termina en ${context.latest.year}. Los años posteriores no se consideran producción cero.`, tone: "historical" };
+  }
   if (!hasMetricValue(ratio)) {
-    if (context.latest && Number(context.latest.year) < 2025) {
-      return { label, value: "No evaluable en 2025", note: `Hay una serie histórica ${context.range}, pero la cobertura terminó antes del periodo actual.`, tone: "historical" };
-    }
     if (context.series.length) {
       const reasons = [];
-      if (context.series.filter(item => Number(item.year) >= 2020 && Number(item.year) <= 2024).length < 3) reasons.push("menos de tres años de línea base entre 2020 y 2024");
-      if (hasMetricValue(current) && Number(current) < 50) reasons.push(`solo ${integerFormat(current)} documentos en 2025; se requieren 50`);
-      if (hasMetricValue(baseline) && Number(baseline) < 20) reasons.push(`mediana histórica de ${numberFormat(baseline)}; se requieren 20`);
+      const baseYears = context.series.filter(item => Number(item.year) >= 2020 && Number(item.year) <= 2024).length;
+      if (baseYears < 3) reasons.push(`solo hay ${baseYears} años utilizables en la línea base 2020–2024; se requieren al menos 3`);
+      if (hasMetricValue(current) && Number(current) < 50) reasons.push(`la fuente registra ${integerFormat(current)} documentos en 2025 y la comparación requiere al menos 50 en ese año`);
+      if (hasMetricValue(baseline) && Number(baseline) < 20) reasons.push(`la mediana 2020–2024 es ${numberFormat(baseline)} y la comparación requiere al menos 20`);
       return { label, value: "Información insuficiente para evaluar", note: reasons.length ? capitalize(reasons.join("; ")) : `Existe una serie ${context.range}, pero no cumple todos los mínimos metodológicos.`, tone: "limited" };
     }
-    return { label, value: "Dato no reportado", note: "La fuente no aporta una serie anual de producción en los archivos integrados.", tone: "missing" };
+    return { label, value: "Dato no disponible", note: "No se dispone de una serie anual de producción utilizable en la fuente consultada.", tone: "missing" };
   }
   const note = `2025: ${integerFormat(current)} · mediana 2020–2024: ${numberFormat(baseline)}`;
   if (signal === "Extreme") return { label, value: `${numberFormat(ratio)} veces`, note: `Crecimiento extremo · ${note}`, tone: "high" };
@@ -1006,18 +1090,47 @@ function sourceProductionMetric(journal, detail, source) {
   return { label, value: `${numberFormat(ratio)} veces`, note: `Comparación disponible, sin crecimiento atípico · ${note}`, tone: "normal" };
 }
 
+function inferSingleYearProductionSignal(journal, detail) {
+  const series = productionSeriesForSource(journal, detail, "scimago")
+    .filter(item => Number(item.total_docs_year) > 0);
+  let best = null;
+  for (let index = 1; index < series.length; index += 1) {
+    const previous = Number(series[index - 1].total_docs_year);
+    const current = Number(series[index].total_docs_year);
+    if (!previous || current < 50) continue;
+    const ratio = current / previous;
+    if (!best || ratio > best.ratio) best = {
+      year: Number(series[index].year),
+      previousYear: Number(series[index - 1].year),
+      previousValue: previous,
+      currentValue: current,
+      ratio
+    };
+  }
+  return best;
+}
+
 function scimagoPersistenceMetric(journal, detail) {
   const years = Number(journal.production_persistent_years || 0);
   const status = journal.production_persistence_status || "";
-  const context = metricSeriesContext(detail, "scimago");
+  const context = metricSeriesContext(journal, detail, "scimago");
+  const ended = context.latest && sourceCoverageEndedBeforeCurrentPeriod(journal, detail, "scimago");
   if (!status || status === "No comparable signal") {
-    if (context.latest && Number(context.latest.year) < 2025) return { label: "Persistencia SCImago", value: "No evaluable en el periodo actual", note: `La serie disponible termina en ${context.latest.year}; no puede comprobarse persistencia reciente.`, tone: "historical" };
+    if (ended) return { label: "Persistencia SCImago", value: "No evaluable en el periodo actual", note: `La cobertura termina en ${context.latest.year}; no puede comprobarse persistencia reciente.`, tone: "historical" };
     if (context.series.length) return { label: "Persistencia SCImago", value: "Información insuficiente para evaluar", note: "La serie existe, pero no reúne las ventanas retrospectivas y los mínimos de volumen requeridos.", tone: "limited" };
-    return { label: "Persistencia SCImago", value: "Dato no reportado", note: "No existe una serie anual SCImago vinculada a esta revista.", tone: "missing" };
+    return { label: "Persistencia SCImago", value: "Dato no disponible", note: "No se dispone de una serie anual SCImago vinculada a esta revista.", tone: "missing" };
   }
-  if (years >= 2 || status === "Persistent growth") return { label: "Persistencia SCImago", value: `${years || 2} años`, note: "Crecimiento atípico observado en más de un año", tone: years >= 3 ? "high" : "moderate" };
-  if (years === 1 || status === "Single-year signal") return { label: "Persistencia SCImago", value: "1 año", note: "Señal de un solo año; no se considera persistente", tone: "normal" };
-  return { label: "Persistencia SCImago", value: "Sin persistencia", note: "No se detectó crecimiento atípico repetido", tone: "normal" };
+  if (years >= 2 || status === "Persistent growth") return { label: "Persistencia SCImago", value: `${years || 2} años`, note: "El crecimiento atípico se repitió en más de un año de la ventana evaluada.", tone: years >= 3 ? "high" : "moderate" };
+  if (years === 1 || status === "Single-year signal") {
+    const candidate = inferSingleYearProductionSignal(journal, detail);
+    const label = ended ? "Señal histórica de producción" : "Persistencia SCImago";
+    const value = candidate ? String(candidate.year) : "1 año";
+    const note = candidate
+      ? `La producción pasó de ${integerFormat(candidate.previousValue)} documentos en ${candidate.previousYear} a ${integerFormat(candidate.currentValue)} en ${candidate.year}. El aumento no se repitió en otro año y, por ello, no se considera persistente.`
+      : "La señal apareció en un solo año de la ventana evaluada y no se considera persistente.";
+    return { label, value, note, tone: ended ? "historical" : "normal" };
+  }
+  return { label: "Persistencia SCImago", value: "Sin persistencia", note: "No se detectó crecimiento atípico repetido.", tone: "normal" };
 }
 
 function bestQuartile(series) {
@@ -1028,60 +1141,65 @@ function bestQuartile(series) {
 
 function scimagoSjrMetric(journal, detail) {
   const series = sourceSeriesValues(detail?.sjr, "sjr");
-  const latest = series.at(-1);
+  const coverageEnd = sourceCoverageEnd(journal, detail, "scimago");
+  const inCoverage = coverageEnd ? series.filter(item => Number(item.year) <= coverageEnd) : series;
+  const latest = (inCoverage.length ? inCoverage : series).at(-1);
   const value = latest ? latest.sjr : (hasMetricValue(journal.sjr_2025) ? journal.sjr_2025 : journal.sjr);
-  const year = latest?.year || (hasMetricValue(journal.sjr_2025) ? 2025 : journal.sjr_year || "");
-  if (!hasMetricValue(value)) return { label: "SJR", value: "Dato no reportado", note: "SCImago no aporta un valor SJR para esta revista en los archivos integrados.", tone: "missing", priority: true };
-  const peak = series.length ? series.reduce((best, item) => Number(item.sjr) > Number(best.sjr) ? item : best, series[0]) : null;
-  const quartile = bestQuartile(series) !== "No reportado" ? bestQuartile(series) : (journal.sjr_quartile_2025 || journal.sjr_quartile || "No reportado");
+  const year = latest?.year || journal.sjr_year || "";
+  if (!hasMetricValue(value)) return { label: "SJR", value: "Dato no disponible", note: "No se dispone de un valor SJR para esta revista en los datos de SCImago consultados.", tone: "missing" };
+  const usable = inCoverage.length ? inCoverage : series;
+  const peak = usable.length ? usable.reduce((best, item) => Number(item.sjr) > Number(best.sjr) ? item : best, usable[0]) : null;
+  const quartile = bestQuartile(usable) !== "No reportado" ? bestQuartile(usable) : (journal.sjr_quartile || "No reportado");
   const peakText = peak ? ` · mejor valor: ${numberFormat(peak.sjr)} (${peak.year})` : "";
-  return { label: `SJR ${year}`.trim(), value: numberFormat(value), note: `Mejor cuartil alcanzado: ${quartile}${peakText}`, tone: "normal", priority: true };
+  const postCoverage = coverageEnd && series.some(item => Number(item.year) > coverageEnd);
+  return { label: coverageEnd && coverageEnd < 2025 ? `Último SJR durante la cobertura (${year})` : `SJR ${year}`.trim(), value: numberFormat(value), note: `Mejor cuartil alcanzado: ${quartile}${peakText}${postCoverage ? ". SCImago registra valores posteriores, pero no implican cobertura vigente." : ""}`, tone: "normal" };
 }
 
 function scimagoTrajectoryMetric(journal, detail) {
+  const coverageEnd = sourceCoverageEnd(journal, detail, "scimago");
+  const allSeries = sourceSeriesValues(detail?.sjr, "sjr");
+  const series = coverageEnd ? allSeries.filter(item => Number(item.year) <= coverageEnd) : allSeries;
+  const ended = sourceCoverageEndedBeforeCurrentPeriod(journal, detail, "scimago");
   const ratio = journal.sjr_change_ratio;
   const absolute = journal.sjr_absolute_change;
   const signal = journal.sjr_trajectory_signal;
-  const series = sourceSeriesValues(detail?.sjr, "sjr");
-  if (!hasMetricValue(ratio)) {
-    if (series.length >= 2) {
-      const first = series[0];
-      const latest = series.at(-1);
-      const change = Number(first.sjr) !== 0 ? ((Number(latest.sjr) - Number(first.sjr)) / Number(first.sjr)) * 100 : null;
-      const changeText = change == null ? "" : `${change >= 0 ? "+" : ""}${change.toFixed(1)} %`;
-      return { label: "Trayectoria SJR", value: `${first.year}–${latest.year}`, note: `De ${numberFormat(first.sjr)} a ${numberFormat(latest.sjr)}${changeText ? ` (${changeText})` : ""}. La gráfica muestra cada año.`, tone: "historical" };
-    }
-    return { label: "Trayectoria SJR", value: "Información insuficiente para evaluar", note: "Se requiere más de un año con SJR para describir su evolución.", tone: "limited" };
+  if (!ended && hasMetricValue(ratio)) {
+    const absText = hasMetricValue(absolute) ? ` · cambio absoluto: ${Number(absolute) >= 0 ? "+" : ""}${numberFormat(absolute)}` : "";
+    if (signal === "Extreme") return { label: "Trayectoria SJR", value: `${numberFormat(ratio)} veces`, note: `Variación extrema frente a 2020–2024${absText}`, tone: "high" };
+    if (signal === "Moderate") return { label: "Trayectoria SJR", value: `${numberFormat(ratio)} veces`, note: `Variación moderada frente a 2020–2024${absText}`, tone: "moderate" };
+    return { label: "Trayectoria SJR", value: `${numberFormat(ratio)} veces`, note: `Comparación disponible, sin variación atípica${absText}`, tone: "normal" };
   }
-  const absText = hasMetricValue(absolute) ? ` · cambio absoluto: ${Number(absolute) >= 0 ? "+" : ""}${numberFormat(absolute)}` : "";
-  if (signal === "Extreme") return { label: "Trayectoria SJR", value: `${numberFormat(ratio)} veces`, note: `Variación extrema frente a 2020–2024${absText}`, tone: "high" };
-  if (signal === "Moderate") return { label: "Trayectoria SJR", value: `${numberFormat(ratio)} veces`, note: `Variación moderada frente a 2020–2024${absText}`, tone: "moderate" };
-  return { label: "Trayectoria SJR", value: `${numberFormat(ratio)} veces`, note: `Comparación disponible, sin variación atípica${absText}`, tone: "normal" };
+  if (series.length >= 2) {
+    const first = series[0];
+    const latest = series.at(-1);
+    const change = Number(first.sjr) !== 0 ? ((Number(latest.sjr) - Number(first.sjr)) / Number(first.sjr)) * 100 : null;
+    const changeText = change == null ? "" : `${change >= 0 ? "+" : ""}${change.toFixed(1)} %`;
+    return { label: "Trayectoria SJR", value: `${first.year}–${latest.year}`, note: `Durante la cobertura pasó de ${numberFormat(first.sjr)} a ${numberFormat(latest.sjr)}${changeText ? ` (${changeText})` : ""}. La gráfica muestra cada año.`, tone: ended ? "historical" : "normal" };
+  }
+  return { label: "Trayectoria SJR", value: "Información insuficiente para evaluar", note: "Se requiere más de un año con SJR para describir su evolución.", tone: "limited" };
 }
 
 function selfCitationMetric(journal) {
-  if (!hasMetricValue(journal.source_self_cite_share)) return { label: "Autocitación de la revista", value: "Dato no reportado", note: "InCites no aporta los conteos necesarios para calcular qué proporción de las citas procede de la propia revista.", tone: "missing" };
-  const confidenceLabels = { High: "alta", Moderate: "media", Limited: "limitada" };
-  const confidence = journal.source_self_confidence ? ` · confianza ${confidenceLabels[journal.source_self_confidence] || String(journal.source_self_confidence).toLowerCase()}` : "";
+  if (!hasMetricValue(journal.source_self_cite_share)) return { label: "Autocitación de la revista", value: "Dato no disponible", note: "No se dispone de la información necesaria para calcular qué proporción de las citas procede de la propia revista.", tone: "missing" };
   if (journal.source_self_signal === "Extreme") return { label: "Autocitación de la revista", value: percentage(journal.source_self_cite_share), note: `De cada 100 citas recibidas, aproximadamente ${Math.round(Number(journal.source_self_cite_share) * 100)} proceden de artículos publicados en la misma revista. Es una proporción muy alta y requiere revisión cualitativa.`, tone: "high" };
   if (journal.source_self_signal === "Moderate") return { label: "Autocitación de la revista", value: percentage(journal.source_self_cite_share), note: `De cada 100 citas recibidas, aproximadamente ${Math.round(Number(journal.source_self_cite_share) * 100)} proceden de artículos publicados en la misma revista. Es una proporción elevada y conviene revisarla.`, tone: "moderate" };
   return { label: "Autocitación de la revista", value: percentage(journal.source_self_cite_share), note: `De cada 100 citas recibidas, aproximadamente ${Math.round(Number(journal.source_self_cite_share) * 100)} proceden de artículos publicados en la misma revista. No se detectó una proporción atípica.`, tone: "normal" };
 }
 
 function cnciMetric(journal) {
-  if (!hasMetricValue(journal.cnci_2024)) return { label: "CNCI documental (complementario)", value: "Dato no reportado", note: "InCites no aporta el CNCI de la cohorte evaluada para esta revista.", tone: "missing" };
+  if (!hasMetricValue(journal.cnci_2024)) return { label: "CNCI documental (complementario)", value: "Dato no disponible", note: "El CNCI no está disponible para el periodo consultado de esta revista.", tone: "missing" };
   if (journal.cnci_signal === "Extreme") return { label: "CNCI documental (complementario)", value: numberFormat(journal.cnci_2024), note: "Variación extrema del impacto normalizado de los documentos; requiere revisión.", tone: "high" };
   if (journal.cnci_signal === "Moderate") return { label: "CNCI documental (complementario)", value: numberFormat(journal.cnci_2024), note: "Variación elevada del impacto normalizado de los documentos; requiere revisión.", tone: "moderate" };
   return { label: "CNCI documental (complementario)", value: numberFormat(journal.cnci_2024), note: "Impacto normalizado de los documentos, sin anomalía detectada. No sustituye al JIF.", tone: "normal" };
 }
 
 function jifMetric(journal) {
-  if (!hasMetricValue(journal.jif_current)) return { label: "JIF", value: "Dato no reportado", note: "La revista tiene cobertura en Web of Science / InCites, pero la exportación integrada no reporta un JIF para este título.", tone: "missing", priority: true };
-  return { label: "JIF disponible en InCites", value: numberFormat(journal.jif_current), note: `Cuartil JIF: ${journal.jif_quartile || "No reportado"}. Se muestra como valor de referencia de la revista; el periodo documental seleccionado no se interpreta como una serie histórica del JIF.`, tone: "normal", priority: true };
+  if (!hasMetricValue(journal.jif_current)) return { label: "JIF", value: "Dato no disponible", note: "El JIF no está disponible en los datos de InCites consultados para esta revista.", tone: "missing" };
+  return { label: "JIF disponible en InCites", value: numberFormat(journal.jif_current), note: `Cuartil JIF: ${journal.jif_quartile || "No reportado"}. Se muestra como valor de referencia de la revista; no se interpreta como una serie histórica del JIF.`, tone: "normal" };
 }
 
 function jifDependencyMetric(journal) {
-  if (!hasMetricValue(journal.jif_current)) return { label: "JIF sin autocitas", value: "Dato no reportado", note: "Sin un JIF disponible no puede evaluarse su diferencia respecto del valor sin autocitas.", tone: "missing" };
+  if (!hasMetricValue(journal.jif_current)) return { label: "JIF sin autocitas", value: "Dato no disponible", note: "Sin un JIF disponible no puede evaluarse su diferencia respecto del valor sin autocitas.", tone: "missing" };
   if (!hasMetricValue(journal.jif_without_self) || !hasMetricValue(journal.jif_self_dependency)) {
     return { label: "JIF sin autocitas", value: "Información insuficiente para evaluar", note: "Existe un JIF disponible, pero falta el valor sin autocitas o alguno de los datos necesarios para medir la dependencia.", tone: "limited" };
   }
@@ -1093,7 +1211,7 @@ function jifDependencyMetric(journal) {
 }
 
 function jciMetric(journal) {
-  if (!hasMetricValue(journal.jci)) return { label: "JCI", value: "Dato no reportado", note: "El JCI no figura para esta revista en los archivos InCites integrados.", tone: "missing" };
+  if (!hasMetricValue(journal.jci)) return { label: "JCI", value: "Dato no disponible", note: "El JCI no está disponible para esta revista en los datos de InCites consultados.", tone: "missing" };
   return { label: "JCI", value: numberFormat(journal.jci), note: `Cuartil JCI: ${journal.jci_quartile || "No reportado"}`, tone: "normal" };
 }
 
@@ -1120,45 +1238,43 @@ function numberFormat(value) {
 function combinedTimelineEvents(journal, detail, complementary) {
   const combined = [...(Array.isArray(detail?.events) ? detail.events : [])];
 
-  // Recupera hitos de cobertura solo cuando pueden documentarse con los datos integrados.
-  // Scopus aporta un rango de cobertura; InCites aporta el inicio de la serie disponible,
-  // que no debe confundirse con el año oficial de ingreso a Web of Science.
   const scopusYears = extractCoverageYears(journal?.scopus_coverage);
   const hasScopusStart = combined.some(event => {
-    const source = String(event.source || '').toLowerCase();
-    const type = String(event.event_type_normalized || event.event_type || '').toLowerCase();
-    return source.includes('scopus') && ['added', 'accepted', 'coverage start'].includes(type);
+    const source = String(event.source || "").toLowerCase();
+    const type = String(event.event_type_normalized || event.event_type || "").toLowerCase();
+    return source.includes("scopus") && ["added", "accepted", "coverage start"].includes(type);
   });
   if (scopusYears.start && !hasScopusStart) {
-    combined.push({
-      source: 'Scopus',
-      event_type: 'Coverage start',
-      event_year: scopusYears.start,
-      title: scopusYears.end
-        ? `Cobertura registrada: ${scopusYears.start}–${scopusYears.end}`
-        : `Cobertura registrada desde ${scopusYears.start}`,
-      reason: 'El año se obtiene del rango de cobertura disponible en los datos integrados.',
-      synthetic_coverage: true
-    });
+    combined.push({ source: "Scopus", event_type: "Coverage start", event_year: scopusYears.start, title: scopusYears.end ? `Cobertura registrada: ${scopusYears.start}–${scopusYears.end}` : `Cobertura registrada desde ${scopusYears.start}`, reason: "El año se obtiene del rango de cobertura disponible.", synthetic_coverage: true });
+  }
+  const hasScopusEnd = combined.some(event => {
+    const source = String(event.source || "").toLowerCase();
+    const type = String(event.event_type_normalized || event.event_type || "").toLowerCase();
+    return source.includes("scopus") && ["discontinuation", "coverage end", "cease"].includes(type);
+  });
+  if (scopusYears.end && journal?.scopus_status !== "Active" && !hasScopusEnd) {
+    combined.push({ source: "Scopus", event_type: "Coverage end", event_year: scopusYears.end, title: `Último año de cobertura registrada: ${scopusYears.end}`, reason: "La revista figura actualmente como inactiva en Scopus.", synthetic_coverage: true });
   }
 
-  const incitesYears = extractCoverageYears(journal?.wos_historical_range);
+  const incitesSeries = sourceSeriesValues(detail?.incites, "wos_documents");
+  const incitesStart = incitesSeries[0]?.year || extractCoverageYears(journal?.wos_historical_range).start;
+  const incitesEnd = incitesSeries.at(-1)?.year || extractCoverageYears(journal?.wos_historical_range).end;
   const hasWosSeriesStart = combined.some(event => {
-    const source = String(event.source || '').toLowerCase();
-    const type = String(event.event_type_normalized || event.event_type || '').toLowerCase();
-    return (source === 'wos' || source.includes('web of science') || source.includes('incites'))
-      && ['added', 'accepted', 'data series start'].includes(type);
+    const source = String(event.source || "").toLowerCase();
+    const type = String(event.event_type_normalized || event.event_type || "").toLowerCase();
+    return (source === "wos" || source.includes("web of science") || source.includes("incites")) && ["added", "accepted", "data series start"].includes(type);
   });
-  const hasWosEvidence = journal?.wos_status === 'Current' || hasHistoricalWosData(detail);
-  if (hasWosEvidence && incitesYears.start && !hasWosSeriesStart) {
-    combined.push({
-      source: 'WoS',
-      event_type: 'Data series start',
-      event_year: incitesYears.start,
-      title: `Serie histórica de InCites disponible desde ${incitesYears.start}`,
-      reason: 'Esta fecha indica el inicio de los datos integrados y no necesariamente el año oficial de indexación en Web of Science.',
-      synthetic_coverage: true
-    });
+  const hasWosEvidence = journal?.wos_status === "Current" || hasHistoricalWosData(detail);
+  if (hasWosEvidence && incitesStart && !hasWosSeriesStart) {
+    combined.push({ source: "WoS", event_type: "Data series start", event_year: incitesStart, title: `Serie histórica de InCites disponible desde ${incitesStart}`, reason: "Esta fecha indica el inicio de los datos disponibles y no necesariamente el año oficial de indexación en Web of Science.", synthetic_coverage: true });
+  }
+  const hasWosSeriesEnd = combined.some(event => {
+    const source = String(event.source || "").toLowerCase();
+    const type = String(event.event_type_normalized || event.event_type || "").toLowerCase();
+    return (source === "wos" || source.includes("web of science") || source.includes("incites")) && type === "data series end";
+  });
+  if (hasWosEvidence && incitesEnd && journal?.wos_status !== "Current" && !hasWosSeriesEnd) {
+    combined.push({ source: "WoS", event_type: "Data series end", event_year: incitesEnd, title: `Último año con información histórica disponible en InCites: ${incitesEnd}`, reason: "Esta fecha no necesariamente corresponde al año oficial de desindexación en Web of Science.", synthetic_coverage: true });
   }
 
   const seen = new Set();
@@ -1166,27 +1282,13 @@ function combinedTimelineEvents(journal, detail, complementary) {
     const key = normalizeDoi(event.notice_doi || event.work_doi) || `${event.event_type}|${event.notice_title}|${event.notice_date}`;
     if (seen.has(key)) return;
     seen.add(key);
-    combined.push({
-      source: event.metadata_source === "retraction-watch" ? "Retraction Watch / Crossref" : "Crossref",
-      event_type: event.event_type,
-      event_date: event.notice_date || "",
-      title: event.notice_title || editorialEventLabel(event.event_type),
-      reason: event.work_doi ? `Registro asociado: ${event.work_doi}` : "",
-      automated_evidence: true
-    });
+    combined.push({ source: event.metadata_source === "retraction-watch" ? "Retraction Watch / Crossref" : "Crossref", event_type: event.event_type, event_date: event.notice_date || "", title: event.notice_title || editorialEventLabel(event.event_type), reason: event.work_doi ? `Registro asociado: ${event.work_doi}` : "", automated_evidence: true });
   });
   (complementary?.openalex?.retracted_works || []).forEach(item => {
     const key = normalizeDoi(item.doi) || `openalex|${item.title}|${item.year}`;
     if (seen.has(key)) return;
     seen.add(key);
-    combined.push({
-      source: "OpenAlex",
-      event_type: "retraction",
-      event_year: item.year || "",
-      title: item.title || "Obra marcada como retractada",
-      reason: item.doi ? `DOI: ${normalizeDoi(item.doi)}` : "",
-      automated_evidence: true
-    });
+    combined.push({ source: "OpenAlex", event_type: "retraction", event_year: item.year || "", title: item.title || "Obra marcada como retractada", reason: item.doi ? `DOI: ${normalizeDoi(item.doi)}` : "", automated_evidence: true });
   });
   return combined;
 }
@@ -1206,7 +1308,7 @@ function timelineHtml(events) {
     const rawSource = String(event.source || "").toLowerCase();
     const sourceClass = event.automated_evidence ? "evidence" : (event.source === "WoS" ? "wos" : rawSource);
     const eventType = event.event_type_normalized || event.event_type;
-    const adverse = ["Discontinuation", "Editorial De-listing", "Production De-listing", "Withdrawn", "retraction", "expression_of_concern", "withdrawal", "removal"].includes(eventType);
+    const adverse = ["Discontinuation", "Editorial De-listing", "Production De-listing", "Withdrawn", "Coverage end", "Data series end", "retraction", "expression_of_concern", "withdrawal", "removal"].includes(eventType);
     const reason = event.reason_normalized || event.reason || "";
     const description = event.automated_evidence ? reason : reasonSpanish(reason, eventType);
     return `
@@ -1236,7 +1338,9 @@ function eventLabel(value) {
     "Accepted": "Aceptada",
     "Accepted pending": "Aceptación pendiente",
     "Coverage start": "Inicio de cobertura",
+    "Coverage end": "Fin de cobertura registrada",
     "Data series start": "Inicio de serie histórica",
+    "Data series end": "Fin de serie histórica disponible",
     "Title Change": "Cambio de título",
     "Cease": "Cese",
     "retraction": "Retractación",
@@ -1263,7 +1367,10 @@ function reasonSpanish(reason, type) {
 }
 
 function chartBlock(title, series, key, sourceClass, measureLabel = "documentos", options = {}) {
-  const valid = sourceSeriesValues(series, key);
+  const rawValid = sourceSeriesValues(series, key);
+  const yearly = new Map();
+  rawValid.forEach(item => yearly.set(Number(item.year), item));
+  const valid = Array.from(yearly.values()).sort((a, b) => Number(a.year) - Number(b.year));
   if (!valid.length) return "";
 
   const width = 920;
@@ -1281,13 +1388,28 @@ function chartBlock(title, series, key, sourceClass, measureLabel = "documentos"
     const y = height - padding.bottom - (Number(item[key]) / maximum) * chartHeight;
     return { x, y, year: item.year, value: Number(item[key]), annotation: options.annotationKey ? item[options.annotationKey] : "" };
   });
-  const polyline = points.map(point => `${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(" ");
-  const dots = points.map(point => `<circle tabindex="0" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="6" aria-label="${escapeHtml(String(point.year))}: ${escapeHtml(formatValue(point.value))} ${escapeHtml(measureLabel)}"><title>${point.year}: ${formatValue(point.value)} ${measureLabel}${point.annotation ? ` · ${point.annotation}` : ""}</title></circle>`).join("");
+  const coverageEnd = Number(options.coverageEnd || 0);
+  const prePoints = coverageEnd ? points.filter(point => Number(point.year) <= coverageEnd) : points;
+  const postPointsOnly = coverageEnd ? points.filter(point => Number(point.year) > coverageEnd) : [];
+  const postPoints = postPointsOnly.length && prePoints.length ? [prePoints.at(-1), ...postPointsOnly] : postPointsOnly;
+  const linePoints = pts => pts.map(point => `${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(" ");
+  const mainPolyline = prePoints.length > 1 ? `<polyline class="series-line" points="${linePoints(prePoints)}"></polyline>` : "";
+  const postPolyline = postPoints.length > 1 ? `<polyline class="series-line post-coverage-line" points="${linePoints(postPoints)}"></polyline>` : "";
+  let postZone = "";
+  if (postPointsOnly.length) {
+    const firstPost = postPointsOnly[0];
+    const lastPre = prePoints.at(-1);
+    const startX = lastPre ? (lastPre.x + firstPost.x) / 2 : firstPost.x - xStep / 2;
+    const zoneWidth = width - padding.right - startX;
+    const zoneMid = startX + zoneWidth / 2;
+    postZone = `<rect class="post-coverage-zone" x="${startX.toFixed(1)}" y="${padding.top}" width="${zoneWidth.toFixed(1)}" height="${chartHeight}"></rect><text class="post-coverage-label" x="${zoneMid.toFixed(1)}" y="${padding.top + 16}" text-anchor="middle"><tspan x="${zoneMid.toFixed(1)}" dy="0">Periodo posterior</tspan><tspan x="${zoneMid.toFixed(1)}" dy="13">a la cobertura</tspan></text>`;
+  }
+  const dots = points.map(point => `<circle tabindex="0" class="${coverageEnd && Number(point.year) > coverageEnd ? "post-coverage-point" : ""}" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="6" aria-label="${escapeHtml(String(point.year))}: ${escapeHtml(formatValue(point.value))} ${escapeHtml(measureLabel)}"><title>${point.year}: ${formatValue(point.value)} ${measureLabel}${point.annotation ? ` · ${point.annotation}` : ""}${coverageEnd && Number(point.year) > coverageEnd ? " · posterior al fin de cobertura" : ""}</title></circle>`).join("");
   const showPointValues = options.showPointValues !== false && points.length <= 14;
   const pointValues = showPointValues ? points.map((point, index) => {
     const shift = index % 2 === 0 ? -14 : 22;
     const y = Math.max(18, point.y + shift);
-    return `<text class="point-value" x="${point.x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle">${escapeHtml(formatValue(point.value))}${point.annotation ? ` · ${escapeHtml(String(point.annotation))}` : ""}</text>`;
+    return `<text class="point-value ${coverageEnd && Number(point.year) > coverageEnd ? "post-coverage-value" : ""}" x="${point.x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle">${escapeHtml(formatValue(point.value))}${point.annotation ? ` · ${escapeHtml(String(point.annotation))}` : ""}</text>`;
   }).join("") : "";
   const labelEvery = valid.length > 22 ? 3 : valid.length > 14 ? 2 : 1;
   const labels = points.map((point, index) => {
@@ -1299,18 +1421,18 @@ function chartBlock(title, series, key, sourceClass, measureLabel = "documentos"
     const value = maximum * fraction;
     return `<line class="grid-line" x1="${padding.left}" y1="${y.toFixed(1)}" x2="${width - padding.right}" y2="${y.toFixed(1)}"></line><text class="axis-value" x="8" y="${(y + 4).toFixed(1)}">${escapeHtml(formatValue(value))}</text>`;
   }).join("");
-  const latest = valid[valid.length - 1];
+  const latest = options.headlineItem || valid[valid.length - 1];
   const annotationHead = options.annotationKey ? `<th>${escapeHtml(options.annotationLabel || "Categoría")}</th>` : "";
   const annotationCells = item => options.annotationKey ? `<td>${escapeHtml(item[options.annotationKey] || "No reportado")}</td>` : "";
 
   return `<div class="chart-card ${sourceClass}">
     <div class="chart-card-heading"><h3>${escapeHtml(title)}</h3><span>${escapeHtml(String(latest.year))}: <strong>${escapeHtml(formatValue(latest[key]))}</strong>${options.annotationKey && latest[options.annotationKey] ? ` · ${escapeHtml(String(latest[options.annotationKey]))}` : ""}</span></div>
     <div class="chart-wrap"><svg class="chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(title)}: ${escapeHtml(measureLabel)} por año">
-      ${gridLines}
+      ${gridLines}${postZone}
       <line class="axis" x1="${padding.left}" y1="${height - padding.bottom}" x2="${width - padding.right}" y2="${height - padding.bottom}"></line>
       <line class="axis" x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${height - padding.bottom}"></line>
       <text class="axis-value" x="42" y="${height - padding.bottom + 4}">0</text>
-      <polyline class="series-line" points="${polyline}"></polyline>${dots}${pointValues}${labels}
+      ${mainPolyline}${postPolyline}${dots}${pointValues}${labels}
     </svg></div>
     <p class="chart-help">Los valores se muestran sobre los puntos; pase el cursor para consultar el detalle.</p>
     <details class="chart-data"><summary>Ver datos anuales</summary><div class="chart-table-wrap"><table><thead><tr><th>Año</th><th>${escapeHtml(capitalize(measureLabel))}</th>${annotationHead}</tr></thead><tbody>${valid.map(item => `<tr><td>${escapeHtml(String(item.year))}</td><td>${escapeHtml(formatValue(item[key]))}</td>${annotationCells(item)}</tr>`).join("")}</tbody></table></div></details>
@@ -1363,6 +1485,13 @@ function openAlexSectionHtml(openalex, journal, detail) {
   const recentProduction = sourceSeriesValues(production, "works_count")
     .filter(item => Number(item.year) >= 2020);
   const chartSeries = recentProduction.length >= 3 ? recentProduction : production;
+  const chartPeriod = sourceSeriesRange(chartSeries, "works_count");
+  const productionChartTitle = chartPeriod
+    ? `Producción registrada en OpenAlex (${chartPeriod})`
+    : "Producción registrada en OpenAlex";
+  const citationsChartTitle = chartPeriod
+    ? `Citas registradas en OpenAlex (${chartPeriod})`
+    : "Citas registradas en OpenAlex";
   const narrative = assessment.incomplete ? "" : openAlexNarrative(chartSeries, openalex.oa_share);
   const metricNote = assessment.incomplete
     ? "Total del registro enlazado en OpenAlex; no representa de forma suficiente la producción reciente."
@@ -1379,7 +1508,7 @@ function openAlexSectionHtml(openalex, journal, detail) {
 
   const charts = assessment.incomplete
     ? `<details class="openalex-history-details"><summary>Ver serie histórica incompleta recuperada de OpenAlex</summary><p>Estos datos se conservan para trazabilidad, pero no se utilizan para evaluar la tendencia actual de la revista.</p><div class="charts-grid openalex-charts">${chartBlock("Producción histórica registrada en OpenAlex", production, "works_count", "openalex", "documentos")}${chartBlock("Citas históricas registradas en OpenAlex", production, "cited_by_count", "openalex-citations", "citas")}</div></details>`
-    : `<div class="charts-grid openalex-charts">${chartBlock("Producción reciente registrada en OpenAlex", chartSeries, "works_count", "openalex", "documentos")}${chartBlock("Citas recientes registradas en OpenAlex", chartSeries, "cited_by_count", "openalex-citations", "citas")}</div>${sourceSeriesValues(production, "works_count").some(item => Number(item.year) < 2020) ? `<details class="openalex-history-details"><summary>Ver trayectoria histórica completa</summary><div class="charts-grid openalex-charts">${chartBlock("Producción histórica registrada en OpenAlex", production, "works_count", "openalex", "documentos")}${chartBlock("Citas históricas registradas en OpenAlex", production, "cited_by_count", "openalex-citations", "citas")}</div></details>` : ""}`;
+    : `<div class="charts-grid openalex-charts">${chartBlock(productionChartTitle, chartSeries, "works_count", "openalex", "documentos")}${chartBlock(citationsChartTitle, chartSeries, "cited_by_count", "openalex-citations", "citas")}</div>${sourceSeriesValues(production, "works_count").some(item => Number(item.year) < 2020) ? `<details class="openalex-history-details"><summary>Ver trayectoria histórica completa</summary><div class="charts-grid openalex-charts">${chartBlock("Producción histórica registrada en OpenAlex", production, "works_count", "openalex", "documentos")}${chartBlock("Citas históricas registradas en OpenAlex", production, "cited_by_count", "openalex-citations", "citas")}</div></details>` : ""}`;
 
   return `
     <section class="journal-section openalex-section">
@@ -1504,10 +1633,16 @@ function openAlexComplementaryEvaluationHtml(openalex, assessment = { incomplete
     : { label: "Metadatos enriquecidos", value: "Enriquecimiento pendiente", note: "El cruce básico está disponible, pero temas, países e instituciones aún no se han completado para esta revista.", tone: "limited" };
 
   const stableStart = openalex.stable_series_start || series[0]?.year;
+  const firstSeriesYear = Number(series[0]?.year || 0);
+  const lastSeriesYear = Number(series.at(-1)?.year || 0);
+  const lastCompleteYear = new Date().getFullYear() - 1;
+  const temporalNote = lastSeriesYear && lastSeriesYear < lastCompleteYear
+    ? `OpenAlex registra información entre ${firstSeriesYear || stableStart} y ${lastSeriesYear}. Como no dispone de datos para ${lastSeriesYear + 1}–${lastCompleteYear}, la serie no se utiliza para evaluar una tendencia actual.`
+    : `${stableStart ? `Serie sostenida desde ${stableStart}. ` : ""}El año en curso se muestra, pero no se usa para comparar años completos.`;
   const seriesMetric = assessment.incomplete
     ? { label: "Uso de la serie OpenAlex", value: "Solo referencia histórica", note: "La trayectoria se conserva para trazabilidad, pero no interviene en la evaluación reciente.", tone: "incomplete" }
     : series.length
-      ? { label: "Cobertura temporal OpenAlex", value: `${series.length} años con registros`, note: `${stableStart ? `Serie sostenida desde ${stableStart}. ` : ""}El año en curso se muestra, pero no se usa para comparar años completos.`, tone: "available" }
+      ? { label: "Cobertura temporal OpenAlex", value: `${series.length} años con registros`, note: temporalNote, tone: "available" }
       : { label: "Cobertura temporal OpenAlex", value: "Dato no reportado", note: "No se identificó una secuencia anual de publicaciones.", tone: "missing" };
 
   const retractions = Array.isArray(openalex.retracted_works) ? openalex.retracted_works : [];
@@ -1547,7 +1682,17 @@ function openAlexNarrative(series, oaShare) {
     trend = ` En los cinco años completos más recientes, el promedio anual fue de ${integerFormat(Math.round(recentAverage))} documentos, frente a ${integerFormat(Math.round(previousAverage))} en los cinco años anteriores, lo que representa ${direction} (${change >= 0 ? "+" : ""}${change.toFixed(1)} %).`;
   }
   const oa = oaShare == null ? "" : ` La proporción de producción en acceso abierto registrada es de ${escapeHtml(String(oaShare))} %.`;
-  return `<div class="openalex-narrative"><strong>Lectura descriptiva de la serie reciente</strong><p>La mayor producción anual del periodo mostrado se registró en ${escapeHtml(String(peak.year))}, con ${integerFormat(peak.works_count)} documentos.${trend}${oa} Las citas de los años más recientes deben interpretarse considerando su menor tiempo de acumulación.</p></div>`;
+  const firstYear = Number(complete[0].year);
+  const lastYear = Number(complete.at(-1).year);
+  const lastCompleteYear = currentYear - 1;
+  const historical = lastYear < lastCompleteYear;
+  const heading = historical
+    ? `Lectura descriptiva del periodo disponible ${firstYear}–${lastYear}`
+    : "Lectura descriptiva de la serie reciente";
+  const limitation = historical
+    ? " Esta trayectoria es histórica y no permite establecer el comportamiento actual de la revista."
+    : "";
+  return `<div class="openalex-narrative"><strong>${escapeHtml(heading)}</strong><p>La mayor producción anual del periodo mostrado se registró en ${escapeHtml(String(peak.year))}, con ${integerFormat(peak.works_count)} documentos.${trend}${oa} Las citas de los años más recientes deben interpretarse considerando su menor tiempo de acumulación.${limitation}</p></div>`;
 }
 
 function openAlexQualityHtml(flags) {
@@ -1621,7 +1766,7 @@ function automatedQualitativeSectionHtml(complementary, detail) {
   if (!complementary) {
     content = `<div class="automated-status not-run"><span>Estado</span><strong>No ejecutada</strong></div>`;
   } else if (!evidence.length) {
-    content = `<div class="automated-status no-results"><span>Resultado</span><strong>Sin resultados relevantes</strong></div>`;
+    content = `<div class="automated-status no-results"><span>Resultado</span><strong>Sin hallazgos en las consultas automatizadas ejecutadas</strong></div>`;
   } else {
     const stats = automatedPriorityStats(complementary);
     const visible = evidence.slice(0, 4);
