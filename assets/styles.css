@@ -1300,3 +1300,406 @@ footer { background: #102d46; }
   .summary-signal-list span { padding: 8px; }
   .automated-narrative { padding: 15px 16px; }
 }
+
+/* Actualización metodológica 0.8: separación visual por origen bibliométrico */
+.quant-source-stack {
+  display: grid;
+  gap: 18px;
+  margin-top: 18px;
+}
+.quant-source-panel {
+  overflow: hidden;
+  border: 2px solid #b7d6e7;
+  border-radius: 14px;
+  background: #ffffff;
+}
+.quant-source-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border-bottom: 2px solid #d7e6ee;
+}
+.quant-source-heading h3 {
+  margin: 0;
+  font-size: 1.02rem;
+}
+.quant-source-heading p {
+  margin: 4px 0 0;
+  color: #5d7483;
+  font-size: .79rem;
+  line-height: 1.4;
+}
+.quant-source-panel.scimago-panel {
+  border-color: #ff9a38;
+}
+.quant-source-panel.scimago-panel .quant-source-heading {
+  background: linear-gradient(90deg,#ffe6c6 0%,#fff8ef 72%,#ffffff 100%);
+  border-bottom-color: #ffb66f;
+}
+.quant-source-panel.scimago-panel .quant-source-heading h3 {
+  color: #a94700;
+}
+.quant-source-panel.wos-panel {
+  border-color: #7c3aed;
+}
+.quant-source-panel.wos-panel .quant-source-heading {
+  background: linear-gradient(90deg,#ece1ff 0%,#faf7ff 72%,#ffffff 100%);
+  border-bottom-color: #b99af5;
+}
+.quant-source-panel.wos-panel .quant-source-heading h3 {
+  color: #4f1cad;
+}
+.source-metric-grid {
+  margin-top: 0;
+  padding: 14px;
+}
+.scimago-panel .source-metric-grid {
+  grid-template-columns: repeat(4,minmax(0,1fr));
+}
+.wos-panel .source-metric-grid {
+  grid-template-columns: repeat(3,minmax(0,1fr));
+}
+.scimago-panel .metric:not(.high):not(.moderate):not(.limited) {
+  border-color: #ffd0a6;
+}
+.wos-panel .metric:not(.high):not(.moderate):not(.limited) {
+  border-color: #d8c1ff;
+}
+.production-concordance {
+  margin-top: 14px;
+  padding: 13px 15px;
+  border: 1px solid #a9cadc;
+  border-left: 6px solid #1677c8;
+  border-radius: 11px;
+  background: #eef7fd;
+}
+.production-concordance strong {
+  color: #174d73;
+}
+.production-concordance p {
+  margin: 4px 0 0;
+  color: #486476;
+  line-height: 1.45;
+}
+@media (max-width: 900px) {
+  .scimago-panel .source-metric-grid,
+  .wos-panel .source-metric-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+}
+@media (max-width: 520px) {
+  .quant-source-heading { display: block; }
+  .scimago-panel .source-metric-grid,
+  .wos-panel .source-metric-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Ajustes v0.8.3: fuentes aplicables, claridad de estados, gráficas y evaluación OpenAlex */
+.quant-source-empty {
+  margin-top: 18px;
+  padding: 18px 20px;
+  border: 2px solid #b8cddb;
+  border-radius: 14px;
+  background: #f4f8fa;
+  color: #3f5868;
+}
+.quant-source-empty p { margin: 5px 0 0; line-height: 1.5; }
+
+.metric.missing {
+  background: #f5f7f8;
+  border-color: #b7c5cd;
+  box-shadow: none;
+}
+.metric.missing span { color: #6d7e88; }
+.metric.missing strong { color: #435763; }
+.metric.missing small { color: #627681; }
+.metric.historical {
+  background: #eef5f8;
+  border-color: #8fb6c9;
+  box-shadow: 0 6px 14px rgba(42,88,112,.07);
+}
+.metric.historical span { color: #557788; }
+.metric.historical strong { color: #224b62; }
+.metric.historical small { color: #496a7b; }
+
+/* Las tarjetas con datos disponibles adoptan con mayor claridad el color de su fuente. */
+.scimago-panel .metric.normal {
+  background: linear-gradient(145deg,#fff0de 0%,#fff8ef 100%);
+  border-color: #ff9a38;
+  box-shadow: 0 7px 16px rgba(238,112,0,.11);
+}
+.scimago-panel .metric.normal span,
+.scimago-panel .metric.normal strong { color: #a94700; }
+.scimago-panel .metric.normal small { color: #8a5526; }
+.scimago-panel .metric.historical {
+  background: linear-gradient(145deg,#fff5e8 0%,#fffaf4 100%);
+  border-color: #e7a965;
+}
+.scimago-panel .metric.historical span,
+.scimago-panel .metric.historical strong { color: #9b520d; }
+.scimago-panel .metric.historical small { color: #805c39; }
+
+.wos-panel .metric.normal {
+  background: linear-gradient(145deg,#f0e8ff 0%,#fbf8ff 100%);
+  border-color: #8b5cf6;
+  box-shadow: 0 7px 16px rgba(104,53,198,.10);
+}
+.wos-panel .metric.normal span,
+.wos-panel .metric.normal strong { color: #4f1cad; }
+.wos-panel .metric.normal small { color: #60458b; }
+.wos-panel .metric.historical {
+  background: linear-gradient(145deg,#f5efff 0%,#fcfaff 100%);
+  border-color: #a88ae8;
+}
+.wos-panel .metric.historical span,
+.wos-panel .metric.historical strong { color: #5c2cb5; }
+.wos-panel .metric.historical small { color: #67528c; }
+
+.adaptive-charts.single-source { grid-template-columns: minmax(0, 1fr); }
+.adaptive-charts.single-source .chart-card { width: 100%; }
+.adaptive-charts .chart-card { padding: 20px 22px 18px; }
+.adaptive-charts .chart-wrap { min-height: 355px; }
+.adaptive-charts .chart { min-width: 760px; }
+.chart .point-value {
+  font-size: 13px;
+  font-weight: 850;
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+.chart-card.scopus .point-value { fill: #a94700; }
+.chart-card.wos .point-value { fill: #4f1cad; }
+.chart-card.openalex .point-value { fill: var(--openalex-dark); }
+.chart-card.openalex-citations .point-value { fill: #244b92; }
+.impact-history-section { background: #f9fcfe; }
+
+.openalex-evaluation {
+  margin: 18px 0 20px;
+  overflow: hidden;
+  border: 2px solid #2b9dbc;
+  border-radius: 14px;
+  background: #fff;
+}
+.openalex-evaluation-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 17px;
+  border-bottom: 2px solid #9fd7e5;
+  background: linear-gradient(90deg,#dff5fb 0%,#f4fcfe 72%,#fff 100%);
+}
+.openalex-evaluation-heading span {
+  display: block;
+  color: #21728c;
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+.openalex-evaluation-heading strong { display: block; margin-top: 3px; color: var(--openalex-dark); }
+.openalex-evaluation-heading em {
+  max-width: 280px;
+  color: #4d7180;
+  font-size: .78rem;
+  font-style: normal;
+  font-weight: 800;
+  text-align: right;
+}
+.openalex-evaluation-grid {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: 12px;
+  padding: 14px;
+}
+.openalex-eval-card {
+  min-width: 0;
+  padding: 14px 15px;
+  border: 2px solid #a8cedb;
+  border-radius: 12px;
+  background: #f7fcfe;
+}
+.openalex-eval-card > span {
+  display: block;
+  color: #4d7180;
+  font-size: .7rem;
+  font-weight: 900;
+  letter-spacing: .045em;
+  text-transform: uppercase;
+}
+.openalex-eval-card > strong {
+  display: block;
+  margin: 7px 0 6px;
+  color: var(--openalex-dark);
+  font-size: 1rem;
+  line-height: 1.3;
+}
+.openalex-eval-card > small { display: block; color: #4e6c79; line-height: 1.45; }
+.openalex-eval-card.available {
+  border-color: #238eae;
+  background: linear-gradient(145deg,#dff5fb 0%,#f5fcfe 100%);
+  box-shadow: 0 7px 16px rgba(8,126,164,.10);
+}
+.openalex-eval-card.limited,
+.openalex-eval-card.pending {
+  border-color: #9eb7c2;
+  background: #eef4f6;
+}
+.openalex-eval-card.warning {
+  border-color: #d97706;
+  background: #fff6df;
+}
+.openalex-eval-card.warning > strong,
+.openalex-eval-card.warning > span { color: #975100; }
+
+@media (max-width: 1050px) {
+  .openalex-evaluation-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 720px) {
+  .openalex-evaluation-heading { display: block; }
+  .openalex-evaluation-heading em { display: block; max-width: none; margin-top: 7px; text-align: left; }
+  .openalex-evaluation-grid { grid-template-columns: 1fr; }
+  .adaptive-charts .chart { min-width: 700px; }
+}
+
+/* Corrección v0.8.3: SJR y JIF como métricas principales de revista. */
+.metric.primary-metric {
+  border-width: 2px;
+  position: relative;
+}
+.metric.primary-metric::after {
+  content: "Métrica principal de revista";
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 10px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: .66rem;
+  font-weight: 850;
+  letter-spacing: .02em;
+}
+.scimago-panel .metric.primary-metric::after {
+  color: #8e3d00;
+  background: #ffd7ad;
+  border: 1px solid #f5a451;
+}
+.wos-panel .metric.primary-metric::after {
+  color: #481596;
+  background: #dfd0ff;
+  border: 1px solid #a985f0;
+}
+
+/* Microajuste v0.8.3.1: mayor contraste para tarjetas con datos y retiro del distintivo de cruce ISSN. */
+.scimago-panel .metric.normal {
+  background: linear-gradient(145deg, #ffd7ad 0%, #ffe8cf 58%, #fff3e7 100%);
+  border-color: #ee7000;
+  box-shadow: 0 9px 20px rgba(214, 91, 0, .20), inset 0 0 0 1px rgba(255,255,255,.40);
+}
+.scimago-panel .metric.normal span,
+.scimago-panel .metric.normal strong { color: #9a3f00; }
+.scimago-panel .metric.normal small { color: #6f401b; }
+.scimago-panel .metric.normal.primary-metric {
+  background: linear-gradient(145deg, #ffc98f 0%, #ffdfbd 58%, #ffefe0 100%);
+  border-color: #d95f00;
+  box-shadow: 0 10px 23px rgba(201, 78, 0, .25), inset 0 0 0 1px rgba(255,255,255,.45);
+}
+
+.wos-panel .metric.normal {
+  background: linear-gradient(145deg, #ded0ff 0%, #eee6ff 58%, #f8f4ff 100%);
+  border-color: #7441df;
+  box-shadow: 0 9px 20px rgba(93, 46, 184, .20), inset 0 0 0 1px rgba(255,255,255,.42);
+}
+.wos-panel .metric.normal span,
+.wos-panel .metric.normal strong { color: #43148f; }
+.wos-panel .metric.normal small { color: #54367e; }
+.wos-panel .metric.normal.primary-metric {
+  background: linear-gradient(145deg, #d1bcff 0%, #e5d9ff 58%, #f5efff 100%);
+  border-color: #6630cf;
+  box-shadow: 0 10px 23px rgba(80, 33, 170, .24), inset 0 0 0 1px rgba(255,255,255,.45);
+}
+
+.openalex-eval-card.available {
+  border-color: #087f9f;
+  background: linear-gradient(145deg, #bfeaf5 0%, #d9f3f9 58%, #eefbfe 100%);
+  box-shadow: 0 9px 20px rgba(0, 112, 145, .21), inset 0 0 0 1px rgba(255,255,255,.45);
+}
+.openalex-eval-card.available > span,
+.openalex-eval-card.available > strong { color: #075d78; }
+.openalex-eval-card.available > small { color: #285f70; }
+
+.openalex-metric.available {
+  border-color: #168aa8;
+  background: linear-gradient(145deg, #cceef6 0%, #e3f7fb 62%, #f4fcfe 100%);
+  box-shadow: 0 8px 18px rgba(0, 112, 145, .17), inset 0 0 0 1px rgba(255,255,255,.42);
+}
+.openalex-metric.available span,
+.openalex-metric.available strong { color: #075f79; }
+.openalex-metric.available small { color: #345f6d; }
+.openalex-metric.missing {
+  border-color: #aebfc7;
+  background: #f1f5f7;
+  box-shadow: none;
+}
+.openalex-metric.missing span { color: #6b7f89; }
+.openalex-metric.missing strong { color: #485d67; }
+.openalex-metric.missing small { color: #6a7d86; }
+
+/* v0.8.3.3 — Corrección final del sombreado en Estado en las fuentes */
+.source-row.absent,
+.source-row.scopus.absent,
+.source-row.wos.absent,
+.source-row.doaj.absent {
+  background: #edf2f5;
+  border-color: #9fb2be;
+  box-shadow: none;
+}
+.source-row.absent::before,
+.source-row.scopus.absent::before,
+.source-row.wos.absent::before,
+.source-row.doaj.absent::before,
+.source-row.absent .source-dot,
+.source-row.scopus.absent .source-dot,
+.source-row.wos.absent .source-dot,
+.source-row.doaj.absent .source-dot {
+  background: #8499a6;
+}
+.source-row.absent .source-name strong,
+.source-row.absent .source-state strong,
+.source-row.scopus.absent .source-name strong,
+.source-row.scopus.absent .source-state strong,
+.source-row.wos.absent .source-name strong,
+.source-row.wos.absent .source-state strong,
+.source-row.doaj.absent .source-name strong,
+.source-row.doaj.absent .source-state strong {
+  color: #4f6878;
+}
+
+.source-row.active.scopus {
+  background: #ffd09f;
+  border-color: #f47700;
+  box-shadow: inset 0 0 0 1px rgba(244,119,0,.18);
+}
+.source-row.active.wos {
+  background: #d9c3ff;
+  border-color: #6d28d9;
+  box-shadow: inset 0 0 0 1px rgba(109,40,217,.16);
+}
+.source-row.active.doaj {
+  background: #beeccf;
+  border-color: #009b62;
+  box-shadow: inset 0 0 0 1px rgba(0,155,98,.16);
+}
+.source-row.removed {
+  background: #ffd5dc;
+  border-color: #ef3b4f;
+  box-shadow: inset 0 0 0 1px rgba(239,59,79,.17);
+}
+.source-row.inactive {
+  background: #ffd7ad;
+  border-color: #ef8300;
+  box-shadow: inset 0 0 0 1px rgba(239,131,0,.16);
+}

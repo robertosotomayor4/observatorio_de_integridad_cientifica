@@ -1,0 +1,30 @@
+OBSERVATORIO DE INTEGRIDAD CIENTÍFICA — PARCHE v0.8.2
+
+Este parche se copia sobre la carpeta activa del repositorio.
+
+IMPORTANTE
+1. GitHub Pages debe permanecer en: main / (root).
+2. No cambie a /docs.
+3. No elimine ni reemplace la carpeta .git.
+4. El parche no contiene index.html: la interfaz principal aprobada se conserva.
+5. Antes de copiar, mantenga el respaldo que ya creó.
+
+APLICACIÓN
+1. Cierre GitHub Desktop.
+2. Abra la carpeta descomprimida del parche.
+3. Seleccione todo su contenido.
+4. Cópielo dentro de Documentos\GitHub\observatorio_de_integridad_cientifica.
+5. Acepte combinar carpetas y reemplazar archivos.
+6. Abra GitHub Desktop y revise los cambios.
+7. Haga commit con: Actualizar metodología y datos a v0.8.2
+8. Pulse Push origin.
+9. Espere el despliegue de GitHub Pages y actualice la web con Ctrl+F5.
+
+PRIMERA REVISIÓN EN LA WEB
+- Verifique que siga apareciendo «Verificador de revistas».
+- Busque Espacios y confirme que la ficha conserva su distribución.
+- Busque British Journal of Surgery y revise los bloques separados.
+- Busque Atmosphere y Atmosphere-Korea como revistas distintas.
+
+OPENALEX
+La ejecución diaria detectará que existe un registro nuevo pendiente y sincronizará el núcleo automáticamente. También se puede ejecutar manualmente el workflow «OpenAlex — universo completo» con mode=auto.

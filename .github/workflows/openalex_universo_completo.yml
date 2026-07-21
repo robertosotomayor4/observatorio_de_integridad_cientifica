@@ -9,6 +9,7 @@ on:
         type: choice
         default: bootstrap
         options:
+          - auto
           - bootstrap
           - core
           - enrich
@@ -50,7 +51,7 @@ jobs:
         shell: bash
         run: |
           if [ "${{ github.event_name }}" = "schedule" ]; then
-            echo "mode=enrich" >> "$GITHUB_OUTPUT"
+            echo "mode=auto" >> "$GITHUB_OUTPUT"
             echo "max_enrichment=2500" >> "$GITHUB_OUTPUT"
           else
             echo "mode=${{ inputs.mode }}" >> "$GITHUB_OUTPUT"
@@ -65,8 +66,31 @@ jobs:
             exit 1
           fi
 
+      - name: Comprobar si el núcleo debe sincronizarse
+        id: catalog_sync
+        env:
+          OPERATION_MODE: ${{ steps.operation.outputs.mode }}
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          import os
+          from pathlib import Path
+
+          catalog = json.loads(Path("data/catalog.json").read_text(encoding="utf-8"))
+          manifest_path = Path("data/openalex_full/manifest.json")
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
+          catalog_count = len(catalog.get("rows") or [])
+          manifest_count = int(manifest.get("catalog_journals") or 0)
+          mode = os.environ.get("OPERATION_MODE", "auto")
+          refresh = mode in {"bootstrap", "core"} or catalog_count != manifest_count or not manifest.get("core_complete", False)
+          print(f"refresh_core={'true' if refresh else 'false'}")
+          print(f"catalog_count={catalog_count}")
+          print(f"manifest_count={manifest_count}")
+          PY
+
       - name: Construir núcleo para todo el catálogo
-        if: ${{ steps.operation.outputs.mode == 'bootstrap' || steps.operation.outputs.mode == 'core' }}
+        if: ${{ steps.catalog_sync.outputs.refresh_core == 'true' }}
         run: |
           python scripts/openalex_full_core.py \
             --catalog data/catalog.json \
@@ -77,7 +101,7 @@ jobs:
             --batch-size 50
 
       - name: Enriquecer temas, países e instituciones
-        if: ${{ steps.operation.outputs.mode == 'bootstrap' || steps.operation.outputs.mode == 'enrich' }}
+        if: ${{ steps.operation.outputs.mode != 'core' }}
         run: |
           python scripts/openalex_full_enrich.py \
             --core-dir data/openalex_full/core \
