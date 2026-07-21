@@ -1707,19 +1707,57 @@ footer { background: #102d46; }
 
 /* Microajuste v0.8.3.4: alertas cuantitativas en rojo y textos más claros. */
 .metric.high {
-  background: linear-gradient(145deg,#ffcfd6 0%,#ffe1e6 58%,#fff0f2 100%);
-  border-color: #c92c3c;
-  box-shadow: 0 10px 22px rgba(201,44,60,.22), inset 0 0 0 1px rgba(255,255,255,.42);
+  background: linear-gradient(145deg,#f4bcc5 0%,#fad2d8 58%,#ffe7ea 100%);
+  border-color: #bd2032;
+  box-shadow: 0 10px 22px rgba(189,32,50,.24), inset 0 0 0 1px rgba(255,255,255,.34);
 }
 .metric.high strong,
-.metric.high small { color: #991d29; }
-.metric.high span { color: #aa2432; }
+.metric.high small { color: #861824; }
+.metric.high span { color: #971f2c; }
 
 .metric.moderate {
-  background: linear-gradient(145deg,#ffe0e4 0%,#ffedf0 58%,#fff7f8 100%);
-  border-color: #e05a67;
-  box-shadow: 0 9px 20px rgba(201,44,60,.15), inset 0 0 0 1px rgba(255,255,255,.38);
+  background: linear-gradient(145deg,#f8d0d6 0%,#fce0e4 58%,#fff0f2 100%);
+  border-color: #d84a59;
+  box-shadow: 0 9px 20px rgba(189,32,50,.17), inset 0 0 0 1px rgba(255,255,255,.32);
 }
 .metric.moderate strong,
-.metric.moderate small { color: #a52a36; }
-.metric.moderate span { color: #b43b47; }
+.metric.moderate small { color: #951f2d; }
+.metric.moderate span { color: #a52b38; }
+
+
+/* v0.8.3.6: control de cobertura reciente de OpenAlex */
+.openalex-coverage-warning {
+  margin: 16px 0;
+  padding: 16px 18px;
+  border: 2px solid #7995a5;
+  border-left: 8px solid #58798b;
+  border-radius: 12px;
+  background: #e9f1f5;
+  color: #294b5d;
+}
+.openalex-coverage-warning strong { display: block; font-size: 1rem; color: #24485a; }
+.openalex-coverage-warning p { margin: 6px 0 0; line-height: 1.55; }
+.openalex-eval-card.incomplete {
+  background: #dce9ef;
+  border: 2px solid #7896a6;
+  box-shadow: 0 8px 18px rgba(46,78,94,.10);
+}
+.openalex-eval-card.incomplete > span,
+.openalex-eval-card.incomplete > strong { color: #284f61; }
+.openalex-eval-card.incomplete > small { color: #3f6677; }
+.openalex-history-details {
+  margin: 18px 0;
+  border: 2px solid #9ebdcb;
+  border-radius: 13px;
+  background: #f3f8fa;
+  overflow: hidden;
+}
+.openalex-history-details > summary {
+  cursor: pointer;
+  padding: 14px 17px;
+  font-weight: 800;
+  color: #27586f;
+  background: #e6f1f5;
+}
+.openalex-history-details > p { margin: 14px 18px 0; color: #526f7d; line-height: 1.5; }
+.openalex-history-details .openalex-charts { padding: 16px; }

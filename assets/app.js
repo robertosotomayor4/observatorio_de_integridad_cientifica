@@ -423,7 +423,7 @@ async function loadComplementaryForJournal(journal) {
 }
 
 function journalHtml(journal, detail, complementary) {
-  const timelineEvents = combinedTimelineEvents(detail, complementary);
+  const timelineEvents = combinedTimelineEvents(journal, detail, complementary);
   const hasEvents = timelineEvents.length > 0;
   const displayQuantStatus = effectiveQuantitativeStatus(journal, detail);
   const officialSection = evaluationSummaryHtml(journal, detail, complementary);
@@ -498,7 +498,7 @@ function journalHtml(journal, detail, complementary) {
 
       ${impactHistory}
 
-      ${openAlexSectionHtml(complementary?.openalex)}
+      ${openAlexSectionHtml(complementary?.openalex, journal, detail)}
 
       <section class="journal-section qualitative-human-section">
         <div class="section-heading">
@@ -1060,12 +1060,12 @@ function scimagoTrajectoryMetric(journal, detail) {
 }
 
 function selfCitationMetric(journal) {
-  if (!hasMetricValue(journal.source_self_cite_share)) return { label: "Autocitación de la fuente", value: "Dato no reportado", note: "InCites no aporta los dos conteos necesarios para calcular la proporción de autocitación de la revista.", tone: "missing" };
+  if (!hasMetricValue(journal.source_self_cite_share)) return { label: "Autocitación de la revista", value: "Dato no reportado", note: "InCites no aporta los conteos necesarios para calcular qué proporción de las citas procede de la propia revista.", tone: "missing" };
   const confidenceLabels = { High: "alta", Moderate: "media", Limited: "limitada" };
   const confidence = journal.source_self_confidence ? ` · confianza ${confidenceLabels[journal.source_self_confidence] || String(journal.source_self_confidence).toLowerCase()}` : "";
-  if (journal.source_self_signal === "Extreme") return { label: "Autocitación de la revista", value: percentage(journal.source_self_cite_share), note: `${percentage(journal.source_self_cite_share)} de las citas registradas provienen de artículos publicados en la misma revista. Proporción muy alta; requiere revisión cualitativa.`, tone: "high" };
-  if (journal.source_self_signal === "Moderate") return { label: "Autocitación de la revista", value: percentage(journal.source_self_cite_share), note: `${percentage(journal.source_self_cite_share)} de las citas registradas provienen de artículos publicados en la misma revista. Proporción elevada; conviene revisarla.`, tone: "moderate" };
-  return { label: "Autocitación de la revista", value: percentage(journal.source_self_cite_share), note: `${percentage(journal.source_self_cite_share)} de las citas registradas provienen de artículos publicados en la misma revista. No se detectó una proporción atípica.`, tone: "normal" };
+  if (journal.source_self_signal === "Extreme") return { label: "Autocitación de la revista", value: percentage(journal.source_self_cite_share), note: `De cada 100 citas recibidas, aproximadamente ${Math.round(Number(journal.source_self_cite_share) * 100)} proceden de artículos publicados en la misma revista. Es una proporción muy alta y requiere revisión cualitativa.`, tone: "high" };
+  if (journal.source_self_signal === "Moderate") return { label: "Autocitación de la revista", value: percentage(journal.source_self_cite_share), note: `De cada 100 citas recibidas, aproximadamente ${Math.round(Number(journal.source_self_cite_share) * 100)} proceden de artículos publicados en la misma revista. Es una proporción elevada y conviene revisarla.`, tone: "moderate" };
+  return { label: "Autocitación de la revista", value: percentage(journal.source_self_cite_share), note: `De cada 100 citas recibidas, aproximadamente ${Math.round(Number(journal.source_self_cite_share) * 100)} proceden de artículos publicados en la misma revista. No se detectó una proporción atípica.`, tone: "normal" };
 }
 
 function cnciMetric(journal) {
@@ -1086,10 +1086,10 @@ function jifDependencyMetric(journal) {
     return { label: "JIF sin autocitas", value: "Información insuficiente para evaluar", note: "Existe un JIF disponible, pero falta el valor sin autocitas o alguno de los datos necesarios para medir la dependencia.", tone: "limited" };
   }
   const dependency = percentage(journal.jif_self_dependency);
-  const explanation = `El JIF disminuye de ${numberFormat(journal.jif_current)} a ${numberFormat(journal.jif_without_self)} al excluir las autocitas. Esto indica que ${dependency} del JIF depende de citas provenientes de la propia revista.`;
-  if (journal.jif_self_signal === "Extreme") return { label: "JIF sin autocitas", value: numberFormat(journal.jif_without_self), note: `${explanation} Dependencia muy alta; requiere revisión cualitativa.`, tone: "high" };
-  if (journal.jif_self_signal === "Moderate") return { label: "JIF sin autocitas", value: numberFormat(journal.jif_without_self), note: `${explanation} Dependencia elevada; conviene revisarla.`, tone: "moderate" };
-  return { label: "JIF sin autocitas", value: numberFormat(journal.jif_without_self), note: `${explanation} No se detectó una dependencia atípica.`, tone: "normal" };
+  const explanation = `Al retirar las autocitas, el JIF baja de ${numberFormat(journal.jif_current)} a ${numberFormat(journal.jif_without_self)}. La diferencia equivale al ${dependency} del JIF original.`;
+  if (journal.jif_self_signal === "Extreme") return { label: "Dependencia del JIF respecto de autocitas", value: dependency, note: `${explanation} Es una dependencia muy alta y requiere revisión cualitativa.`, tone: "high" };
+  if (journal.jif_self_signal === "Moderate") return { label: "Dependencia del JIF respecto de autocitas", value: dependency, note: `${explanation} Es una dependencia elevada y conviene revisarla junto con otras evidencias.`, tone: "moderate" };
+  return { label: "Dependencia del JIF respecto de autocitas", value: dependency, note: `${explanation} No se detectó una dependencia atípica.`, tone: "normal" };
 }
 
 function jciMetric(journal) {
@@ -1117,8 +1117,50 @@ function numberFormat(value) {
   return new Intl.NumberFormat("es-PE", { maximumFractionDigits: 2 }).format(Number(value));
 }
 
-function combinedTimelineEvents(detail, complementary) {
+function combinedTimelineEvents(journal, detail, complementary) {
   const combined = [...(Array.isArray(detail?.events) ? detail.events : [])];
+
+  // Recupera hitos de cobertura solo cuando pueden documentarse con los datos integrados.
+  // Scopus aporta un rango de cobertura; InCites aporta el inicio de la serie disponible,
+  // que no debe confundirse con el año oficial de ingreso a Web of Science.
+  const scopusYears = extractCoverageYears(journal?.scopus_coverage);
+  const hasScopusStart = combined.some(event => {
+    const source = String(event.source || '').toLowerCase();
+    const type = String(event.event_type_normalized || event.event_type || '').toLowerCase();
+    return source.includes('scopus') && ['added', 'accepted', 'coverage start'].includes(type);
+  });
+  if (scopusYears.start && !hasScopusStart) {
+    combined.push({
+      source: 'Scopus',
+      event_type: 'Coverage start',
+      event_year: scopusYears.start,
+      title: scopusYears.end
+        ? `Cobertura registrada: ${scopusYears.start}–${scopusYears.end}`
+        : `Cobertura registrada desde ${scopusYears.start}`,
+      reason: 'El año se obtiene del rango de cobertura disponible en los datos integrados.',
+      synthetic_coverage: true
+    });
+  }
+
+  const incitesYears = extractCoverageYears(journal?.wos_historical_range);
+  const hasWosSeriesStart = combined.some(event => {
+    const source = String(event.source || '').toLowerCase();
+    const type = String(event.event_type_normalized || event.event_type || '').toLowerCase();
+    return (source === 'wos' || source.includes('web of science') || source.includes('incites'))
+      && ['added', 'accepted', 'data series start'].includes(type);
+  });
+  const hasWosEvidence = journal?.wos_status === 'Current' || hasHistoricalWosData(detail);
+  if (hasWosEvidence && incitesYears.start && !hasWosSeriesStart) {
+    combined.push({
+      source: 'WoS',
+      event_type: 'Data series start',
+      event_year: incitesYears.start,
+      title: `Serie histórica de InCites disponible desde ${incitesYears.start}`,
+      reason: 'Esta fecha indica el inicio de los datos integrados y no necesariamente el año oficial de indexación en Web of Science.',
+      synthetic_coverage: true
+    });
+  }
+
   const seen = new Set();
   (complementary?.crossref?.events || []).filter(item => item.severity === "high_signal").forEach(event => {
     const key = normalizeDoi(event.notice_doi || event.work_doi) || `${event.event_type}|${event.notice_title}|${event.notice_date}`;
@@ -1147,6 +1189,14 @@ function combinedTimelineEvents(detail, complementary) {
     });
   });
   return combined;
+}
+
+function extractCoverageYears(value) {
+  const years = String(value || '').match(/(?:19|20)\d{2}/g) || [];
+  return {
+    start: years[0] ? Number(years[0]) : null,
+    end: years[1] ? Number(years[1]) : null
+  };
 }
 
 function timelineHtml(events) {
@@ -1185,6 +1235,8 @@ function eventLabel(value) {
     "Added": "Alta o reincorporación",
     "Accepted": "Aceptada",
     "Accepted pending": "Aceptación pendiente",
+    "Coverage start": "Inicio de cobertura",
+    "Data series start": "Inicio de serie histórica",
     "Title Change": "Cambio de título",
     "Cease": "Cese",
     "retraction": "Retractación",
@@ -1296,15 +1348,38 @@ function qualitativeLabel(value) {
   })[value] || value || "Realizada";
 }
 
-function openAlexSectionHtml(openalex) {
+function openAlexSectionHtml(openalex, journal, detail) {
   if (!openalex || !openalex.source) return "";
   const source = openalex.source;
   const production = openalex.production_by_year || [];
+  const assessment = openAlexCoverageAssessment(openalex, journal, detail);
   const hIndex = source.summary_stats?.h_index;
   const oaShare = openalex.oa_share == null ? "Sin dato" : `${openalex.oa_share} %`;
-  const quality = openAlexQualityHtml(openalex.quality_flags || []);
+  const extraFlags = assessment.incomplete
+    ? [{ code: "incomplete_recent_coverage", message: assessment.explanation }]
+    : [];
+  const quality = openAlexQualityHtml([...(openalex.quality_flags || []), ...extraFlags]);
   const openAlexUrl = source.id || "";
-  const narrative = openAlexNarrative(production, openalex.oa_share);
+  const recentProduction = sourceSeriesValues(production, "works_count")
+    .filter(item => Number(item.year) >= 2020);
+  const chartSeries = recentProduction.length >= 3 ? recentProduction : production;
+  const narrative = assessment.incomplete ? "" : openAlexNarrative(chartSeries, openalex.oa_share);
+  const metricNote = assessment.incomplete
+    ? "Total del registro enlazado en OpenAlex; no representa de forma suficiente la producción reciente."
+    : "Total atribuido por OpenAlex";
+  const citationNote = assessment.incomplete
+    ? "Conteo acumulado del registro enlazado; debe leerse como referencia histórica."
+    : "Conteo acumulado en OpenAlex";
+  const indexNote = assessment.incomplete
+    ? "Indicador del registro enlazado; no se usa para evaluar la situación reciente."
+    : "Indicador calculado por OpenAlex";
+  const oaNote = assessment.incomplete
+    ? "Proporción calculada sobre la serie incompleta recuperada."
+    : "Participación en la serie utilizada";
+
+  const charts = assessment.incomplete
+    ? `<details class="openalex-history-details"><summary>Ver serie histórica incompleta recuperada de OpenAlex</summary><p>Estos datos se conservan para trazabilidad, pero no se utilizan para evaluar la tendencia actual de la revista.</p><div class="charts-grid openalex-charts">${chartBlock("Producción histórica registrada en OpenAlex", production, "works_count", "openalex", "documentos")}${chartBlock("Citas históricas registradas en OpenAlex", production, "cited_by_count", "openalex-citations", "citas")}</div></details>`
+    : `<div class="charts-grid openalex-charts">${chartBlock("Producción reciente registrada en OpenAlex", chartSeries, "works_count", "openalex", "documentos")}${chartBlock("Citas recientes registradas en OpenAlex", chartSeries, "cited_by_count", "openalex-citations", "citas")}</div>${sourceSeriesValues(production, "works_count").some(item => Number(item.year) < 2020) ? `<details class="openalex-history-details"><summary>Ver trayectoria histórica completa</summary><div class="charts-grid openalex-charts">${chartBlock("Producción histórica registrada en OpenAlex", production, "works_count", "openalex", "documentos")}${chartBlock("Citas históricas registradas en OpenAlex", production, "cited_by_count", "openalex-citations", "citas")}</div></details>` : ""}`;
 
   return `
     <section class="journal-section openalex-section">
@@ -1312,26 +1387,86 @@ function openAlexSectionHtml(openalex) {
         <div><p class="section-kicker">Fuente bibliométrica abierta</p><h2>Análisis complementario con OpenAlex</h2></div>
       </div>
       <p class="openalex-intro">OpenAlex aporta una lectura adicional sobre producción, citación, acceso abierto y procedencia institucional. No sustituye el estado oficial de Scopus, Web of Science o DOAJ ni modifica por sí solo la escala de evaluación.</p>
-      ${openAlexComplementaryEvaluationHtml(openalex)}
+      ${assessment.incomplete ? openAlexCoverageWarningHtml(assessment) : ""}
+      ${openAlexComplementaryEvaluationHtml(openalex, assessment)}
       <div class="openalex-metrics">
-        ${openAlexMetric("Documentos registrados", integerFormat(source.works_count), "Total atribuido por OpenAlex")}
-        ${openAlexMetric("Citas registradas", integerFormat(source.cited_by_count), "Conteo acumulado en OpenAlex")}
-        ${openAlexMetric("Índice h", hIndex == null ? "Sin dato" : integerFormat(hIndex), "Indicador calculado por OpenAlex")}
-        ${openAlexMetric("Producción en acceso abierto", oaShare, "Participación en la serie utilizada")}
+        ${openAlexMetric("Documentos registrados", integerFormat(source.works_count), metricNote)}
+        ${openAlexMetric("Citas registradas", integerFormat(source.cited_by_count), citationNote)}
+        ${openAlexMetric("Índice h", hIndex == null ? "Sin dato" : integerFormat(hIndex), indexNote)}
+        ${openAlexMetric("Producción en acceso abierto", oaShare, oaNote)}
       </div>
       ${narrative}
-      <div class="charts-grid openalex-charts">
-        ${chartBlock("Producción registrada en OpenAlex", production, "works_count", "openalex", "documentos")}
-        ${chartBlock("Citas registradas en OpenAlex", production, "cited_by_count", "openalex-citations", "citas")}
-      </div>
+      ${charts}
       ${quality}
       ${openAlexExplorerHtml(openalex.top || {})}
       <div class="openalex-source-note">
         <span><strong>Fuente:</strong> ${escapeHtml(source.display_name || "OpenAlex")}${source.host_organization_name ? ` · ${escapeHtml(source.host_organization_name)}` : ""}</span>
-        ${source.updated_date ? `<span><strong>Actualización en OpenAlex:</strong> ${escapeHtml(formatDate(source.updated_date))}</span>` : ""}
+        ${source.updated_date ? `<span><strong>Actualización del registro:</strong> ${escapeHtml(formatDate(source.updated_date))}</span>` : ""}
         ${openAlexUrl ? `<a href="${escapeHtml(openAlexUrl)}" target="_blank" rel="noopener">Ver registro en OpenAlex</a>` : ""}
       </div>
     </section>`;
+}
+
+function latestCompleteSourceValue(series, key, lastCompleteYear) {
+  const values = sourceSeriesValues(series, key).filter(item => Number(item.year) <= lastCompleteYear);
+  return values.length ? values.at(-1) : null;
+}
+
+function openAlexCoverageAssessment(openalex, journal, detail) {
+  const currentYear = new Date().getFullYear();
+  const lastCompleteYear = currentYear - 1;
+  const series = sourceSeriesValues(openalex?.production_by_year, "works_count")
+    .filter(item => Number(item.year) <= lastCompleteYear);
+  const positive = series.filter(item => Number(item.works_count) > 0);
+  const lastPositive = positive.length ? positive.at(-1) : null;
+  const activeElsewhere = journal?.scopus_status === "Active"
+    || journal?.wos_status === "Current"
+    || String(journal?.doaj_status || "").startsWith("Current");
+
+  const sjrLatest = latestCompleteSourceValue(detail?.sjr, "total_docs_year", lastCompleteYear);
+  const incitesLatest = latestCompleteSourceValue(detail?.incites, "wos_documents", lastCompleteYear);
+  const referenceCandidates = [sjrLatest, incitesLatest]
+    .filter(Boolean)
+    .map(item => ({ year: Number(item.year), value: Number(item.total_docs_year ?? item.wos_documents) }))
+    .filter(item => Number.isFinite(item.value));
+  const reference = referenceCandidates.sort((a, b) => b.year - a.year || b.value - a.value)[0] || null;
+  const openAlexAtReference = reference
+    ? series.find(item => Number(item.year) === reference.year)
+    : null;
+
+  const staleRecentCoverage = activeElsewhere && (!lastPositive || Number(lastPositive.year) < lastCompleteYear - 1);
+  const strongMismatch = activeElsewhere && reference && reference.value >= 20
+    && (!openAlexAtReference || Number(openAlexAtReference.works_count) < reference.value * 0.25);
+  const incomplete = Boolean(staleRecentCoverage || strongMismatch);
+
+  const reasons = [];
+  if (staleRecentCoverage) {
+    reasons.push(lastPositive
+      ? `el último año con publicaciones recuperadas es ${lastPositive.year}`
+      : "no se recuperaron publicaciones recientes");
+  }
+  if (strongMismatch && reference) {
+    const oaValue = openAlexAtReference ? Number(openAlexAtReference.works_count) : 0;
+    reasons.push(`para ${reference.year}, OpenAlex registra ${integerFormat(oaValue)} documentos frente a ${integerFormat(reference.value)} en otra fuente bibliométrica integrada`);
+  }
+
+  const explanation = incomplete
+    ? `El registro enlazado no representa de forma suficiente la actividad reciente de la revista: ${reasons.join("; ")}. Puede existir fragmentación, desactualización o una asignación incompleta de publicaciones en OpenAlex. Por ello, la serie se conserva solo como referencia histórica y no se utiliza para calcular tendencias ni alertas.`
+    : "La serie reciente de OpenAlex presenta continuidad suficiente para una lectura descriptiva complementaria.";
+
+  return {
+    incomplete,
+    activeElsewhere,
+    lastPositiveYear: lastPositive?.year || null,
+    referenceYear: reference?.year || null,
+    referenceValue: reference?.value || null,
+    openAlexReferenceValue: openAlexAtReference ? Number(openAlexAtReference.works_count) : null,
+    explanation
+  };
+}
+
+function openAlexCoverageWarningHtml(assessment) {
+  return `<div class="openalex-coverage-warning"><strong>Cobertura reciente incompleta en OpenAlex</strong><p>${escapeHtml(assessment.explanation)}</p></div>`;
 }
 
 function median(values) {
@@ -1341,13 +1476,15 @@ function median(values) {
   return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
 }
 
-function openAlexComplementaryEvaluationHtml(openalex) {
+function openAlexComplementaryEvaluationHtml(openalex, assessment = { incomplete: false }) {
   const series = sourceSeriesValues(openalex.production_by_year, "works_count");
   const baseline = series.filter(item => Number(item.year) >= 2020 && Number(item.year) <= 2024);
   const current = series.find(item => Number(item.year) === 2025);
   const baselineMedian = median(baseline.map(item => item.works_count));
   let productionMetric;
-  if (current && baseline.length >= 3 && baselineMedian != null && baselineMedian >= 20 && Number(current.works_count) >= 50) {
+  if (assessment.incomplete) {
+    productionMetric = { label: "Producción OpenAlex", value: "Cobertura reciente incompleta", note: "La serie recuperada no representa de forma suficiente la actividad actual; no se calcula crecimiento ni disminución.", tone: "incomplete" };
+  } else if (current && baseline.length >= 3 && baselineMedian != null && baselineMedian >= 20 && Number(current.works_count) >= 50) {
     const ratio = Number(current.works_count) / baselineMedian;
     productionMetric = { label: "Producción OpenAlex 2025", value: `${numberFormat(ratio)} veces`, note: `2025: ${integerFormat(current.works_count)} · mediana 2020–2024: ${numberFormat(baselineMedian)}. Comparación descriptiva; aún no modifica la categoría pública.`, tone: "available" };
   } else if (series.length) {
@@ -1367,9 +1504,11 @@ function openAlexComplementaryEvaluationHtml(openalex) {
     : { label: "Metadatos enriquecidos", value: "Enriquecimiento pendiente", note: "El cruce básico está disponible, pero temas, países e instituciones aún no se han completado para esta revista.", tone: "limited" };
 
   const stableStart = openalex.stable_series_start || series[0]?.year;
-  const seriesMetric = series.length
-    ? { label: "Cobertura temporal OpenAlex", value: `${series.length} años con registros`, note: `${stableStart ? `Serie sostenida desde ${stableStart}. ` : ""}El año en curso se muestra, pero no se usa para comparar años completos.`, tone: "available" }
-    : { label: "Cobertura temporal OpenAlex", value: "Dato no reportado", note: "No se identificó una secuencia anual de publicaciones.", tone: "missing" };
+  const seriesMetric = assessment.incomplete
+    ? { label: "Uso de la serie OpenAlex", value: "Solo referencia histórica", note: "La trayectoria se conserva para trazabilidad, pero no interviene en la evaluación reciente.", tone: "incomplete" }
+    : series.length
+      ? { label: "Cobertura temporal OpenAlex", value: `${series.length} años con registros`, note: `${stableStart ? `Serie sostenida desde ${stableStart}. ` : ""}El año en curso se muestra, pero no se usa para comparar años completos.`, tone: "available" }
+      : { label: "Cobertura temporal OpenAlex", value: "Dato no reportado", note: "No se identificó una secuencia anual de publicaciones.", tone: "missing" };
 
   const retractions = Array.isArray(openalex.retracted_works) ? openalex.retracted_works : [];
   const retractionMetric = retractions.length
@@ -1408,7 +1547,7 @@ function openAlexNarrative(series, oaShare) {
     trend = ` En los cinco años completos más recientes, el promedio anual fue de ${integerFormat(Math.round(recentAverage))} documentos, frente a ${integerFormat(Math.round(previousAverage))} en los cinco años anteriores, lo que representa ${direction} (${change >= 0 ? "+" : ""}${change.toFixed(1)} %).`;
   }
   const oa = oaShare == null ? "" : ` La proporción de producción en acceso abierto registrada es de ${escapeHtml(String(oaShare))} %.`;
-  return `<div class="openalex-narrative"><strong>Lectura de la tendencia</strong><p>La mayor producción anual de la serie se registró en ${escapeHtml(String(peak.year))}, con ${integerFormat(peak.works_count)} documentos.${trend}${oa} Las citas de los años más recientes deben interpretarse considerando su menor tiempo de acumulación.</p></div>`;
+  return `<div class="openalex-narrative"><strong>Lectura descriptiva de la serie reciente</strong><p>La mayor producción anual del periodo mostrado se registró en ${escapeHtml(String(peak.year))}, con ${integerFormat(peak.works_count)} documentos.${trend}${oa} Las citas de los años más recientes deben interpretarse considerando su menor tiempo de acumulación.</p></div>`;
 }
 
 function openAlexQualityHtml(flags) {
@@ -1421,6 +1560,9 @@ function openAlexQualityHtml(flags) {
     }
     if (flag.code === "low_title_similarity") {
       return "El cruce se sostuvo por ISSN/eISSN, pero OpenAlex presenta una variante significativa en el título; el caso permanece bajo control de calidad.";
+    }
+    if (flag.code === "incomplete_recent_coverage") {
+      return flag.message || "La cobertura reciente de OpenAlex es incompleta y no se utiliza para evaluar tendencias.";
     }
     return flag.message || "El registro presenta una observación de control de calidad.";
   });
