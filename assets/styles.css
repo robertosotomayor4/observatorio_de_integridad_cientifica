@@ -1848,3 +1848,341 @@ footer { background: #102d46; }
   font-size: 10px;
   letter-spacing: .01em;
 }
+
+
+/* Evaluación cualitativa humana estructurada · v0.8.5 */
+.official-banner.integrated-summary .summary-signal-list.integrated {
+  margin-top: 13px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+}
+.summary-signal-list.integrated span {
+  display: block;
+  padding: 9px 11px;
+  border: 1px solid rgba(79, 105, 120, .18);
+  border-radius: 9px;
+  background: rgba(255,255,255,.72);
+  line-height: 1.35;
+}
+.official-banner.observed {
+  background: #fff0f2;
+  border-color: #d93a49;
+}
+.official-banner.observed h2 { color: #a51f28; }
+
+.human-review-overview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 16px;
+  border: 2px solid #82b9a0;
+  border-radius: 14px;
+  background: #f1faf5;
+}
+.human-review-overview.cols-1 { grid-template-columns: minmax(0, 1fr); }
+.human-review-overview.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.human-review-overview.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.human-review-overview.no-findings {
+  border-color: #82b99c;
+  background: #eef9f3;
+}
+.human-review-overview.in-progress {
+  border-color: #91afbf;
+  background: #edf5f8;
+}
+.human-review-overview.neutral {
+  border-color: #aebcc5;
+  background: #f2f5f6;
+}
+.human-review-overview.observed {
+  border-color: #df6f78;
+  background: #fff1f3;
+}
+.human-review-meta-item {
+  min-width: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.78);
+}
+.human-review-meta-item span {
+  display: block;
+  margin-bottom: 5px;
+  color: #657d8c;
+  font-size: .7rem;
+  font-weight: 850;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.human-review-meta-item strong { color: #153c5c; }
+.human-review-overview.no-findings .human-review-meta-item strong { color: #17623d; }
+.human-review-overview.in-progress .human-review-meta-item strong { color: #285d74; }
+.human-review-overview.neutral .human-review-meta-item strong { color: #4f6470; }
+.human-review-overview.observed .human-review-meta-item strong { color: #9e2430; }
+
+.human-evidence-list {
+  display: grid;
+  gap: 15px;
+  margin-bottom: 18px;
+}
+.human-evidence-card {
+  padding: 18px 20px;
+  border: 2px solid #d99aa0;
+  border-left-width: 8px;
+  border-radius: 14px;
+  background: #fff7f8;
+}
+.human-evidence-card header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.human-evidence-kicker {
+  margin: 0;
+  color: #96272e;
+  font-size: .82rem;
+  font-weight: 850;
+  letter-spacing: .025em;
+  text-transform: uppercase;
+}
+.human-evidence-assessment {
+  flex: 0 0 auto;
+  padding: 5px 9px;
+  border: 1px solid #d88991;
+  border-radius: 999px;
+  background: #ffe5e8;
+  color: #8f202c;
+  font-size: .76rem;
+  font-weight: 800;
+}
+.human-evidence-text {
+  color: #19384e;
+  line-height: 1.58;
+}
+.human-evidence-subtitle {
+  margin: 0 0 14px;
+  color: #19384e;
+  font-weight: 800;
+}
+.human-evidence-body {
+  color: inherit;
+  line-height: inherit;
+}
+.human-evidence-card footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #e8c8cc;
+  color: #526f82;
+  font-size: .82rem;
+}
+.human-evidence-card footer a { font-weight: 800; }
+
+.human-review-conclusion {
+  padding: 18px 20px;
+  border: 2px solid #75af91;
+  border-left-width: 8px;
+  border-radius: 14px;
+  background: #eef9f3;
+}
+.human-review-conclusion.observed {
+  border-color: #d93a49;
+  background: #fff0f2;
+}
+.human-review-conclusion h3 {
+  margin: 0 0 8px;
+  color: #17623d;
+  font-size: 1rem;
+}
+.human-review-conclusion.observed h3 { color: #a51f28; }
+.human-review-conclusion p { margin: 0; line-height: 1.55; }
+.human-review-status.not-required {
+  flex-wrap: wrap;
+  border-color: #8ab6cb;
+  background: #eef7fb;
+}
+
+@media (max-width: 760px) {
+  .official-banner.integrated-summary .summary-signal-list.integrated,
+  .human-review-overview,
+  .human-review-overview.cols-2,
+  .human-review-overview.cols-3 { grid-template-columns: 1fr; }
+  .human-evidence-card header { display: grid; }
+  .human-evidence-assessment { justify-self: start; }
+}
+
+/* Ajustes consolidados v0.8.6: alcance, etiquetas, cronología, OpenAlex y revisión humana */
+.timeline-intro {
+  max-width: none;
+  width: 100%;
+  margin: -4px 0 18px;
+  line-height: 1.55;
+}
+
+.section-result-badge {
+  display: inline-flex;
+  align-items: center;
+  max-width: 360px;
+  padding: 8px 12px;
+  border: 1px solid #afc4d0;
+  border-radius: 999px;
+  background: #eef4f7;
+  color: #405b6b;
+  font-size: .78rem;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+}
+.section-result-badge.positive {
+  border-color: #8bd6b3;
+  background: #e7f9ef;
+  color: #006b43;
+}
+.section-result-badge.observed {
+  border-color: #ef9da4;
+  background: #fff0f1;
+  color: #a51f28;
+}
+.section-result-badge.pending {
+  border-color: #9bb8c7;
+  background: #edf5f8;
+  color: #285d74;
+}
+
+.quant-summary .label { color: #526f80; }
+.quant-summary strong { line-height: 1.3; }
+
+.openalex-evaluation-heading {
+  align-items: flex-start;
+}
+.openalex-evaluation-heading > div { min-width: 0; }
+.openalex-evaluation-heading > div > small {
+  display: block;
+  margin-top: 5px;
+  color: #587482;
+  font-size: .78rem;
+  font-weight: 400;
+  line-height: 1.4;
+}
+.openalex-evaluation-heading .openalex-heading-notice {
+  flex: 0 0 auto;
+  max-width: 250px;
+  padding: 6px 9px;
+  border: 1px solid #7fc5d7;
+  border-radius: 999px;
+  background: #eefafd;
+  color: #276d82;
+  font-size: .75rem;
+  font-style: normal;
+  font-weight: 750;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.chart .current-year-zone {
+  fill: #edf7fa;
+  opacity: .92;
+}
+.chart .current-year-label {
+  fill: #527985;
+  font-size: 10px;
+  font-weight: 800;
+}
+.chart-card.openalex .current-year-line,
+.chart-card.openalex-citations .current-year-line {
+  stroke: #6f98a7 !important;
+  stroke-dasharray: 10 8;
+  opacity: .95;
+}
+.chart-card.openalex circle.current-year-point,
+.chart-card.openalex-citations circle.current-year-point {
+  fill: #7c9fac !important;
+  stroke: #fff !important;
+}
+.chart-card.openalex .current-year-value,
+.chart-card.openalex-citations .current-year-value {
+  fill: #557785 !important;
+}
+
+.human-evidence-card footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px 24px;
+  margin-top: 15px;
+  padding: 11px 12px;
+  border: 1px solid #ead2d5;
+  border-radius: 9px;
+  background: #fff;
+  color: #526f82;
+  font-size: .82rem;
+}
+.human-evidence-card footer .human-evidence-source { min-width: 0; }
+.human-evidence-card footer .human-evidence-date {
+  justify-self: end;
+  white-space: nowrap;
+  text-align: right;
+}
+.human-evidence-card footer a {
+  color: #126fa6;
+  font-weight: 800;
+  text-decoration-thickness: 1px;
+}
+
+@media (max-width: 760px) {
+  .section-heading { display: block; }
+  .section-result-badge { margin-top: 10px; max-width: 100%; }
+  .openalex-evaluation-heading .openalex-heading-notice { margin-top: 10px; max-width: 100%; }
+  .human-evidence-card footer { grid-template-columns: 1fr; }
+  .human-evidence-card footer .human-evidence-date { justify-self: start; white-space: normal; text-align: left; }
+}
+
+
+/* Parche real v0.8.6.2: etiquetas precisas, notas contextuales y fuentes alineadas */
+.timeline-data-note {
+  margin: 18px 0 0;
+  padding: 11px 13px;
+  border-left: 4px solid #8aa9ba;
+  border-radius: 7px;
+  background: #f2f7fa;
+  color: #4c6878;
+  font-size: .84rem;
+  line-height: 1.5;
+}
+
+.chart-context-note {
+  margin: 0 18px 8px;
+  padding: 10px 12px;
+  border-left: 4px solid #8ba7cf;
+  border-radius: 6px;
+  background: #f3f7fc;
+  color: #4d637b;
+  font-size: .82rem;
+  line-height: 1.48;
+}
+
+.human-evidence-card footer .human-evidence-source {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  min-width: 0;
+  text-align: left;
+}
+.human-evidence-card footer .human-evidence-source-value {
+  min-width: 0;
+}
+.human-evidence-card footer .human-evidence-source a {
+  display: inline !important;
+  margin: 0 !important;
+  text-align: left !important;
+}
+
+@media (max-width: 760px) {
+  .chart-context-note { margin-left: 12px; margin-right: 12px; }
+  .human-evidence-card footer .human-evidence-source { flex-wrap: wrap; }
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-07-21",
+  "records": {
+    "J23321091": {
+      "journal_id": "J23321091",
+      "issn": "2332-1091",
+      "status": "Culminada",
+      "result": "Observada",
+      "review_date": "2026-07-21",
+      "public_summary": "Los antecedentes en la lista de Beall, la promoción mediante ARDA, las quejas de autores y las múltiples descontinuaciones de revistas de la misma editorial configuran posibles señales de riesgo editorial, aun cuando aparezca actualmente indexada en Scopus.",
+      "next_review": "2026-09-21",
+      "methodology_version": "1.0",
+      "evidence": [
+        {
+          "category": "Antecedentes del editor",
+          "finding": "Antecedente en la lista de Beall:\n\nHorizon Research Publishing aparece en la versión histórica de la lista de Beall de editoriales potencialmente depredadoras. Aunque esta lista no constituye una sanción oficial ni una evaluación vigente, su inclusión representa un antecedente reputacional relevante y podría indicar que la editorial ya generaba dudas sobre sus prácticas y transparencia.",
+          "source": "Lista de Beall",
+          "url": "https://beallslist.net/",
+          "consulted_date": "2026-07-21",
+          "assessment": "Requiere seguimiento",
+          "visibility": "Pública"
+        },
+        {
+          "category": "Intermediación editorial",
+          "finding": "Promoción mediante ARDA\n\nCivil Engineering and Architecture fue promocionada por ARDA, organización investigada por ofrecer servicios de redacción, selección de revistas y apoyo para publicar en títulos indexados. Esta relación podría ser compatible con una intermediación editorial poco transparente, especialmente cuando se anuncian plazos de aceptación o publicación. Aunque no se ha demostrado que Horizon Research Publishing autorizara cada oferta, la presencia de la revista en este circuito genera dudas sobre el control de intermediarios, la procedencia de los manuscritos y la independencia del proceso editorial.",
+          "source": "Retraction Watch",
+          "url": "https://retractionwatch.com/2024/10/01/hidden-hydras-uncovering-the-massive-footprint-of-one-paper-mills-operations/",
+          "consulted_date": "2026-07-21",
+          "assessment": "Requiere seguimiento",
+          "visibility": "Pública"
+        },
+        {
+          "category": "Experiencia de autores",
+          "finding": "Quejas de autores en el perfil de SCImago\n\nEn el perfil de la revista en SCImago se registran quejas de autores relacionadas con su experiencia editorial. Aunque estos comentarios no constituyen evidencia verificada y podrían reflejar casos individuales, su reiteración podría señalar problemas operativos o editoriales que merecen investigación",
+          "source": "SCImago",
+          "url": "https://www.scimagojr.com/journalsearch.php?q=21100901948&tip=sid&clean=0",
+          "consulted_date": "2026-07-21",
+          "assessment": "Requiere seguimiento",
+          "visibility": "Pública"
+        },
+        {
+          "category": "Historial de indexación del editor",
+          "finding": "Varias revistas de Horizon Research Publishing fueron descontinuadas por Scopus\n\nEn la lista oficial de fuentes de Scopus actualizada a junio de 2026 aparecen seis revistas de Horizon Research Publishing descontinuadas:\n- Universal Journal of Electrical and Electronic Engineering\n- Universal Journal of Mechanical Engineering\n- Universal Journal of Educational Research\n- Universal Journal of Accounting and Finance\n- Universal Journal of Agricultural Research\n- Universal Journal of Public Health",
+          "source": "Scopus",
+          "url": "https://www.elsevier.com/products/scopus/content",
+          "consulted_date": "2026-07-21",
+          "assessment": "Requiere seguimiento",
+          "visibility": "Pública"
+        }
+      ]
+    }
+  }
+}

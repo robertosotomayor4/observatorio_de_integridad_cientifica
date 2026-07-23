@@ -10,6 +10,8 @@ const STATE = {
   openAlexCorePromises: new Map(),
   openAlexEnriched: new Map(),
   openAlexEnrichedPromises: new Map(),
+  humanReviews: null,
+  humanReviewsPromise: null,
   loaded: false,
   suggestions: [],
   activeSuggestion: -1,
@@ -238,12 +240,14 @@ async function selectJournal(journal, options = {}) {
   history.replaceState({}, "", url);
 
   try {
-    const [payload, complementary] = await Promise.all([
+    const [payload, complementary, humanReviews] = await Promise.all([
       loadDetailChunk(journal.detail_chunk),
-      loadComplementaryForJournal(journal)
+      loadComplementaryForJournal(journal),
+      loadHumanReviews()
     ]);
     const detail = payload.journals[journal.journal_id] || { events: [], sjr: [], incites: [], sources: [] };
-    $.journalContent.innerHTML = journalHtml(journal, detail, complementary);
+    const humanReview = humanReviews[journal.journal_id] || null;
+    $.journalContent.innerHTML = journalHtml(journal, detail, complementary, humanReview);
     $.journalLoading.hidden = true;
     if (!options.noScroll) {
       window.scrollTo({ top: $.journalView.offsetTop - 88, behavior: "smooth" });
@@ -354,6 +358,27 @@ async function loadComplementaryData() {
 }
 
 
+async function loadHumanReviews() {
+  if (STATE.humanReviews) return STATE.humanReviews;
+  if (STATE.humanReviewsPromise) return STATE.humanReviewsPromise;
+
+  STATE.humanReviewsPromise = (async () => {
+    try {
+      const response = await fetch("data/human_reviews.json");
+      if (!response.ok) throw new Error("human-reviews-json");
+      const payload = await response.json();
+      STATE.humanReviews = payload.records || {};
+      return STATE.humanReviews;
+    } catch (error) {
+      console.warn("No se cargaron las revisiones cualitativas humanas.", error);
+      STATE.humanReviews = {};
+      return STATE.humanReviews;
+    }
+  })();
+
+  return STATE.humanReviewsPromise;
+}
+
 async function loadOpenAlexShard(kind, chunk) {
   const cache = kind === "core" ? STATE.openAlexCore : STATE.openAlexEnriched;
   const promises = kind === "core" ? STATE.openAlexCorePromises : STATE.openAlexEnrichedPromises;
@@ -422,22 +447,26 @@ async function loadComplementaryForJournal(journal) {
   return Object.keys(output).length ? output : null;
 }
 
-function journalHtml(journal, detail, complementary) {
+function journalHtml(journal, detail, complementary, humanReviewRecord) {
   const publicTitle = publicJournalTitle(journal.preferred_title);
   const timelineEvents = combinedTimelineEvents(journal, detail, complementary);
   const hasEvents = timelineEvents.length > 0;
   const displayQuantStatus = effectiveQuantitativeStatus(journal, detail);
-  const officialSection = evaluationSummaryHtml(journal, detail, complementary);
+  const quantScope = quantitativeEvaluationScope(journal, detail);
+  const humanReview = applyLocalHumanReviewDemo(effectiveHumanReview(journal, humanReviewRecord));
+  const officialSection = evaluationSummaryHtml(journal, detail, complementary, humanReview);
   const sourceAvailability = bibliometricSourceAvailability(journal, detail);
   const productionHistory = productionHistoryHtml(journal, detail, sourceAvailability);
   const impactHistory = impactHistoryHtml(journal, detail, sourceAvailability);
+  const coverageSeriesNote = coverageSeriesStartNote(journal, detail);
   const timelineSection = hasEvents ? `
     <section class="journal-section timeline-section">
       <div class="section-heading">
         <div><p class="section-kicker">Historia documentada</p><h2>Cronología de eventos relevantes</h2></div>
       </div>
-      <p class="timeline-intro">Integra cambios de indexación documentados y, cuando existen, eventos editoriales prioritarios localizados en fuentes externas.</p>
+      <p class="timeline-intro">Reúne inicios y finales de cobertura, cambios de estado, reincorporaciones y otros eventos editoriales documentados en las fuentes consultadas.</p>
       ${timelineHtml(timelineEvents)}
+      ${coverageSeriesNote}
     </section>` : "";
 
   return `
@@ -466,7 +495,7 @@ function journalHtml(journal, detail, complementary) {
           <div><p class="section-kicker">Cobertura y situación vigente</p><h2>Estado en las fuentes</h2></div>
         </div>
         <div class="source-list">
-          ${sourceRow("scopus", "Scopus / SCImago", scopusStatus(journal), journal.scopus_coverage ? `Cobertura registrada: ${journal.scopus_coverage}` : "", "")}
+          ${sourceRow("scopus", "Scopus / SCImago", scopusStatus(journal), journal.scopus_coverage ? `Cobertura registrada: ${formatCoverageDisplay(journal.scopus_coverage)}` : "", "")}
           ${sourceRow("wos", "Web of Science / InCites", wosStatus(journal, detail), wosSourceExtra(journal, detail), "")}
           ${sourceRow("doaj", "DOAJ", doajStatus(journal), "", journal.doaj_url)}
         </div>
@@ -478,12 +507,12 @@ function journalHtml(journal, detail, complementary) {
       <section class="journal-section quantitative-section">
         <div class="section-heading">
           <div><p class="section-kicker">Análisis bibliométrico</p><h2>Evaluación cuantitativa</h2></div>
-          <span class="quant-badge ${quantClass(displayQuantStatus)}">${escapeHtml(quantLabel(displayQuantStatus))}</span>
+          <span class="quant-badge ${quantClass(displayQuantStatus)}">${escapeHtml(detailedQuantitativeLabel(journal, detail))}</span>
         </div>
         <div class="quant-summary">
           <div>
-            <span class="label">Suficiencia de datos</span>
-            <strong>${escapeHtml(sufficiencyLabel(journal.data_sufficiency))}</strong>
+            <span class="label">Alcance de los datos</span>
+            <strong>${escapeHtml(quantScope.label)}</strong>
           </div>
           <p>${escapeHtml(quantitativeInterpretation(journal, detail))}</p>
         </div>
@@ -504,15 +533,16 @@ function journalHtml(journal, detail, complementary) {
       <section class="journal-section qualitative-human-section">
         <div class="section-heading">
           <div><p class="section-kicker">Revisión especializada</p><h2>Evaluación cualitativa humana</h2></div>
+          ${humanReviewSectionBadge(humanReview)}
         </div>
-        ${qualitativeHtml(journal)}
+        ${qualitativeHtml(humanReview)}
       </section>
 
       ${automatedQualitativeSectionHtml(complementary, detail)}
 
       <aside class="interpretation-note">
         <strong>Interpretación responsable</strong>
-        <p>La ausencia de señales no garantiza integridad. Una alerta cuantitativa no demuestra por sí sola una mala práctica. El resultado debe leerse junto con los hechos oficiales, la suficiencia de datos y la revisión cualitativa.</p>
+        <p>La ausencia de señales cuantitativas no garantiza integridad. Una señal cuantitativa o un hallazgo cualitativo no demuestra por sí solo una mala práctica. El resultado debe interpretarse junto con los hechos oficiales, el alcance de los datos y las evidencias documentadas.</p>
       </aside>
 
       <div class="sheet-actions">
@@ -596,11 +626,13 @@ function bibliometricSourceAvailability(journal, detail) {
 function productionHistoryHtml(journal, detail, availability) {
   const charts = [];
   const readings = [];
+  let endedCoverage = false;
   if (availability.scimago) {
     const series = productionSeriesForSource(journal, detail, "scimago");
     if (series.length) {
       readings.push(sourceProductionReadingHtml(journal, detail, "scimago"));
       charts.push(chartBlock("SCImago / Scopus", series, "total_docs_year", "scopus", "documentos", { showPointValues: true }));
+      endedCoverage = endedCoverage || sourceCoverageEndedBeforeCurrentPeriod(journal, detail, "scimago");
     }
   }
   if (availability.wos) {
@@ -608,6 +640,7 @@ function productionHistoryHtml(journal, detail, availability) {
     if (series.length) {
       readings.push(sourceProductionReadingHtml(journal, detail, "incites"));
       charts.push(chartBlock("InCites / Web of Science", series, "wos_documents", "wos", "documentos", { showPointValues: true }));
+      endedCoverage = endedCoverage || sourceCoverageEndedBeforeCurrentPeriod(journal, detail, "incites");
     }
   }
   if (!charts.length) return "";
@@ -615,7 +648,7 @@ function productionHistoryHtml(journal, detail, availability) {
     <div class="section-heading"><div><p class="section-kicker">Información histórica disponible</p><h2>Evolución de la producción</h2></div></div>
     <div class="source-readings-grid ${readings.length === 1 ? "single-source" : ""}">${readings.join("")}</div>
     <div class="charts-grid adaptive-charts ${charts.length === 1 ? "single-source" : ""}">${charts.join("")}</div>
-    <p class="history-note">Los años posteriores al fin de la cobertura no se representan como producción cero. La trayectoria se limita al periodo efectivamente registrado por cada fuente.</p>
+    ${endedCoverage ? `<p class="history-note">Los años posteriores al fin de la cobertura no se representan como producción cero. La trayectoria se limita al periodo efectivamente registrado por cada fuente.</p>` : ""}
   </section>`;
 }
 
@@ -629,14 +662,25 @@ function sourceProductionReadingHtml(journal, detail, source) {
   const peak = series.reduce((best, item) => Number(item[key]) > Number(best[key]) ? item : best, series[0]);
   const latest = series.at(-1);
   const ended = sourceCoverageEndedBeforeCurrentPeriod(journal, detail, source);
-  let text = `La mayor producción registrada fue de ${integerFormat(peak[key])} documentos en ${peak.year}. El último año disponible es ${latest.year}, con ${integerFormat(latest[key])} documentos.`;
+  let text = "";
   if (ended) {
-    text += ` La cobertura disponible termina en ${latest.year}; por ello, los años posteriores no se interpretan como producción cero ni se utilizan para evaluar una tendencia actual.`;
+    text = `La mayor producción registrada fue de ${integerFormat(peak[key])} documentos en ${peak.year}. El último año disponible es ${latest.year}, con ${integerFormat(latest[key])} documentos. La cobertura disponible termina en ${latest.year}; por ello, los años posteriores no se interpretan como producción cero ni se utilizan para evaluar una tendencia actual.`;
   } else if (series.length >= 2) {
     const previous = series.at(-2);
     const difference = Number(latest[key]) - Number(previous[key]);
+    const change = Number(previous[key]) ? (difference / Number(previous[key])) * 100 : null;
     const direction = difference > 0 ? "aumentó" : difference < 0 ? "disminuyó" : "se mantuvo estable";
-    text += ` Entre ${previous.year} y ${latest.year}, la producción ${direction}.`;
+    text = `La producción ${direction} de ${integerFormat(previous[key])} documentos en ${previous.year} a ${integerFormat(latest[key])} en ${latest.year}${change == null ? "" : ` (${change >= 0 ? "+" : ""}${change.toFixed(1)} %)`}.`;
+    const baseline = isScimago ? journal.sjr_docs_baseline_median : journal.incites_docs_baseline_median;
+    const ratio = isScimago ? journal.sjr_production_ratio : journal.incites_production_ratio;
+    const signal = isScimago ? journal.production_signal_scimago : journal.production_signal_incites;
+    if (hasMetricValue(baseline) && hasMetricValue(ratio)) {
+      const baselineChange = (Number(ratio) - 1) * 100;
+      const atypical = signal === "Extreme" ? "representa un crecimiento extremo" : signal === "Moderate" ? "representa un crecimiento moderado" : "no representa una variación atípica";
+      text += ` El valor de ${latest.year} está ${Math.abs(baselineChange).toFixed(1)} % ${baselineChange >= 0 ? "por encima" : "por debajo"} de la mediana 2020–2024 (${numberFormat(baseline)}) y ${atypical}.`;
+    }
+  } else {
+    text = `Solo se dispone de ${integerFormat(latest[key])} documentos para ${latest.year}; no es posible describir una tendencia.`;
   }
   if (!isScimago && series.length < 3) text += " La serie es demasiado corta para establecer una tendencia reciente.";
   return `<div class="source-reading ${css}"><strong>${escapeHtml(label)}</strong><p>${escapeHtml(text)}</p></div>`;
@@ -648,12 +692,13 @@ function impactHistoryHtml(journal, detail, availability) {
   const coverageEnd = sourceCoverageEnd(journal, detail, "scimago");
   const inCoverage = coverageEnd ? sjrSeries.filter(item => Number(item.year) <= coverageEnd) : sjrSeries;
   const reference = inCoverage.length ? inCoverage.at(-1) : sjrSeries.at(-1);
-  const chart = chartBlock("Evolución histórica del SJR / SCImago", detail.sjr || [], "sjr", "scopus", "SJR", { decimals: 3, showPointValues: true, annotationKey: "quartile", annotationLabel: "Cuartil", coverageEnd, headlineItem: reference });
+  const hasPostCoverage = Boolean(coverageEnd && sjrSeries.some(item => Number(item.year) > coverageEnd));
+  const chart = chartBlock("Evolución histórica del SJR / SCImago", detail.sjr || [], "sjr", "scopus", "SJR", { decimals: 3, showPointValues: true, annotationKey: "quartile", annotationLabel: "Cuartil", coverageEnd: hasPostCoverage ? coverageEnd : null, headlineItem: reference });
   return `<section class="journal-section impact-history-section">
     <div class="section-heading"><div><p class="section-kicker">Trayectoria del impacto de la revista</p><h2>Evolución histórica del SJR</h2></div></div>
     ${scimagoImpactReadingHtml(journal, detail)}
     <div class="charts-grid adaptive-charts single-source">${chart}</div>
-    <p class="history-note">El SJR puede seguir apareciendo después del último año de cobertura porque refleja citas a documentos anteriores. Esos valores se conservan como información histórica, pero no implican que la revista continúe indexada.</p>
+    ${hasPostCoverage ? `<p class="history-note">El SJR puede seguir apareciendo después del último año de cobertura porque refleja citas a documentos anteriores. Esos valores se conservan como información histórica, pero no implican que la revista continúe indexada.</p>` : ""}
   </section>`;
 }
 
@@ -666,14 +711,69 @@ function scimagoImpactReadingHtml(journal, detail) {
   const latest = usable.at(-1);
   const peak = usable.reduce((best, item) => Number(item.sjr) > Number(best.sjr) ? item : best, usable[0]);
   const best = bestQuartile(usable);
-  let text = `Durante el periodo de cobertura, el SJR osciló entre ${numberFormat(Math.min(...usable.map(item => Number(item.sjr))))} y ${numberFormat(peak.sjr)}. El mejor cuartil alcanzado fue ${best} en ${peak.year}. El último SJR correspondiente al periodo de cobertura fue ${numberFormat(latest.sjr)} (${latest.quartile || "cuartil no reportado"}) en ${latest.year}.`;
+  const ended = sourceCoverageEndedBeforeCurrentPeriod(journal, detail, "scimago");
+  let text = `En la serie disponible, el SJR osciló entre ${numberFormat(Math.min(...usable.map(item => Number(item.sjr))))} y ${numberFormat(peak.sjr)}. El mejor cuartil alcanzado fue ${best} en ${peak.year}.`;
+  text += ended
+    ? ` El último SJR correspondiente al periodo de cobertura fue ${numberFormat(latest.sjr)} (${latest.quartile || "cuartil no reportado"}) en ${latest.year}.`
+    : ` El valor más reciente es ${numberFormat(latest.sjr)} (${latest.quartile || "cuartil no reportado"}) en ${latest.year}.`;
   if (coverageEnd && series.some(item => Number(item.year) > coverageEnd)) text += " Los valores posteriores se muestran de forma diferenciada y no representan cobertura vigente.";
   return `<div class="source-reading scopus impact-reading"><strong>Lectura de la trayectoria del SJR</strong><p>${escapeHtml(text)}</p></div>`;
+}
+
+function quantitativeMetricSet(journal, detail) {
+  const availability = bibliometricSourceAvailability(journal, detail);
+  const metrics = [];
+  if (availability.scimago) {
+    metrics.push(
+      sourceProductionMetric(journal, detail, "scimago"),
+      scimagoPersistenceMetric(journal, detail),
+      scimagoSjrMetric(journal, detail),
+      scimagoTrajectoryMetric(journal, detail)
+    );
+  }
+  if (availability.wos) {
+    metrics.push(
+      sourceProductionMetric(journal, detail, "incites"),
+      jifMetric(journal),
+      jifDependencyMetric(journal),
+      selfCitationMetric(journal),
+      cnciMetric(journal),
+      jciMetric(journal)
+    );
+  }
+  return metrics;
+}
+
+function quantitativeEvaluationScope(journal, detail) {
+  const status = effectiveQuantitativeStatus(journal, detail);
+  const metrics = quantitativeMetricSet(journal, detail);
+  const unavailable = metrics.filter(item => ["limited", "missing"].includes(item?.tone));
+  const evaluated = metrics.filter(item => item && !["limited", "missing"].includes(item.tone));
+  const partial = status === "No quantitative signals" && unavailable.length > 0 && evaluated.length > 0;
+  if (status === "Limited data") return { label: "Evaluación limitada", partial: true, unavailable, evaluated };
+  if (status === "Not applicable") return { label: "Evaluación cuantitativa no disponible", partial: true, unavailable, evaluated };
+  if (partial) return { label: "Evaluación parcial disponible", partial: true, unavailable, evaluated };
+  if (status === "No quantitative signals") return { label: "Datos suficientes para la evaluación", partial: false, unavailable, evaluated };
+  return { label: "Datos disponibles para la evaluación", partial: unavailable.length > 0, unavailable, evaluated };
+}
+
+function publicQuantitativeLabel(journal, detail) {
+  const status = effectiveQuantitativeStatus(journal, detail);
+  const scope = quantitativeEvaluationScope(journal, detail);
+  if (status === "No quantitative signals" && scope.partial) return "Sin señales en los indicadores evaluables";
+  return quantLabel(status);
+}
+
+function detailedQuantitativeLabel(journal, detail) {
+  const status = effectiveQuantitativeStatus(journal, detail);
+  if (status === "No quantitative signals") return "Sin señales en los indicadores evaluables";
+  return publicQuantitativeLabel(journal, detail);
 }
 
 function quantitativeInterpretation(journal, detail) {
   const status = effectiveQuantitativeStatus(journal, detail);
   const availability = bibliometricSourceAvailability(journal, detail);
+  const scope = quantitativeEvaluationScope(journal, detail);
   if (status === "Limited data") {
     const parts = [];
     if (availability.scimago) {
@@ -695,27 +795,35 @@ function quantitativeInterpretation(journal, detail) {
     if (parts.length) return `${parts.join(". ")}. Los datos existentes permiten describir la trayectoria histórica, pero no aplicar todos los criterios cuantitativos actuales.`;
     return "Existe información bibliométrica parcial, pero no alcanza los mínimos de años, continuidad o volumen requeridos para una evaluación cuantitativa completa.";
   }
-  if (status === "No quantitative signals") return "Con los datos disponibles no se identificaron anomalías cuantitativas relevantes. Este resultado no equivale a una certificación de calidad o integridad editorial.";
+  if (status === "No quantitative signals") {
+    if (scope.partial) {
+      const names = scope.unavailable.map(item => String(item.label || "").toLowerCase()).filter(Boolean);
+      const unavailableText = names.length ? ` No fue posible evaluar: ${joinSpanish(names)}.` : "";
+      return `Los datos disponibles permiten aplicar una evaluación cuantitativa parcial.${unavailableText} En los indicadores evaluables no se identificaron anomalías cuantitativas relevantes. Este resultado no equivale a una certificación de calidad o integridad editorial.`;
+    }
+    return "La serie disponible cumple los mínimos definidos para los indicadores aplicables. No se identificaron anomalías cuantitativas relevantes. Este resultado no equivale a una certificación de calidad o integridad editorial.";
+  }
   if (status === "Moderate alert") return "Se identificaron patrones cuantitativos que justifican una revisión cualitativa antes de formular una conclusión más amplia.";
   if (status === "High alert") return "Se identificaron patrones cuantitativos fuertes o combinados que requieren una revisión cualitativa prioritaria.";
   return "No se dispone de información suficiente para aplicar la evaluación cuantitativa.";
 }
 
-function evaluationSummaryHtml(journal, detail, complementary) {
+function evaluationSummaryHtml(journal, detail, complementary, humanReview) {
   const scopusInactive = journal.scopus_status === "Inactive";
   const wosHistoricalAlert = wosNoLongerCurrent(journal, detail);
   const doajWithdrawn = journal.doaj_status === "Withdrawn";
   const autoStats = automatedPriorityStats(complementary);
   const quantStatus = effectiveQuantitativeStatus(journal, detail);
-  const humanCompleted = journal.qualitative_review_status === "Completed";
-  const humanResult = humanCompleted ? qualitativeLabel(journal.qualitative_review_result) : "";
+  const observed = humanReview?.status === "Culminada" && humanReview?.result === "Observada";
+  const noFindings = humanReview?.status === "Culminada" && humanReview?.result === "Sin hallazgos";
+  const signals = summarySignalsHtml(complementary, autoStats, quantStatus, humanReview, journal, detail);
 
   if (journal.official_status === "Current removal") {
     const additional = indexingAlertSummary(journal, detail, true);
     return `
       <section class="official-banner removal">
         <div class="official-icon">!</div>
-        <div><p class="section-kicker">Resumen de la evaluación</p><h2>Retirada / desindexada</h2><p>Se registró un retiro o una desindexación oficial vigente en al menos una de las fuentes integradas.</p>${officialMeta(journal)}${additional}${summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult)}</div>
+        <div><p class="section-kicker">Resumen de la evaluación</p><h2>Retirada / desindexada</h2><p>Se registró un retiro o una desindexación oficial vigente en al menos una de las fuentes integradas.</p>${officialMeta(journal)}${additional}${signals}</div>
       </section>`;
   }
 
@@ -723,7 +831,7 @@ function evaluationSummaryHtml(journal, detail, complementary) {
     return `
       <section class="official-banner historical">
         <div class="official-icon">↺</div>
-        <div><p class="section-kicker">Resumen de la evaluación</p><h2>Antecedente histórico de retiro</h2><p>La revista presenta un retiro histórico documentado y un estado posterior que debe interpretarse junto con la cronología disponible.</p>${officialMeta(journal)}${summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult)}</div>
+        <div><p class="section-kicker">Resumen de la evaluación</p><h2>Antecedente histórico de retiro</h2><p>La revista presenta un retiro histórico documentado y un estado posterior que debe interpretarse junto con la cronología disponible.</p>${officialMeta(journal)}${signals}</div>
       </section>`;
   }
 
@@ -736,7 +844,15 @@ function evaluationSummaryHtml(journal, detail, complementary) {
     return `
       <section class="official-banner removal">
         <div class="official-icon">!</div>
-        <div><p class="section-kicker">Resumen de la evaluación</p><h2>${escapeHtml(title)}</h2><p>La revista ${escapeHtml(joinSpanish(statements))}. Para fines de selección editorial, este resultado debe interpretarse como una señal de alerta.</p>${indexingAlertMeta(journal, detail)}${summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult)}</div>
+        <div><p class="section-kicker">Resumen de la evaluación</p><h2>${escapeHtml(title)}</h2><p>La revista ${escapeHtml(joinSpanish(statements))}. Para fines de selección editorial, este resultado debe interpretarse como una señal de alerta.</p>${indexingAlertMeta(journal, detail)}${signals}</div>
+      </section>`;
+  }
+
+  if (observed) {
+    return `
+      <section class="official-banner removal integrated-summary observed">
+        <div class="official-icon">!</div>
+        <div><p class="section-kicker">Resumen de la evaluación</p><h2>Revista observada</h2><p>${escapeHtml(integratedObservedSummary(journal, detail, complementary, autoStats, quantStatus))}</p>${signals}</div>
       </section>`;
   }
 
@@ -744,48 +860,88 @@ function evaluationSummaryHtml(journal, detail, complementary) {
     return `
       <section class="official-banner removal">
         <div class="official-icon">!</div>
-        <div><p class="section-kicker">Resumen de la evaluación</p><h2>Hallazgos editoriales que requieren revisión</h2><p>${escapeHtml(automatedPrioritySentence(autoStats))} Estos hallazgos aportan información relevante para la toma de decisiones, pero no permiten concluir por sí solos sobre la calidad o integridad global de la revista.</p>${summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult)}</div>
+        <div><p class="section-kicker">Resumen de la evaluación</p><h2>Hallazgos editoriales que requieren revisión</h2><p>${escapeHtml(automatedPrioritySentence(autoStats))} Estos hallazgos aportan información relevante para la toma de decisiones, pero no permiten concluir por sí solos sobre la calidad o integridad global de la revista.</p>${signals}</div>
       </section>`;
   }
 
-  if (humanCompleted && journal.qualitative_review_result === "Observed") {
-    return `
-      <section class="official-banner removal">
-        <div class="official-icon">!</div>
-        <div><p class="section-kicker">Resumen de la evaluación</p><h2>Revista observada en la revisión cualitativa</h2><p>La revisión humana documentó hallazgos que deben considerarse antes de tomar una decisión editorial.</p>${summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult)}</div>
-      </section>`;
-  }
-
-  if (quantStatus === "High alert" || quantStatus === "Moderate alert" || (humanCompleted && journal.qualitative_review_result === "Monitor")) {
+  if (quantStatus === "High alert" || quantStatus === "Moderate alert") {
     const high = quantStatus === "High alert";
     return `
       <section class="official-banner ${high ? "removal" : "moderate"}">
         <div class="official-icon">${high ? "!" : "i"}</div>
-        <div><p class="section-kicker">Resumen de la evaluación</p><h2>${high ? "Alerta cuantitativa alta" : "Se requiere revisión adicional"}</h2><p>${escapeHtml(quantitativeInterpretation(journal, detail))}</p>${summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult)}</div>
+        <div><p class="section-kicker">Resumen de la evaluación</p><h2>${high ? "Alerta cuantitativa alta" : "Se requiere revisión adicional"}</h2><p>${escapeHtml(quantitativeInterpretation(journal, detail))}</p>${signals}</div>
       </section>`;
   }
 
-  if (humanCompleted && journal.qualitative_review_result === "No additional alert") {
+  if (noFindings) {
     return `
-      <section class="official-banner positive">
+      <section class="official-banner positive integrated-summary">
         <div class="official-icon">✓</div>
-        <div><p class="section-kicker">Resumen de la evaluación</p><h2>Sin hallazgos adicionales en la revisión humana</h2><p>La revisión cualitativa realizada no identificó hallazgos adicionales. Esta conclusión debe leerse junto con el estado de indexación y la evaluación cuantitativa.</p>${summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult)}</div>
+        <div><p class="section-kicker">Resumen de la evaluación</p><h2>Sin hallazgos en la revisión humana</h2><p>La revisión cualitativa humana no identificó hallazgos. Esta conclusión debe leerse junto con el estado de indexación, la evaluación cuantitativa y las consultas automatizadas.</p>${signals}</div>
       </section>`;
   }
 
   return `
-    <section class="official-banner neutral">
+    <section class="official-banner neutral integrated-summary">
       <div class="official-icon">i</div>
-      <div><p class="section-kicker">Resumen de la evaluación</p><h2>Sin alertas oficiales documentadas</h2><p>No se identificaron retiros, desindexaciones u otros cambios adversos documentados en las fuentes integradas.</p>${summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult)}</div>
+      <div><p class="section-kicker">Resumen de la evaluación</p><h2>Sin alertas oficiales documentadas</h2><p>No se identificaron retiros, desindexaciones u otros cambios adversos documentados en las fuentes integradas.</p>${signals}</div>
     </section>`;
 }
 
-function summarySignalsHtml(autoStats, quantStatus, humanCompleted, humanResult) {
+function integratedObservedSummary(journal, detail, complementary, autoStats, quantStatus) {
+  const parts = [];
+  const sourceText = sourceOverviewSentence(journal, detail);
+  if (sourceText) parts.push(sourceText);
+  if (quantStatus === "No quantitative signals") parts.push("No se identificaron señales cuantitativas relevantes.");
+  else if (quantStatus === "High alert") parts.push("La evaluación cuantitativa presenta una alerta alta.");
+  else if (quantStatus === "Moderate alert") parts.push("La evaluación cuantitativa presenta una alerta moderada.");
+  else if (quantStatus === "Limited data") parts.push("La evaluación cuantitativa es limitada por la disponibilidad de datos.");
+  else parts.push("La evaluación cuantitativa no está disponible.");
+  parts.push("La revisión cualitativa humana dio como resultado «Observada».");
+  if (!complementary) parts.push("La revisión cualitativa automatizada no fue ejecutada.");
+  else if (autoStats.total > 0) parts.push(`${automatedPrioritySentence(autoStats)}.`);
+  else parts.push("Las consultas automatizadas ejecutadas no registraron hallazgos adicionales.");
+  return parts.join(" ");
+}
+
+function sourceOverviewSentence(journal, detail) {
+  const current = [];
+  const absent = [];
+  if (journal.scopus_status === "Active") current.push("Scopus");
+  else if (!journal.scopus_status) absent.push("Scopus");
+  if (journal.wos_status === "Current") current.push("Web of Science");
+  else if (!wosNoLongerCurrent(journal, detail)) absent.push("Web of Science");
+  if (journal.doaj_status === "Current" || journal.doaj_status === "Current (withdrawal history)") current.push("DOAJ");
+  else if (journal.doaj_status !== "Withdrawn") absent.push("DOAJ");
+
+  const clauses = [];
+  if (current.length) clauses.push(`La revista está vigente en ${joinSpanish(current)}`);
+  if (absent.length) clauses.push(`no figura indexada en ${joinNegativeSources(absent)}`);
+  if (!clauses.length) return "";
+  return `${clauses.join(" y ")}.`;
+}
+
+function joinNegativeSources(items) {
+  if (!items.length) return "las fuentes consultadas";
+  if (items.length === 1) return items[0];
+  if (items.length === 2) return `${items[0]} ni en ${items[1]}`;
+  return `${items.slice(0, -1).join(", ")} ni en ${items[items.length - 1]}`;
+}
+
+function summarySignalsHtml(complementary, autoStats, quantStatus, humanReview, journal = null, detail = null) {
   const items = [];
-  if (autoStats.total > 0) items.push(`<span><strong>Evaluación automatizada:</strong> ${escapeHtml(automatedPrioritySentence(autoStats))}</span>`);
-  if (["High alert", "Moderate alert"].includes(quantStatus)) items.push(`<span><strong>Evaluación cuantitativa:</strong> ${escapeHtml(quantLabel(quantStatus))}</span>`);
-  if (humanCompleted) items.push(`<span><strong>Revisión humana:</strong> ${escapeHtml(humanResult)}</span>`);
-  return items.length ? `<div class="summary-signal-list">${items.join("")}</div>` : "";
+  const quantText = journal && detail ? publicQuantitativeLabel(journal, detail) : quantLabel(quantStatus);
+  items.push(`<span><strong>Evaluación cuantitativa:</strong> ${escapeHtml(quantText)}</span>`);
+  if (humanReview) {
+    const humanLabel = humanReview.status === "Culminada" && humanReview.result
+      ? humanReview.result
+      : humanReview.status;
+    items.push(`<span><strong>Revisión humana:</strong> ${escapeHtml(humanLabel)}</span>`);
+  }
+  if (!complementary) items.push("<span><strong>Revisión automatizada:</strong> No ejecutada</span>");
+  else if (autoStats.total > 0) items.push(`<span><strong>Revisión automatizada:</strong> ${escapeHtml(automatedPrioritySentence(autoStats))}</span>`);
+  else items.push("<span><strong>Revisión automatizada:</strong> Sin hallazgos en las consultas ejecutadas</span>");
+  return `<div class="summary-signal-list integrated">${items.join("")}</div>`;
 }
 
 function automatedPriorityStats(complementary) {
@@ -1063,6 +1219,7 @@ function metricSeriesContext(journal, detail, source) {
 
 function sourceProductionMetric(journal, detail, source) {
   const isScimago = source === "scimago";
+  const sourceName = isScimago ? "Scopus" : "Web of Science/InCites";
   const label = isScimago ? "Producción SCImago" : "Producción InCites";
   const current = isScimago ? journal.sjr_docs_2025 : journal.incites_docs_2025;
   const baseline = isScimago ? journal.sjr_docs_baseline_median : journal.incites_docs_baseline_median;
@@ -1070,7 +1227,6 @@ function sourceProductionMetric(journal, detail, source) {
   const signal = isScimago ? journal.production_signal_scimago : journal.production_signal_incites;
   const context = metricSeriesContext(journal, detail, source);
   if (context.latest && sourceCoverageEndedBeforeCurrentPeriod(journal, detail, source)) {
-    const sourceName = isScimago ? "Scopus" : "Web of Science/InCites";
     return { label, value: "No evaluable en el periodo actual", note: `La cobertura disponible en ${sourceName} termina en ${context.latest.year}. Los años posteriores no se consideran producción cero.`, tone: "historical" };
   }
   if (!hasMetricValue(ratio)) {
@@ -1084,10 +1240,13 @@ function sourceProductionMetric(journal, detail, source) {
     }
     return { label, value: "Dato no disponible", note: "No se dispone de una serie anual de producción utilizable en la fuente consultada.", tone: "missing" };
   }
-  const note = `2025: ${integerFormat(current)} · mediana 2020–2024: ${numberFormat(baseline)}`;
-  if (signal === "Extreme") return { label, value: `${numberFormat(ratio)} veces`, note: `Crecimiento extremo · ${note}`, tone: "high" };
-  if (signal === "Moderate") return { label, value: `${numberFormat(ratio)} veces`, note: `Crecimiento moderado · ${note}`, tone: "moderate" };
-  return { label, value: `${numberFormat(ratio)} veces`, note: `Comparación disponible, sin crecimiento atípico · ${note}`, tone: "normal" };
+  const change = (Number(ratio) - 1) * 100;
+  const changeText = `${change >= 0 ? "+" : ""}${change.toFixed(1)} %`;
+  const baseText = `Mediana 2020–2024: ${numberFormat(baseline)}; diferencia: ${changeText}.`;
+  const value = `${integerFormat(current)} documentos`;
+  if (signal === "Extreme") return { label: `${label} 2025`, value, note: `Crecimiento extremo. ${baseText}`, tone: "high" };
+  if (signal === "Moderate") return { label: `${label} 2025`, value, note: `Crecimiento moderado. ${baseText}`, tone: "moderate" };
+  return { label: `${label} 2025`, value, note: `${baseText} Variación dentro del rango esperado.`, tone: "normal" };
 }
 
 function inferSingleYearProductionSignal(journal, detail) {
@@ -1115,22 +1274,33 @@ function scimagoPersistenceMetric(journal, detail) {
   const status = journal.production_persistence_status || "";
   const context = metricSeriesContext(journal, detail, "scimago");
   const ended = context.latest && sourceCoverageEndedBeforeCurrentPeriod(journal, detail, "scimago");
+  const productionComparable = hasMetricValue(journal.sjr_production_ratio);
+  const initialSignal = journal.production_signal_scimago || journal.production_signal || "";
   if (!status || status === "No comparable signal") {
-    if (ended) return { label: "Persistencia SCImago", value: "No evaluable en el periodo actual", note: `La cobertura termina en ${context.latest.year}; no puede comprobarse persistencia reciente.`, tone: "historical" };
-    if (context.series.length) return { label: "Persistencia SCImago", value: "Información insuficiente para evaluar", note: "La serie existe, pero no reúne las ventanas retrospectivas y los mínimos de volumen requeridos.", tone: "limited" };
-    return { label: "Persistencia SCImago", value: "Dato no disponible", note: "No se dispone de una serie anual SCImago vinculada a esta revista.", tone: "missing" };
+    if (ended) return { label: "Persistencia de la producción", value: "No evaluable en el periodo actual", note: `La cobertura termina en ${context.latest.year}; no puede comprobarse persistencia reciente.`, tone: "historical" };
+    if (productionComparable && (!initialSignal || initialSignal === "None" || initialSignal === "No production signal")) {
+      return { label: "Persistencia de la producción", value: "Sin señal persistente", note: "No se detectó un crecimiento atípico inicial que requiera comprobar su repetición en varios años.", tone: "normal" };
+    }
+    if (context.series.length) {
+      const baseYears = context.series.filter(item => Number(item.year) >= 2020 && Number(item.year) <= 2024).length;
+      const reasons = [];
+      if (baseYears < 3) reasons.push(`solo hay ${baseYears} años utilizables en la línea base 2020–2024; se requieren al menos 3`);
+      if (!productionComparable) reasons.push("no se dispone de una comparación válida para el año evaluado");
+      return { label: "Persistencia de la producción", value: "Información insuficiente para evaluar", note: capitalize(reasons.join("; ") || "La serie no reúne las ventanas comparables requeridas por la metodología."), tone: "limited" };
+    }
+    return { label: "Persistencia de la producción", value: "Dato no disponible", note: "No se dispone de una serie anual SCImago vinculada a esta revista.", tone: "missing" };
   }
-  if (years >= 2 || status === "Persistent growth") return { label: "Persistencia SCImago", value: `${years || 2} años`, note: "El crecimiento atípico se repitió en más de un año de la ventana evaluada.", tone: years >= 3 ? "high" : "moderate" };
+  if (years >= 2 || status === "Persistent growth") return { label: "Persistencia de la producción", value: `${years || 2} años`, note: "El crecimiento atípico se repitió en más de un año de la ventana evaluada.", tone: years >= 3 ? "high" : "moderate" };
   if (years === 1 || status === "Single-year signal") {
     const candidate = inferSingleYearProductionSignal(journal, detail);
-    const label = ended ? "Señal histórica de producción" : "Persistencia SCImago";
+    const label = ended ? "Señal histórica de producción" : "Persistencia de la producción";
     const value = candidate ? String(candidate.year) : "1 año";
     const note = candidate
       ? `La producción pasó de ${integerFormat(candidate.previousValue)} documentos en ${candidate.previousYear} a ${integerFormat(candidate.currentValue)} en ${candidate.year}. El aumento no se repitió en otro año y, por ello, no se considera persistente.`
       : "La señal apareció en un solo año de la ventana evaluada y no se considera persistente.";
     return { label, value, note, tone: ended ? "historical" : "normal" };
   }
-  return { label: "Persistencia SCImago", value: "Sin persistencia", note: "No se detectó crecimiento atípico repetido.", tone: "normal" };
+  return { label: "Persistencia de la producción", value: "Sin señal persistente", note: "No se detectó crecimiento atípico repetido.", tone: "normal" };
 }
 
 function bestQuartile(series) {
@@ -1162,12 +1332,16 @@ function scimagoTrajectoryMetric(journal, detail) {
   const ended = sourceCoverageEndedBeforeCurrentPeriod(journal, detail, "scimago");
   const ratio = journal.sjr_change_ratio;
   const absolute = journal.sjr_absolute_change;
+  const baseline = journal.sjr_baseline_median;
   const signal = journal.sjr_trajectory_signal;
   if (!ended && hasMetricValue(ratio)) {
-    const absText = hasMetricValue(absolute) ? ` · cambio absoluto: ${Number(absolute) >= 0 ? "+" : ""}${numberFormat(absolute)}` : "";
-    if (signal === "Extreme") return { label: "Trayectoria SJR", value: `${numberFormat(ratio)} veces`, note: `Variación extrema frente a 2020–2024${absText}`, tone: "high" };
-    if (signal === "Moderate") return { label: "Trayectoria SJR", value: `${numberFormat(ratio)} veces`, note: `Variación moderada frente a 2020–2024${absText}`, tone: "moderate" };
-    return { label: "Trayectoria SJR", value: `${numberFormat(ratio)} veces`, note: `Comparación disponible, sin variación atípica${absText}`, tone: "normal" };
+    const change = (Number(ratio) - 1) * 100;
+    const value = `${change >= 0 ? "+" : ""}${change.toFixed(1)} %`;
+    const baselineText = hasMetricValue(baseline) ? ` frente a la mediana 2020–2024 (${numberFormat(baseline)})` : " frente al periodo 2020–2024";
+    const absText = hasMetricValue(absolute) ? `; cambio absoluto: ${Number(absolute) >= 0 ? "+" : ""}${numberFormat(absolute)}` : "";
+    if (signal === "Extreme") return { label: "Variación del SJR 2025", value, note: `Variación extrema${baselineText}${absText}.`, tone: "high" };
+    if (signal === "Moderate") return { label: "Variación del SJR 2025", value, note: `Variación moderada${baselineText}${absText}.`, tone: "moderate" };
+    return { label: "Variación del SJR 2025", value, note: `${value}${baselineText}${absText}. Variación dentro del rango esperado.`, tone: "normal" };
   }
   if (series.length >= 2) {
     const first = series[0];
@@ -1238,22 +1412,36 @@ function numberFormat(value) {
 function combinedTimelineEvents(journal, detail, complementary) {
   const combined = [...(Array.isArray(detail?.events) ? detail.events : [])];
 
-  const scopusYears = extractCoverageYears(journal?.scopus_coverage);
-  const hasScopusStart = combined.some(event => {
+  const scopusCoverage = extractCoverageYears(journal?.scopus_coverage);
+  const scopusSegments = scopusCoverage.segments || [];
+  const scopusEventAt = (year, types = []) => combined.some(event => {
     const source = String(event.source || "").toLowerCase();
     const type = String(event.event_type_normalized || event.event_type || "").toLowerCase();
-    return source.includes("scopus") && ["added", "accepted", "coverage start"].includes(type);
+    return source.includes("scopus") && Number(event.event_year || String(event.event_date || "").slice(0, 4)) === Number(year) && (!types.length || types.includes(type));
   });
-  if (scopusYears.start && !hasScopusStart) {
-    combined.push({ source: "Scopus", event_type: "Coverage start", event_year: scopusYears.start, title: scopusYears.end ? `Cobertura registrada: ${scopusYears.start}–${scopusYears.end}` : `Cobertura registrada desde ${scopusYears.start}`, reason: "El año se obtiene del rango de cobertura disponible.", synthetic_coverage: true });
-  }
+
+  scopusSegments.forEach((segment, index) => {
+    const earlier = scopusSegments.slice(0, index).some(item => item.end < segment.start);
+    if (segment.start === segment.end) {
+      if (!scopusEventAt(segment.start)) {
+        combined.push({ source: "Scopus", event_type: "Coverage record", event_year: segment.start, title: `Año de cobertura registrado: ${segment.start}`, reason: "El año aparece como un periodo independiente en los datos de cobertura disponibles.", synthetic_coverage: true });
+      }
+      return;
+    }
+    const type = earlier ? "Coverage restart" : "Coverage start";
+    const acceptedTypes = ["added", "accepted", "coverage start", "coverage restart"];
+    if (!scopusEventAt(segment.start, acceptedTypes)) {
+      combined.push({ source: "Scopus", event_type: type, event_year: segment.start, title: `Cobertura registrada: ${segment.start}–${segment.end}`, reason: earlier ? "El rango aparece separado de un periodo de cobertura anterior en los datos disponibles." : "El año se obtiene del rango de cobertura disponible.", synthetic_coverage: true });
+    }
+  });
+
   const hasScopusEnd = combined.some(event => {
     const source = String(event.source || "").toLowerCase();
     const type = String(event.event_type_normalized || event.event_type || "").toLowerCase();
     return source.includes("scopus") && ["discontinuation", "coverage end", "cease"].includes(type);
   });
-  if (scopusYears.end && journal?.scopus_status !== "Active" && !hasScopusEnd) {
-    combined.push({ source: "Scopus", event_type: "Coverage end", event_year: scopusYears.end, title: `Último año de cobertura registrada: ${scopusYears.end}`, reason: "La revista figura actualmente como inactiva en Scopus.", synthetic_coverage: true });
+  if (scopusCoverage.end && journal?.scopus_status !== "Active" && !hasScopusEnd) {
+    combined.push({ source: "Scopus", event_type: "Coverage end", event_year: scopusCoverage.end, title: `Último año de cobertura registrada: ${scopusCoverage.end}`, reason: "La revista figura actualmente como inactiva en Scopus.", synthetic_coverage: true });
   }
 
   const incitesSeries = sourceSeriesValues(detail?.incites, "wos_documents");
@@ -1293,12 +1481,53 @@ function combinedTimelineEvents(journal, detail, complementary) {
   return combined;
 }
 
+function parseCoverageSegments(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return [];
+  const segments = [];
+  raw.split(/[;,]+/).map(part => part.trim()).filter(Boolean).forEach(part => {
+    const years = part.match(/(?:19|20)\d{2}/g) || [];
+    if (!years.length) return;
+    const start = Number(years[0]);
+    const end = Number(years[1] || years[0]);
+    segments.push({ start: Math.min(start, end), end: Math.max(start, end), standalone: years.length === 1 });
+  });
+  return segments.sort((a, b) => a.start - b.start || a.end - b.end);
+}
+
+function formatCoverageDisplay(value) {
+  const segments = parseCoverageSegments(value);
+  if (!segments.length) return String(value || "");
+  return segments.map(segment => segment.start === segment.end ? String(segment.start) : `${segment.start}–${segment.end}`).join("; ");
+}
+
 function extractCoverageYears(value) {
-  const years = String(value || '').match(/(?:19|20)\d{2}/g) || [];
+  const segments = parseCoverageSegments(value);
+  if (!segments.length) return { start: null, end: null, segments: [] };
   return {
-    start: years[0] ? Number(years[0]) : null,
-    end: years[1] ? Number(years[1]) : null
+    start: Math.min(...segments.map(item => item.start)),
+    end: Math.max(...segments.map(item => item.end)),
+    segments
   };
+}
+
+function coverageSeriesStartNote(journal, detail) {
+  const coverage = extractCoverageYears(journal?.scopus_coverage);
+  if (!coverage.start) return "";
+
+  const production = sourceSeriesValues(detail?.sjr, "total_docs_year");
+  const sjr = sourceSeriesValues(detail?.sjr, "sjr");
+  const availableStarts = [];
+
+  if (production.length && Number(production[0].year) > Number(coverage.start)) {
+    availableStarts.push(`la producción disponible comienza en ${production[0].year}`);
+  }
+  if (sjr.length && Number(sjr[0].year) > Number(coverage.start)) {
+    availableStarts.push(`el SJR disponible comienza en ${sjr[0].year}`);
+  }
+  if (!availableStarts.length) return "";
+
+  return `<p class="timeline-data-note">El inicio de la cobertura y el inicio de las series bibliométricas disponibles pueden no coincidir. En esta ficha, ${escapeHtml(joinSpanish(availableStarts))}.</p>`;
 }
 
 function timelineHtml(events) {
@@ -1338,6 +1567,8 @@ function eventLabel(value) {
     "Accepted": "Aceptada",
     "Accepted pending": "Aceptación pendiente",
     "Coverage start": "Inicio de cobertura",
+    "Coverage restart": "Reinicio de cobertura",
+    "Coverage record": "Cobertura registrada",
     "Coverage end": "Fin de cobertura registrada",
     "Data series start": "Inicio de serie histórica",
     "Data series end": "Fin de serie histórica disponible",
@@ -1389,27 +1620,38 @@ function chartBlock(title, series, key, sourceClass, measureLabel = "documentos"
     return { x, y, year: item.year, value: Number(item[key]), annotation: options.annotationKey ? item[options.annotationKey] : "" };
   });
   const coverageEnd = Number(options.coverageEnd || 0);
-  const prePoints = coverageEnd ? points.filter(point => Number(point.year) <= coverageEnd) : points;
+  const currentYear = Number(options.currentYear || 0);
+  const prePoints = coverageEnd ? points.filter(point => Number(point.year) <= coverageEnd) : (currentYear ? points.filter(point => Number(point.year) < currentYear) : points);
   const postPointsOnly = coverageEnd ? points.filter(point => Number(point.year) > coverageEnd) : [];
+  const currentPointsOnly = !coverageEnd && currentYear ? points.filter(point => Number(point.year) >= currentYear) : [];
   const postPoints = postPointsOnly.length && prePoints.length ? [prePoints.at(-1), ...postPointsOnly] : postPointsOnly;
+  const currentPoints = currentPointsOnly.length && prePoints.length ? [prePoints.at(-1), ...currentPointsOnly] : currentPointsOnly;
   const linePoints = pts => pts.map(point => `${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(" ");
   const mainPolyline = prePoints.length > 1 ? `<polyline class="series-line" points="${linePoints(prePoints)}"></polyline>` : "";
   const postPolyline = postPoints.length > 1 ? `<polyline class="series-line post-coverage-line" points="${linePoints(postPoints)}"></polyline>` : "";
-  let postZone = "";
-  if (postPointsOnly.length) {
-    const firstPost = postPointsOnly[0];
+  const currentPolyline = currentPoints.length > 1 ? `<polyline class="series-line current-year-line" points="${linePoints(currentPoints)}"></polyline>` : "";
+  let specialZone = "";
+  const zonePoints = postPointsOnly.length ? postPointsOnly : currentPointsOnly;
+  if (zonePoints.length) {
+    const firstSpecial = zonePoints[0];
     const lastPre = prePoints.at(-1);
-    const startX = lastPre ? (lastPre.x + firstPost.x) / 2 : firstPost.x - xStep / 2;
+    const startX = lastPre ? (lastPre.x + firstSpecial.x) / 2 : firstSpecial.x - xStep / 2;
     const zoneWidth = width - padding.right - startX;
     const zoneMid = startX + zoneWidth / 2;
-    postZone = `<rect class="post-coverage-zone" x="${startX.toFixed(1)}" y="${padding.top}" width="${zoneWidth.toFixed(1)}" height="${chartHeight}"></rect><text class="post-coverage-label" x="${zoneMid.toFixed(1)}" y="${padding.top + 16}" text-anchor="middle"><tspan x="${zoneMid.toFixed(1)}" dy="0">Periodo posterior</tspan><tspan x="${zoneMid.toFixed(1)}" dy="13">a la cobertura</tspan></text>`;
+    const zoneClass = postPointsOnly.length ? "post-coverage-zone" : "current-year-zone";
+    const labelClass = postPointsOnly.length ? "post-coverage-label" : "current-year-label";
+    const lines = postPointsOnly.length ? ["Periodo posterior", "a la cobertura"] : [`${currentYear}`, "año en curso"];
+    specialZone = `<rect class="${zoneClass}" x="${startX.toFixed(1)}" y="${padding.top}" width="${zoneWidth.toFixed(1)}" height="${chartHeight}"></rect><text class="${labelClass}" x="${zoneMid.toFixed(1)}" y="${padding.top + 16}" text-anchor="middle"><tspan x="${zoneMid.toFixed(1)}" dy="0">${lines[0]}</tspan><tspan x="${zoneMid.toFixed(1)}" dy="13">${lines[1]}</tspan></text>`;
   }
-  const dots = points.map(point => `<circle tabindex="0" class="${coverageEnd && Number(point.year) > coverageEnd ? "post-coverage-point" : ""}" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="6" aria-label="${escapeHtml(String(point.year))}: ${escapeHtml(formatValue(point.value))} ${escapeHtml(measureLabel)}"><title>${point.year}: ${formatValue(point.value)} ${measureLabel}${point.annotation ? ` · ${point.annotation}` : ""}${coverageEnd && Number(point.year) > coverageEnd ? " · posterior al fin de cobertura" : ""}</title></circle>`).join("");
+  const pointClass = point => coverageEnd && Number(point.year) > coverageEnd ? "post-coverage-point" : currentYear && Number(point.year) >= currentYear ? "current-year-point" : "";
+  const pointSuffix = point => coverageEnd && Number(point.year) > coverageEnd ? " · posterior al fin de cobertura" : currentYear && Number(point.year) >= currentYear ? " · año en curso" : "";
+  const dots = points.map(point => `<circle tabindex="0" class="${pointClass(point)}" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="6" aria-label="${escapeHtml(String(point.year))}: ${escapeHtml(formatValue(point.value))} ${escapeHtml(measureLabel)}${pointSuffix(point)}"><title>${point.year}: ${formatValue(point.value)} ${measureLabel}${point.annotation ? ` · ${point.annotation}` : ""}${pointSuffix(point)}</title></circle>`).join("");
   const showPointValues = options.showPointValues !== false && points.length <= 14;
   const pointValues = showPointValues ? points.map((point, index) => {
     const shift = index % 2 === 0 ? -14 : 22;
     const y = Math.max(18, point.y + shift);
-    return `<text class="point-value ${coverageEnd && Number(point.year) > coverageEnd ? "post-coverage-value" : ""}" x="${point.x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle">${escapeHtml(formatValue(point.value))}${point.annotation ? ` · ${escapeHtml(String(point.annotation))}` : ""}</text>`;
+    const specialClass = coverageEnd && Number(point.year) > coverageEnd ? "post-coverage-value" : currentYear && Number(point.year) >= currentYear ? "current-year-value" : "";
+    return `<text class="point-value ${specialClass}" x="${point.x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle">${escapeHtml(formatValue(point.value))}${point.annotation ? ` · ${escapeHtml(String(point.annotation))}` : ""}</text>`;
   }).join("") : "";
   const labelEvery = valid.length > 22 ? 3 : valid.length > 14 ? 2 : 1;
   const labels = points.map((point, index) => {
@@ -1422,20 +1664,22 @@ function chartBlock(title, series, key, sourceClass, measureLabel = "documentos"
     return `<line class="grid-line" x1="${padding.left}" y1="${y.toFixed(1)}" x2="${width - padding.right}" y2="${y.toFixed(1)}"></line><text class="axis-value" x="8" y="${(y + 4).toFixed(1)}">${escapeHtml(formatValue(value))}</text>`;
   }).join("");
   const latest = options.headlineItem || valid[valid.length - 1];
+  const headlineCurrent = currentYear && Number(latest.year) >= currentYear ? " · año en curso" : "";
   const annotationHead = options.annotationKey ? `<th>${escapeHtml(options.annotationLabel || "Categoría")}</th>` : "";
   const annotationCells = item => options.annotationKey ? `<td>${escapeHtml(item[options.annotationKey] || "No reportado")}</td>` : "";
 
   return `<div class="chart-card ${sourceClass}">
-    <div class="chart-card-heading"><h3>${escapeHtml(title)}</h3><span>${escapeHtml(String(latest.year))}: <strong>${escapeHtml(formatValue(latest[key]))}</strong>${options.annotationKey && latest[options.annotationKey] ? ` · ${escapeHtml(String(latest[options.annotationKey]))}` : ""}</span></div>
+    <div class="chart-card-heading"><h3>${escapeHtml(title)}</h3><span>${escapeHtml(String(latest.year))}: <strong>${escapeHtml(formatValue(latest[key]))}</strong>${options.annotationKey && latest[options.annotationKey] ? ` · ${escapeHtml(String(latest[options.annotationKey]))}` : ""}${headlineCurrent}</span></div>
+    ${options.contextNote ? `<p class="chart-context-note">${escapeHtml(options.contextNote)}</p>` : ""}
     <div class="chart-wrap"><svg class="chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(title)}: ${escapeHtml(measureLabel)} por año">
-      ${gridLines}${postZone}
+      ${gridLines}${specialZone}
       <line class="axis" x1="${padding.left}" y1="${height - padding.bottom}" x2="${width - padding.right}" y2="${height - padding.bottom}"></line>
       <line class="axis" x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${height - padding.bottom}"></line>
       <text class="axis-value" x="42" y="${height - padding.bottom + 4}">0</text>
-      ${mainPolyline}${postPolyline}${dots}${pointValues}${labels}
+      ${mainPolyline}${postPolyline}${currentPolyline}${dots}${pointValues}${labels}
     </svg></div>
     <p class="chart-help">Los valores se muestran sobre los puntos; pase el cursor para consultar el detalle.</p>
-    <details class="chart-data"><summary>Ver datos anuales</summary><div class="chart-table-wrap"><table><thead><tr><th>Año</th><th>${escapeHtml(capitalize(measureLabel))}</th>${annotationHead}</tr></thead><tbody>${valid.map(item => `<tr><td>${escapeHtml(String(item.year))}</td><td>${escapeHtml(formatValue(item[key]))}</td>${annotationCells(item)}</tr>`).join("")}</tbody></table></div></details>
+    <details class="chart-data"><summary>Ver datos anuales</summary><div class="chart-table-wrap"><table><thead><tr><th>Año</th><th>${escapeHtml(capitalize(measureLabel))}</th>${annotationHead}</tr></thead><tbody>${valid.map(item => `<tr><td>${escapeHtml(String(item.year))}${currentYear && Number(item.year) >= currentYear ? " (en curso)" : ""}</td><td>${escapeHtml(formatValue(item[key]))}</td>${annotationCells(item)}</tr>`).join("")}</tbody></table></div></details>
   </div>`;
 }
 
@@ -1444,30 +1688,171 @@ function capitalize(value) {
   return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
 }
 
-function qualitativeHtml(journal) {
-  if (journal.qualitative_review_status !== "Completed") {
-    return `
-      <div class="human-review-status pending">
-        <span>Estado</span>
-        <strong>No realizada</strong>
-      </div>`;
-  }
+function effectiveHumanReview(journal, record) {
+  if (record) return record;
 
+  const legacyStatus = journal.qualitative_review_status;
+  const legacyResult = journal.qualitative_review_result;
+  if (legacyStatus === "Completed") {
+    if (legacyResult === "Observed") {
+      return { status: "Culminada", result: "Observada", review_date: journal.review_date || "", public_summary: journal.qualitative_summary || "", evidence: [], legacy: true };
+    }
+    if (legacyResult === "No additional alert") {
+      return { status: "Culminada", result: "Sin hallazgos", review_date: journal.review_date || "", public_summary: journal.qualitative_summary || "", evidence: [], legacy: true };
+    }
+    if (legacyResult === "Monitor") {
+      return { status: "En proceso", result: "", review_date: journal.review_date || "", public_summary: journal.qualitative_summary || "", evidence: [], legacy: true };
+    }
+  }
+  return null;
+}
+
+function normalizedHumanReviewStatus(review) {
+  const raw = String(review?.status || "").trim();
+  const value = raw.toLowerCase();
+  if (!value || value.includes("no inici")) return "No iniciado";
+  if (value.includes("no requiere")) return "No requiere por ahora";
+  if (value.includes("en proceso")) return "En proceso";
+  if (value.includes("culmin")) return "Culminada";
+  return raw || "No iniciado";
+}
+
+function normalizedHumanReviewResult(review) {
+  const raw = String(review?.result || "").trim();
+  const value = raw.toLowerCase();
+  if (value.includes("observ")) return "Observada";
+  if (value.includes("sin hallaz")) return "Sin hallazgos";
+  return raw;
+}
+
+function applyLocalHumanReviewDemo(review) {
+  const isLocal = ["localhost", "127.0.0.1"].includes(location.hostname);
+  if (!isLocal) return review;
+
+  const mode = new URLSearchParams(location.search).get("human_demo");
+  if (!mode) return review;
+
+  const date = review?.review_date || "2026-07-21";
+  const base = { evidence: [], public_summary: "", local_demo: true };
+  if (mode === "no_findings") return { ...base, status: "Culminada", result: "Sin hallazgos", review_date: date };
+  if (mode === "not_required") return { ...base, status: "No requiere por ahora", result: "", review_date: "" };
+  if (mode === "in_process") return { ...base, status: "En proceso", result: "", review_date: date };
+  if (mode === "not_started") return { ...base, status: "No iniciado", result: "", review_date: "" };
+  return review;
+}
+
+function humanReviewSectionBadge(review) {
+  const status = normalizedHumanReviewStatus(review);
+  const result = normalizedHumanReviewResult(review);
+  if (status === "Culminada" && result === "Observada") return '<span class="section-result-badge observed">Observada</span>';
+  if (status === "Culminada" && result === "Sin hallazgos") return '<span class="section-result-badge positive">Sin hallazgos</span>';
+  if (status === "En proceso") return '<span class="section-result-badge pending">En proceso</span>';
+  if (status === "No requiere por ahora") return '<span class="section-result-badge neutral">No requiere por ahora</span>';
+  return '<span class="section-result-badge neutral">No iniciado</span>';
+}
+
+function humanReviewOverviewHtml(items, tone) {
+  const safeItems = items.filter(item => item && item.value);
+  const columns = Math.max(1, Math.min(3, safeItems.length));
   return `
-    <div class="human-review-status completed">
-      <span>Resultado</span>
-      <strong>${escapeHtml(qualitativeLabel(journal.qualitative_review_result))}</strong>
-      ${journal.review_date ? `<small>Fecha de revisión: ${escapeHtml(journal.review_date)}</small>` : ""}
-      ${journal.qualitative_summary ? `<p>${escapeHtml(journal.qualitative_summary)}</p>` : ""}
+    <div class="human-review-overview ${escapeHtml(tone)} cols-${columns}">
+      ${safeItems.map(item => `
+        <div class="human-review-meta-item">
+          <span>${escapeHtml(item.label)}</span>
+          <strong>${escapeHtml(item.value)}</strong>
+        </div>`).join("")}
     </div>`;
 }
 
-function qualitativeLabel(value) {
-  return ({
-    "Observed": "Observada",
-    "Monitor": "Seguimiento",
-    "No additional alert": "Sin hallazgos adicionales"
-  })[value] || value || "Realizada";
+function qualitativeHtml(review) {
+  const status = normalizedHumanReviewStatus(review);
+  const result = normalizedHumanReviewResult(review);
+  const reviewDate = review?.review_date ? formatPublicDate(review.review_date) : "";
+
+  if (status === "Culminada") {
+    const observed = result === "Observada";
+    const noFindings = result === "Sin hallazgos";
+    const tone = observed ? "observed" : noFindings ? "no-findings" : "neutral";
+    const overview = humanReviewOverviewHtml([
+      { label: "Estado", value: status },
+      { label: "Resultado", value: result || "Sin resultado" },
+      { label: "Fecha de revisión", value: reviewDate }
+    ], tone);
+
+    if (!observed) return overview;
+
+    const evidence = Array.isArray(review?.evidence)
+      ? review.evidence.filter(item => item.visibility === "Pública")
+      : [];
+
+    return `${overview}
+      ${evidence.length ? `<div class="human-evidence-list">${evidence.map(humanEvidenceCardHtml).join("")}</div>` : ""}
+      ${review?.public_summary ? `
+        <div class="human-review-conclusion observed">
+          <h3>Conclusión de la revisión humana</h3>
+          <p>${escapeHtml(review.public_summary)}</p>
+        </div>` : ""}`;
+  }
+
+  if (status === "En proceso") {
+    return humanReviewOverviewHtml([
+      { label: "Estado", value: status },
+      { label: "Fecha de actualización", value: reviewDate }
+    ], "in-progress");
+  }
+
+  if (status === "No requiere por ahora") {
+    return humanReviewOverviewHtml([
+      { label: "Estado", value: status }
+    ], "neutral");
+  }
+
+  return humanReviewOverviewHtml([
+    { label: "Estado", value: "No iniciado" }
+  ], "neutral");
+}
+
+function humanEvidenceCardHtml(item) {
+  const sourceLink = item.url
+    ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener">${escapeHtml(item.source || "Consultar fuente")}</a>`
+    : escapeHtml(item.source || "Fuente no indicada");
+  const consulted = item.consulted_date ? formatPublicDate(item.consulted_date) : "";
+  return `
+    <article class="human-evidence-card">
+      <header>
+        <div><p class="human-evidence-kicker">${escapeHtml(item.category || "Hallazgo documentado")}</p></div>
+        ${item.assessment ? `<span class="human-evidence-assessment">${escapeHtml(item.assessment)}</span>` : ""}
+      </header>
+      <div class="human-evidence-text">${humanEvidenceFindingHtml(item.finding || "")}</div>
+      <footer>
+        <span class="human-evidence-source"><strong>Fuente:</strong><span class="human-evidence-source-value">${sourceLink}</span></span>
+        ${consulted ? `<span class="human-evidence-date"><strong>Fecha de consulta:</strong> ${escapeHtml(consulted)}</span>` : ""}
+      </footer>
+    </article>`;
+}
+
+function humanEvidenceFindingHtml(value) {
+  const normalized = String(value || "").replace(/\r\n/g, "\n").trim();
+  if (!normalized) return "";
+
+  const blocks = normalized.split(/\n\s*\n/);
+  if (blocks.length < 2) return multilineHtml(normalized);
+
+  const subtitle = blocks.shift().trim().replace(/[:：]\s*$/, "");
+  const body = blocks.join("\n\n").trim();
+  return `
+    <p class="human-evidence-subtitle"><strong>${escapeHtml(subtitle)}:</strong></p>
+    ${body ? `<div class="human-evidence-body">${multilineHtml(body)}</div>` : ""}`;
+}
+
+function multilineHtml(value) {
+  return escapeHtml(value).replace(/\r?\n/g, "<br>");
+}
+
+function formatPublicDate(value) {
+  const date = new Date(`${value}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return String(value || "");
+  return new Intl.DateTimeFormat("es-PE", { day: "numeric", month: "long", year: "numeric" }).format(date);
 }
 
 function openAlexSectionHtml(openalex, journal, detail) {
@@ -1490,8 +1875,9 @@ function openAlexSectionHtml(openalex, journal, detail) {
     ? `Producción registrada en OpenAlex (${chartPeriod})`
     : "Producción registrada en OpenAlex";
   const citationsChartTitle = chartPeriod
-    ? `Citas registradas en OpenAlex (${chartPeriod})`
-    : "Citas registradas en OpenAlex";
+    ? `Citas acumuladas de documentos publicados por año en OpenAlex (${chartPeriod})`
+    : "Citas acumuladas de documentos publicados por año en OpenAlex";
+  const citationsContextNote = "Los documentos publicados en los años más recientes han tenido menos tiempo para acumular citas. Estos valores no deben interpretarse por sí solos como una disminución del impacto de la revista.";
   const narrative = assessment.incomplete ? "" : openAlexNarrative(chartSeries, openalex.oa_share);
   const metricNote = assessment.incomplete
     ? "Total del registro enlazado en OpenAlex; no representa de forma suficiente la producción reciente."
@@ -1507,15 +1893,15 @@ function openAlexSectionHtml(openalex, journal, detail) {
     : "Participación en la serie utilizada";
 
   const charts = assessment.incomplete
-    ? `<details class="openalex-history-details"><summary>Ver serie histórica incompleta recuperada de OpenAlex</summary><p>Estos datos se conservan para trazabilidad, pero no se utilizan para evaluar la tendencia actual de la revista.</p><div class="charts-grid openalex-charts">${chartBlock("Producción histórica registrada en OpenAlex", production, "works_count", "openalex", "documentos")}${chartBlock("Citas históricas registradas en OpenAlex", production, "cited_by_count", "openalex-citations", "citas")}</div></details>`
-    : `<div class="charts-grid openalex-charts">${chartBlock(productionChartTitle, chartSeries, "works_count", "openalex", "documentos")}${chartBlock(citationsChartTitle, chartSeries, "cited_by_count", "openalex-citations", "citas")}</div>${sourceSeriesValues(production, "works_count").some(item => Number(item.year) < 2020) ? `<details class="openalex-history-details"><summary>Ver trayectoria histórica completa</summary><div class="charts-grid openalex-charts">${chartBlock("Producción histórica registrada en OpenAlex", production, "works_count", "openalex", "documentos")}${chartBlock("Citas históricas registradas en OpenAlex", production, "cited_by_count", "openalex-citations", "citas")}</div></details>` : ""}`;
+    ? `<details class="openalex-history-details"><summary>Ver serie histórica incompleta recuperada de OpenAlex</summary><p>Estos datos se conservan para trazabilidad, pero no se utilizan para evaluar la tendencia actual de la revista.</p><div class="charts-grid openalex-charts">${chartBlock("Producción histórica registrada en OpenAlex", production, "works_count", "openalex", "documentos", { currentYear: new Date().getFullYear() })}${chartBlock("Citas acumuladas de documentos publicados por año en OpenAlex", production, "cited_by_count", "openalex-citations", "citas", { currentYear: new Date().getFullYear(), contextNote: citationsContextNote })}</div></details>`
+    : `<div class="charts-grid openalex-charts">${chartBlock(productionChartTitle, chartSeries, "works_count", "openalex", "documentos", { currentYear: new Date().getFullYear() })}${chartBlock(citationsChartTitle, chartSeries, "cited_by_count", "openalex-citations", "citas", { currentYear: new Date().getFullYear(), contextNote: citationsContextNote })}</div>${sourceSeriesValues(production, "works_count").some(item => Number(item.year) < 2020) ? `<details class="openalex-history-details"><summary>Ver trayectoria histórica completa</summary><div class="charts-grid openalex-charts">${chartBlock("Producción histórica registrada en OpenAlex", production, "works_count", "openalex", "documentos", { currentYear: new Date().getFullYear() })}${chartBlock("Citas acumuladas de documentos publicados por año en OpenAlex", production, "cited_by_count", "openalex-citations", "citas", { currentYear: new Date().getFullYear(), contextNote: citationsContextNote })}</div></details>` : ""}`;
 
   return `
     <section class="journal-section openalex-section">
       <div class="section-heading">
         <div><p class="section-kicker">Fuente bibliométrica abierta</p><h2>Análisis complementario con OpenAlex</h2></div>
       </div>
-      <p class="openalex-intro">OpenAlex aporta una lectura adicional sobre producción, citación, acceso abierto y procedencia institucional. No sustituye el estado oficial de Scopus, Web of Science o DOAJ ni modifica por sí solo la escala de evaluación.</p>
+      <p class="openalex-intro">OpenAlex aporta una lectura adicional sobre producción, citación, acceso abierto y procedencia institucional. No sustituye el estado oficial de Scopus, Web of Science o DOAJ.</p>
       ${assessment.incomplete ? openAlexCoverageWarningHtml(assessment) : ""}
       ${openAlexComplementaryEvaluationHtml(openalex, assessment)}
       <div class="openalex-metrics">
@@ -1606,19 +1992,21 @@ function median(values) {
 }
 
 function openAlexComplementaryEvaluationHtml(openalex, assessment = { incomplete: false }) {
+  const currentYear = new Date().getFullYear();
   const series = sourceSeriesValues(openalex.production_by_year, "works_count");
-  const baseline = series.filter(item => Number(item.year) >= 2020 && Number(item.year) <= 2024);
-  const current = series.find(item => Number(item.year) === 2025);
-  const baselineMedian = median(baseline.map(item => item.works_count));
+  const currentYearPresent = series.some(item => Number(item.year) === currentYear);
+  const latestComplete = latestCompleteSourceValue(openalex.production_by_year, "works_count", currentYear - 1);
+  const baseline = series.filter(item => Number(item.year) >= currentYear - 6 && Number(item.year) <= currentYear - 2);
+  const baselineMedian = median(baseline.map(item => Number(item.works_count)));
   let productionMetric;
   if (assessment.incomplete) {
     productionMetric = { label: "Producción OpenAlex", value: "Cobertura reciente incompleta", note: "La serie recuperada no representa de forma suficiente la actividad actual; no se calcula crecimiento ni disminución.", tone: "incomplete" };
-  } else if (current && baseline.length >= 3 && baselineMedian != null && baselineMedian >= 20 && Number(current.works_count) >= 50) {
-    const ratio = Number(current.works_count) / baselineMedian;
-    productionMetric = { label: "Producción OpenAlex 2025", value: `${numberFormat(ratio)} veces`, note: `2025: ${integerFormat(current.works_count)} · mediana 2020–2024: ${numberFormat(baselineMedian)}. Comparación descriptiva; aún no modifica la categoría pública.`, tone: "available" };
+  } else if (latestComplete && baseline.length >= 3 && baselineMedian >= 20) {
+    const ratio = Number(latestComplete.works_count) / baselineMedian;
+    productionMetric = { label: `Producción OpenAlex ${latestComplete.year}`, value: `${numberFormat(ratio)} veces`, note: `${latestComplete.year}: ${integerFormat(latestComplete.works_count)} · mediana ${baseline[0].year}–${baseline.at(-1).year}: ${integerFormat(baselineMedian)}. Comparación descriptiva; aún no modifica la categoría pública.`, tone: "available" };
   } else if (series.length) {
     const range = `${series[0].year}–${series.at(-1).year}`;
-    productionMetric = { label: "Producción OpenAlex", value: "Información insuficiente para evaluar", note: `Existe una serie ${range}, pero no cumple los mínimos de años o volumen para la comparación 2025.`, tone: "limited" };
+    productionMetric = { label: "Producción OpenAlex", value: "Información insuficiente para evaluar", note: `Existe una serie ${range}, pero no cumple los mínimos de años o volumen para la comparación ${currentYear - 1}.`, tone: "limited" };
   } else {
     productionMetric = { label: "Producción OpenAlex", value: "Dato no reportado", note: "OpenAlex no aporta una serie anual utilizable para esta fuente.", tone: "missing" };
   }
@@ -1635,10 +2023,10 @@ function openAlexComplementaryEvaluationHtml(openalex, assessment = { incomplete
   const stableStart = openalex.stable_series_start || series[0]?.year;
   const firstSeriesYear = Number(series[0]?.year || 0);
   const lastSeriesYear = Number(series.at(-1)?.year || 0);
-  const lastCompleteYear = new Date().getFullYear() - 1;
+  const lastCompleteYear = currentYear - 1;
   const temporalNote = lastSeriesYear && lastSeriesYear < lastCompleteYear
     ? `OpenAlex registra información entre ${firstSeriesYear || stableStart} y ${lastSeriesYear}. Como no dispone de datos para ${lastSeriesYear + 1}–${lastCompleteYear}, la serie no se utiliza para evaluar una tendencia actual.`
-    : `${stableStart ? `Serie sostenida desde ${stableStart}. ` : ""}El año en curso se muestra, pero no se usa para comparar años completos.`;
+    : `${stableStart ? `Serie sostenida desde ${stableStart}. ` : ""}${currentYearPresent ? `El año ${currentYear} se muestra como dato en curso y no se usa para comparar años completos.` : "La serie dispone de información hasta el último año completo."}`;
   const seriesMetric = assessment.incomplete
     ? { label: "Uso de la serie OpenAlex", value: "Solo referencia histórica", note: "La trayectoria se conserva para trazabilidad, pero no interviene en la evaluación reciente.", tone: "incomplete" }
     : series.length
@@ -1650,9 +2038,12 @@ function openAlexComplementaryEvaluationHtml(openalex, assessment = { incomplete
     ? { label: "Obras marcadas como retractadas", value: integerFormat(retractions.length), note: "Son registros de detección que requieren verificación con la fuente editorial o una base especializada.", tone: "warning" }
     : { label: "Retracciones en OpenAlex", value: "Consulta exhaustiva pendiente", note: "La carga básica actual no consulta de forma exhaustiva todas las obras retractadas; no debe interpretarse como cero retractaciones.", tone: "pending" };
 
+  const notice = assessment.incomplete
+    ? "Cobertura reciente incompleta"
+    : currentYearPresent ? `Año ${currentYear} en curso` : "";
   const metrics = [productionMetric, seriesMetric, metadataMetric, retractionMetric];
   return `<div class="openalex-evaluation">
-    <div class="openalex-evaluation-heading"><div><span>Evaluación complementaria inicial</span><strong>Indicadores descriptivos de OpenAlex</strong></div><em>No altera por sí sola la categoría cuantitativa</em></div>
+    <div class="openalex-evaluation-heading"><div><span>Evaluación complementaria inicial</span><strong>Indicadores descriptivos de OpenAlex</strong><small>Estos indicadores son complementarios y no modifican por sí solos el resultado cuantitativo.</small></div>${notice ? `<em class="openalex-heading-notice">${escapeHtml(notice)}</em>` : ""}</div>
     <div class="openalex-evaluation-grid">${metrics.map(item => `<div class="openalex-eval-card ${escapeHtml(item.tone)}"><span>${escapeHtml(item.label)}</span><strong>${escapeHtml(item.value)}</strong><small>${escapeHtml(item.note)}</small></div>`).join("")}</div>
   </div>`;
 }
@@ -1762,12 +2153,15 @@ function switchOpenAlexTab(button) {
 function automatedQualitativeSectionHtml(complementary, detail) {
   const evidence = collectAutomatedFindings(complementary, detail);
   let content = "";
+  let badge = '<span class="section-result-badge neutral">No ejecutada</span>';
 
   if (!complementary) {
     content = `<div class="automated-status not-run"><span>Estado</span><strong>No ejecutada</strong></div>`;
   } else if (!evidence.length) {
+    badge = '<span class="section-result-badge positive">Sin hallazgos</span>';
     content = `<div class="automated-status no-results"><span>Resultado</span><strong>Sin hallazgos en las consultas automatizadas ejecutadas</strong></div>`;
   } else {
+    badge = '<span class="section-result-badge observed">Hallazgos localizados</span>';
     const stats = automatedPriorityStats(complementary);
     const visible = evidence.slice(0, 4);
     const extra = evidence.slice(4);
@@ -1783,6 +2177,7 @@ function automatedQualitativeSectionHtml(complementary, detail) {
   return `<section class="journal-section qualitative-automated-section">
     <div class="section-heading">
       <div><p class="section-kicker">Revisión automatizada de fuentes externas</p><h2>Evaluación cualitativa automatizada</h2></div>
+      ${badge}
     </div>
     ${content}
   </section>`;
